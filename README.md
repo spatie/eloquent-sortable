@@ -1,6 +1,9 @@
 Sortable behaviour for Eloquent models
 =================
 
+[![Latest Stable Version](https://poser.pugx.org/spatie/eloquent-sortable/version.png)](https://packagist.org/packages/spatie/eloquent-sortable)
+[![License](https://poser.pugx.org/spatie/eloquent-sortable/license.png)](https://packagist.org/packages/spatie/eloquent-sortable)
+
 This package provides a trait that adds sortable behaviour to and Eloquent model.
 
 The value of the ordercolumn of a new record of a model is determined by the maximum value of the ordercolumn of all records of the model + 1.
