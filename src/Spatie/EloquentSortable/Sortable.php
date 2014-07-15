@@ -1,9 +1,8 @@
 <?php
-namespace Spatie\EloquentSortable\Sortable;
+namespace Spatie\EloquentSortable;
 
 trait Sortable
 {
-
 
     /**
      *

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 
-class EloquentSortableServiceProvider extends ServiceProvider {
+class SortableServiceProvider extends ServiceProvider {
 
 	/**
 	 * Indicates if loading of the provider is deferred.
@@ -21,7 +21,6 @@ class EloquentSortableServiceProvider extends ServiceProvider {
 	{
         $this->registerEvents();
 	}
-
 
     /**
      *

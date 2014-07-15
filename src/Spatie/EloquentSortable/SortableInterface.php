@@ -1,4 +1,4 @@
-<?php namespace Spatie\EloquentSortable\Sortable;
+<?php namespace Spatie\EloquentSortable;
 
 interface SortableInterface {
     public function validateModelProperties();

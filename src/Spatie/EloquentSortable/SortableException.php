@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EloquentSortable\Sortable;
+namespace Spatie\EloquentSortable;
 
 
 class SortableException extends \Exception {
