@@ -41,13 +41,7 @@ trait Sortable
     public function getHighestOrderNumber()
     {
 
-        $highestOrderNumber = 0;
-
-        if ($lastArticle = self::orderBy($this->sortable['order_column_name'], 'desc')->limit(1)->first([$this->sortable['order_column_name']])) {
-            $highestOrderNumber = $lastArticle->order_column + 1;
-        }
-
-        return $highestOrderNumber;
+         return ((int) self::max($this->sortable['order_column_name'])) + 1;
 
     }
 
