@@ -35,7 +35,6 @@ To add sortable behaviour to your model you must:<br />
 
 ###example
 ```php
-<?php
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableInterface;
 
@@ -55,7 +54,6 @@ class MyModel extends Eloquent implements SortableInterface
 
 Assuming that the db-table for ```MyModel``` is empty:
 ```php
-<?php
 $myModel = new MyModel();
 $myModel->save(); //the order_column for this record will be set to 1;
 
