@@ -1,20 +1,30 @@
 {
     "name": "spatie/eloquent-sortable",
-    "description": "",
+    "description": "Sortable behaviour for eloquent models",
     "authors": [
         {
             "name": "Freek Van der Herten",
             "email": "freek@spatie.be"
         }
     ],
+    "keywords":
+        [
+            "sort",
+            "sortable",
+            "eloquent",
+            "model",
+            "laravel",
+            "behaviour"
+        ],
+    "license": "MIT",
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "4.2.*"
     },
+    "require-dev": {
+        "codeception/codeception": "~2.0"
+    },
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
         "psr-0": {
             "Spatie\\EloquentSortable\\": "src/"
         }
