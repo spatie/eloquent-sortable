@@ -6,7 +6,7 @@ Sortable behaviour for Eloquent models
 
 This package provides a trait that adds sortable behaviour to an Eloquent model.
 
-The value of the ordercolumn of a new record of a model is determined by the maximum value of the ordercolumn of all records of the model + 1.
+The value of the ordercolumn of a new record of a model is determined by the maximum value of the ordercolumn of all records of that model + 1.
 
 The package also provides a query scope to fetch all the records in the right order.
 
