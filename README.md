@@ -43,7 +43,6 @@ class MyModel extends Eloquent implements SortableInterface
 
     use Sortable;
 
-   
     public $sortable = [
         'order_column_name' => 'order_column',
     ];
