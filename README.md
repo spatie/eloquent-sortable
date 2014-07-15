@@ -57,13 +57,13 @@ class MyModel extends Eloquent implements SortableInterface
 Assuming that the db-table for ```MyModel``` is empty:
 ```php
 $myModel = new MyModel();
-$myModel->save(); // order_column for this record will be set to 1;
+$myModel->save(); // order_column for this record will be set to 1
 
 $myModel = new MyModel();
-$myModel->save(); // order_column for this record will be set to 2;
+$myModel->save(); // order_column for this record will be set to 2
 
 $myModel = new MyModel();
-$myModel->save(); // order_column for this record will be set to 3;
+$myModel->save(); // order_column for this record will be set to 3
 
 //the trait also provides the ordered query scope
 $orderedRecords = MyModel::ordered()->get(); 
