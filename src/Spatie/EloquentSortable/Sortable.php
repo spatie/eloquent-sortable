@@ -23,11 +23,11 @@ trait Sortable
     {
         if (! isset($this->sortable['order_column_name']) OR $this->sortable['order_column_name'] == '')
         {
-            return 'order_column';
+            $orderColumnName =  'order_column';
         }
         else
         {
-            return $this->sortable['order_column_name'];
+            $orderColumnName = $this->sortable['order_column_name'];
         }
 
         return $orderColumnName;
@@ -40,7 +40,7 @@ trait Sortable
      */
     public function getHighestOrderNumber()
     {
-         return ((int) self::max($this->sortable['order_column_name'])) + 1;
+         return ((int) self::max($this->determineOrderColumnName())) + 1;
     }
 
     /**
@@ -51,7 +51,7 @@ trait Sortable
      */
     public function scopeOrdered($query)
     {
-        return $query->orderBy($this->sortable['order_column_name']);
+        return $query->orderBy($this->determineOrderColumnName());
     }
 
     /**
