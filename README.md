@@ -78,6 +78,6 @@ You can set a new order for all the records using the ```setNewOrder```-method
  * the record for model id 3 will have record_column value 1
  * the record for model id 1 will have record_column value 2
  * the record for model id 2 will have record_column value 3
- * /
+ */
 MyModel::setNewOrder([3,1,2]);
 ```
