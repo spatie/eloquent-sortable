@@ -53,6 +53,8 @@ class MyModel extends Eloquent implements SortableInterface
     ...
 }
 ```
+If you don't set a value ```$sortable['order_column_name']``` the package will asume that your order column name will be 'order_column'; 
+
 
 Assuming that the db-table for ```MyModel``` is empty:
 ```php
@@ -65,5 +67,16 @@ $myModel->save(); // order_column for this record will be set to 2
 $myModel = new MyModel();
 $myModel->save(); // order_column for this record will be set to 3
 
+
 //the trait also provides the ordered query scope
 $orderedRecords = MyModel::ordered()->get(); 
+```
+You can set a new order for all the records using the ```setNewOrder```-method
+```
+/**
+ * the record for model id 3 will have record_column value 1
+ * the record for model id 1 will have record_column value 2
+ * the record for model id 2 will have record_column value 3
+ * /
+MyModel::setNewOrder([3,1,2]);
+```
