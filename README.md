@@ -72,7 +72,8 @@ $myModel->save(); // order_column for this record will be set to 3
 $orderedRecords = MyModel::ordered()->get(); 
 ```
 You can set a new order for all the records using the ```setNewOrder```-method
-```
+
+```php
 /**
  * the record for model id 3 will have record_column value 1
  * the record for model id 1 will have record_column value 2
