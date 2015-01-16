@@ -1,6 +1,6 @@
 Sortable behaviour for Eloquent models
 =================
-
+[![Total Downloads](https://poser.pugx.org/spatie/eloquent-sortable/downloads.svg)](https://packagist.org/packages/spatie/eloquent-sortable)
 [![Latest Stable Version](https://poser.pugx.org/spatie/eloquent-sortable/version.png)](https://packagist.org/packages/spatie/eloquent-sortable)
 [![License](https://poser.pugx.org/spatie/eloquent-sortable/license.png)](https://packagist.org/packages/spatie/eloquent-sortable)
 
