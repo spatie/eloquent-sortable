@@ -1,12 +1,12 @@
 Sortable behaviour for Eloquent models
 =================
 
-[![Build Status](https://scrutinizer-ci.com/g/MatthiasDeWinter/eloquent-sortable/badges/build.png?b=master)](https://scrutinizer-ci.com/g/MatthiasDeWinter/eloquent-sortable/build-status/master)
-[![Latest Stable Version](https://poser.pugx.org/spatie/eloquent-sortable/version.png)](https://packagist.org/packages/spatie/eloquent-sortable)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/27df870e-f06d-4cb1-9fc7-9463edf7508a/mini.png)](https://insight.sensiolabs.com/projects/27df870e-f06d-4cb1-9fc7-9463edf7508a)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MatthiasDeWinter/eloquent-sortable/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MatthiasDeWinter/eloquent-sortable/?branch=master)
-[![License](https://poser.pugx.org/spatie/eloquent-sortable/license.png)](https://packagist.org/packages/spatie/eloquent-sortable)
-[![Total Downloads](https://poser.pugx.org/spatie/eloquent-sortable/downloads.svg)](https://packagist.org/packages/spatie/eloquent-sortable)
+[![Build status](https://img.shields.io/travis/freekmurze/eloquent-sortable.svg)](https://travis-ci.org/freekmurze/eloquent-sortable)
+[![Latest Version](https://img.shields.io/github/release/freekmurze/eloquent-sortable.svg?style=flat-square)](https://github.com/freekmurze/eloquent-sortable/releases)
+[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/fb7765b9-7632-4897-8054-22d85b41ffda.svg)](https://insight.sensiolabs.com/projects/fb7765b9-7632-4897-8054-22d85b41ffda)
+[![Quality Score](https://img.shields.io/scrutinizer/g/freekmurze/eloquent-sortable.svg?style=flat-square)](https://scrutinizer-ci.com/g/freekmurze/eloquent-sortable)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Total Downloads](https://img.shields.io/packagist/dt/spatie/eloquent-sortable.svg?style=flat-square)](https://packagist.org/packages/spatie/eloquent-sortable)
 
 This package provides a trait that adds sortable behaviour to an Eloquent model.
 
