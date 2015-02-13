@@ -18,19 +18,19 @@ The package also provides a query scope to fetch all the records in the right or
 
 This package can be installed through Composer.
 
-```js
-{
-    "require": {
-		"spatie/eloquent-sortable": "0.*"
-	}
-}
+```bash
+composer require spatie/eloquent-sortable
 ```
 
 You must add this service provider:
 ```php
-// app/config/app.php
+// Laravel 4: app/config/app.php 
+// Laravel 5: config/app.php
 
-'providers' => [ '...', 'Spatie\EloquentSortable\SortableServiceProvider' ];
+'providers' => [ 
+	'...',
+	'Spatie\EloquentSortable\SortableServiceProvider',
+];
 ```
 
 ## Usage
