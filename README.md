@@ -1,8 +1,12 @@
 Sortable behaviour for Eloquent models
 =================
-[![Total Downloads](https://poser.pugx.org/spatie/eloquent-sortable/downloads.svg)](https://packagist.org/packages/spatie/eloquent-sortable)
+
+[![Build Status](https://scrutinizer-ci.com/g/MatthiasDeWinter/eloquent-sortable/badges/build.png?b=master)](https://scrutinizer-ci.com/g/MatthiasDeWinter/eloquent-sortable/build-status/master)
 [![Latest Stable Version](https://poser.pugx.org/spatie/eloquent-sortable/version.png)](https://packagist.org/packages/spatie/eloquent-sortable)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/27df870e-f06d-4cb1-9fc7-9463edf7508a/mini.png)](https://insight.sensiolabs.com/projects/27df870e-f06d-4cb1-9fc7-9463edf7508a)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MatthiasDeWinter/eloquent-sortable/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MatthiasDeWinter/eloquent-sortable/?branch=master)
 [![License](https://poser.pugx.org/spatie/eloquent-sortable/license.png)](https://packagist.org/packages/spatie/eloquent-sortable)
+[![Total Downloads](https://poser.pugx.org/spatie/eloquent-sortable/downloads.svg)](https://packagist.org/packages/spatie/eloquent-sortable)
 
 This package provides a trait that adds sortable behaviour to an Eloquent model.
 
