@@ -1,5 +1,7 @@
 <?php namespace Spatie\EloquentSortable;
 
+use Illuminate\Database\Query\Builder;
+
 interface SortableInterface {
     /**
      * Modify the order column value
@@ -11,10 +13,10 @@ interface SortableInterface {
     /**
      * Let's be nice and provide an ordered scope
      *
-     * @param $query
+     * @param Builder $query
      * @return mixed
      */
-    public function scopeOrdered($query);
+    public function scopeOrdered(Builder $query);
 
     /**
      * This function reorders the records: the record with the first id in the array

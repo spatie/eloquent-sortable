@@ -1,6 +1,8 @@
 <?php
 namespace Spatie\EloquentSortable;
 
+use Illuminate\Database\Query\Builder;
+
 trait Sortable
 {
     /**
@@ -46,7 +48,7 @@ trait Sortable
     /**
      * Let's be nice and provide an ordered scope
      *
-     * @param $query
+     * @param Builder $query
      * @return mixed
      */
     public function scopeOrdered(Builder $query)
