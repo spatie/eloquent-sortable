@@ -24,4 +24,4 @@ interface SortableInterface {
      * @throws SortableException
      */
     public static function setNewOrder($ids);
-} 
+}
