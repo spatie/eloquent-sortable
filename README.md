@@ -1,7 +1,6 @@
 Sortable behaviour for Eloquent models
 =================
 
-[![Build status](https://img.shields.io/travis/freekmurze/eloquent-sortable.svg)](https://travis-ci.org/freekmurze/eloquent-sortable)
 [![Latest Version](https://img.shields.io/github/release/freekmurze/eloquent-sortable.svg?style=flat-square)](https://github.com/freekmurze/eloquent-sortable/releases)
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/fb7765b9-7632-4897-8054-22d85b41ffda.svg)](https://insight.sensiolabs.com/projects/fb7765b9-7632-4897-8054-22d85b41ffda)
 [![Quality Score](https://img.shields.io/scrutinizer/g/freekmurze/eloquent-sortable.svg?style=flat-square)](https://scrutinizer-ci.com/g/freekmurze/eloquent-sortable)
