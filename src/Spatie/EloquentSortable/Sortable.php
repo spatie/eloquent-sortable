@@ -1,6 +1,8 @@
 <?php
 namespace Spatie\EloquentSortable;
 
+use Illuminate\Database\Query\Builder;
+
 trait Sortable
 {
     /**
@@ -21,7 +23,7 @@ trait Sortable
      */
     protected function determineOrderColumnName()
     {
-        if (! isset($this->sortable['order_column_name']) OR $this->sortable['order_column_name'] == '')
+        if (! isset($this->sortable['order_column_name']) || $this->sortable['order_column_name'] == '')
         {
             $orderColumnName =  'order_column';
         }
@@ -46,10 +48,10 @@ trait Sortable
     /**
      * Let's be nice and provide an ordered scope
      *
-     * @param $query
+     * @param Builder $query
      * @return mixed
      */
-    public function scopeOrdered($query)
+    public function scopeOrdered(Builder $query)
     {
         return $query->orderBy($this->determineOrderColumnName());
     }
