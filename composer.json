@@ -1,7 +1,7 @@
 {
     "name": "spatie/eloquent-sortable",
     "description": "Sortable behaviour for eloquent models",
-    "homepage": "https://github.com/spatie/eloquent-sortable"
+    "homepage": "https://github.com/spatie/eloquent-sortable",
     "authors": [
         {
             "name": "Freek Van der Herten",
