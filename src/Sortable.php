@@ -45,11 +45,11 @@ trait Sortable
     /**
      * Let's be nice and provide an ordered scope.
      *
-     * @param Builder $query
+     * @param $query
      *
      * @return mixed
      */
-    public function scopeOrdered(Builder $query)
+    public function scopeOrdered($query)
     {
         return $query->orderBy($this->determineOrderColumnName());
     }
