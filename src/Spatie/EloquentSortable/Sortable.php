@@ -59,18 +59,19 @@ trait Sortable
     /**
      * This function reorders the records: the record with the first id in the array
      * will get order 1, the record with the second it will get order 2, ...
+     * A starting order can be optionally supplied (defaults to 1).
      *
      * @param array $ids
+     * @param integer $newOrder
      * @throws SortableException
      */
-    public static function setNewOrder($ids)
+    public static function setNewOrder($ids, $newOrder = 1)
     {
         if (! is_array($ids))
         {
             throw new SortableException('You must pass an array to setNewOrder');
         }
 
-        $newOrder = 1;
         foreach($ids as $id)
         {
             $model = self::find($id);
