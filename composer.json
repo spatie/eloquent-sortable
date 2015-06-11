@@ -26,7 +26,7 @@
         "codeception/codeception": "~2.0"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Spatie\\EloquentSortable\\": "src/"
         }
     },

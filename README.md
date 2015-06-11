@@ -74,7 +74,7 @@ $myModel->save(); // order_column for this record will be set to 3
 //the trait also provides the ordered query scope
 $orderedRecords = MyModel::ordered()->get(); 
 ```
-You can set a new order for all the records using the ```setNewOrder```-method
+You can set a new order for all the records using the `setNewOrder`-method
 
 ```php
 /**
@@ -84,3 +84,35 @@ You can set a new order for all the records using the ```setNewOrder```-method
  */
 MyModel::setNewOrder([3,1,2]);
 ```
+
+Optionally you can pass the starting order number as the second argument.
+```php
+/**
+ * the record for model id 3 will have record_column value 11
+ * the record for model id 1 will have record_column value 12
+ * the record for model id 2 will have record_column value 13
+ */
+MyModel::setNewOrder([3,1,2], 10);
+``` 
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Security
+
+If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
+
+## Credits
+
+- [Freek Van der Herten](https:/murze.be)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+

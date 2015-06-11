@@ -2,18 +2,20 @@
 
 use Illuminate\Database\Query\Builder;
 
-interface SortableInterface {
+interface SortableInterface
+{
     /**
-     * Modify the order column value
+     * Modify the order column value.
      *
      * @param $model
      */
     public function setHighestOrderNumber($model);
 
     /**
-     * Let's be nice and provide an ordered scope
+     * Let's be nice and provide an ordered scope.
      *
      * @param Builder $query
+     *
      * @return mixed
      */
     public function scopeOrdered(Builder $query);
@@ -23,6 +25,7 @@ interface SortableInterface {
      * will get order 1, the record with the second it will get order 2, ...
      *
      * @param array $ids
+     *
      * @throws SortableException
      */
     public static function setNewOrder($ids);
