@@ -14,11 +14,11 @@ interface SortableInterface
     /**
      * Let's be nice and provide an ordered scope.
      *
-     * @param Builder $query
+     * @param $query
      *
      * @return mixed
      */
-    public function scopeOrdered(Builder $query);
+    public function scopeOrdered($query);
 
     /**
      * This function reorders the records: the record with the first id in the array
