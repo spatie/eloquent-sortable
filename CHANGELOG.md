@@ -2,6 +2,13 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
+## 2.0.0
+- SortableInterface is now Sortable
+- Sortable is now SortableTrait
+- getHighestOrderNumber() now retrieves the highest existing order number (not a new one)
+- setHighestOrderNumber() no longer requires a Sortable object parameter
+- Added test coverage
+
 ## 1.1.2
 - Removed typehinting on scope in interface.
 

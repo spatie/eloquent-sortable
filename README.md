@@ -3,6 +3,7 @@ Sortable behaviour for Eloquent models
 
 [![Latest Version](https://img.shields.io/github/release/spatie/eloquent-sortable.svg?style=flat-square)](https://github.com/spatie/eloquent-sortable/releases)
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/fb7765b9-7632-4897-8054-22d85b41ffda.svg)](https://insight.sensiolabs.com/projects/fb7765b9-7632-4897-8054-22d85b41ffda)
+[![Build Status](https://img.shields.io/travis/spatie/eloquent-sortable.svg?style=flat-square)](https://travis-ci.org/spatie/eloquent-sortable)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/eloquent-sortable.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/eloquent-sortable)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/eloquent-sortable.svg?style=flat-square)](https://packagist.org/packages/spatie/eloquent-sortable)
@@ -19,8 +20,8 @@ Spatie is webdesign agency in Antwerp, Belgium. You'll find an overview of all o
 
 This package can be installed through Composer.
 
-```bash
-composer require spatie/eloquent-sortable
+```
+$ composer require spatie/eloquent-sortable
 ```
 
 You must add this service provider:
@@ -41,7 +42,8 @@ To add sortable behaviour to your model you must:<br />
 2. use the trait ```Spatie\EloquentSortable\Sortable```<br />
 3. specify which column will be used as the ordercolumn<br />
 
-###example
+### Example
+
 ```php
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableInterface;
@@ -58,10 +60,11 @@ class MyModel extends Eloquent implements SortableInterface
     ...
 }
 ```
+
 If you don't set a value ```$sortable['order_column_name']``` the package will asume that your order column name will be 'order_column'; 
 
-
 Assuming that the db-table for ```MyModel``` is empty:
+
 ```php
 $myModel = new MyModel();
 $myModel->save(); // order_column for this record will be set to 1
@@ -95,7 +98,15 @@ Optionally you can pass the starting order number as the second argument.
  * the record for model id 2 will have record_column value 13
  */
 MyModel::setNewOrder([3,1,2], 10);
-``` 
+```
+
+## Tests
+
+The package contains some integration/smoke tests, set up with Orchestra. The tests can be run via phpunit.
+
+```
+$ phpunit
+```
 
 ## Changelog
 

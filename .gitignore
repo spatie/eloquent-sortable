@@ -2,3 +2,4 @@
 composer.phar
 composer.lock
 tests/_output/*
+tests/database.sqlite

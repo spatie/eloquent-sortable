@@ -1,4 +1,6 @@
-<?php namespace Spatie\EloquentSortable;
+<?php
+
+namespace Spatie\EloquentSortable;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -12,21 +14,28 @@ class SortableServiceProvider extends ServiceProvider
     protected $defer = false;
 
     /**
+     * The boot method.
+     */
+    public function boot()
+    {
+        $this->bootEvents();
+    }
+
+    /**
      * Register the service provider.
      */
     public function register()
     {
-        $this->registerEvents();
     }
 
     /**
      * Perform actions on Eloquent's Creating-event.
      */
-    public function registerEvents()
+    public function bootEvents()
     {
         $this->app['events']->listen('eloquent.creating*', function ($model) {
-            if ($model instanceof SortableInterface) {
-                $model->setHighestOrderNumber($model);
+            if ($model instanceof Sortable) {
+                $model->setHighestOrderNumber();
             }
         });
     }
