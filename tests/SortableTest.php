@@ -27,7 +27,7 @@ class SortableTest extends TestCase
      */
     public function it_can_set_a_new_order()
     {
-        $newOrder = Dummy::all()->pluck('id')->shuffle()->toArray();
+        $newOrder = Collection:make(Dummy::all()->pluck('id'))->shuffle()->toArray();
 
         Dummy::setNewOrder($newOrder);
 
