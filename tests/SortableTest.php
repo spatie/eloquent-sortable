@@ -2,6 +2,8 @@
 
 namespace Spatie\EloquentSortable\Test;
 
+use Illuminate\Support\Collection;
+
 class SortableTest extends TestCase
 {
     /**
@@ -27,7 +29,7 @@ class SortableTest extends TestCase
      */
     public function it_can_set_a_new_order()
     {
-        $newOrder = Collection:make(Dummy::all()->pluck('id'))->shuffle()->toArray();
+        $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
 
         Dummy::setNewOrder($newOrder);
 
