@@ -22,7 +22,7 @@ interface Sortable
 
     /**
      * This function reorders the records: the record with the first id in the array
-     * will get order 1, the record with the second it will get order 2, ...
+     * will get order 1, the record with the second it will get order 2,...
      *
      * @param array $ids
      *
