@@ -110,7 +110,7 @@ MyModel::setNewOrder([3,1,2], 10);
 The package contains some integration/smoke tests, set up with Orchestra. The tests can be run via phpunit.
 
 ```
-$ phpunit
+$ vendor/bin/phpunit
 ```
 
 ## Changelog
