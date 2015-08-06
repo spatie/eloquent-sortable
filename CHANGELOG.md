@@ -8,6 +8,7 @@ All Notable changes to `eloquent-sortable` will be documented in this file
 - getHighestOrderNumber() now retrieves the highest existing order number (not a new one)
 - setHighestOrderNumber() no longer requires a Sortable object parameter
 - sort_when_creating option
+- Added shouldSortWhenCreating function
 - Added test coverage
 
 ## 1.1.2
