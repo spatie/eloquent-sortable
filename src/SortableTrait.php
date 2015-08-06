@@ -26,11 +26,11 @@ trait SortableTrait
     /**
      * Let's be nice and provide an ordered scope.
      *
-     * @param $query
+     * @param \Illuminate\Database\Query\Builder $query
      *
-     * @return mixed
+     * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeOrdered($query)
+    public function scopeOrdered(\Illuminate\Database\Query\Builder $query)
     {
         return $query->orderBy($this->determineOrderColumnName());
     }

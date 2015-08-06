@@ -16,7 +16,7 @@ interface Sortable
      *
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeOrdered($query);
+    public function scopeOrdered(\Illuminate\Database\Query\Builder $query);
 
     /**
      * This function reorders the records: the record with the first id in the array
