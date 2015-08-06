@@ -35,6 +35,14 @@ class SortableServiceProvider extends ServiceProvider
     {
         $this->app['events']->listen('eloquent.creating*', function ($model) {
             if ($model instanceof Sortable) {
+                if (
+                    isset($model->sortable) &&
+                    isset($model->sortable['sort_when_creating']) &&
+                    $model->sortable['sort_when_creating'] === false
+                ) {
+                    return;
+                }
+
                 $model->setHighestOrderNumber();
             }
         });

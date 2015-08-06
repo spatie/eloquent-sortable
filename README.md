@@ -55,6 +55,7 @@ class MyModel extends Eloquent implements SortableInterface
 
     public $sortable = [
         'order_column_name' => 'order_column',
+        'sort_when_creating' => true,
     ];
     
     ...
@@ -62,6 +63,8 @@ class MyModel extends Eloquent implements SortableInterface
 ```
 
 If you don't set a value ```$sortable['order_column_name']``` the package will asume that your order column name will be 'order_column'; 
+
+If you don't set a value ```$sortable['sort_when_creating']``` the package will automatically assign the highest order number to a new model;
 
 Assuming that the db-table for ```MyModel``` is empty:
 
@@ -79,6 +82,7 @@ $myModel->save(); // order_column for this record will be set to 3
 //the trait also provides the ordered query scope
 $orderedRecords = MyModel::ordered()->get(); 
 ```
+
 You can set a new order for all the records using the `setNewOrder`-method
 
 ```php
@@ -91,6 +95,7 @@ MyModel::setNewOrder([3,1,2]);
 ```
 
 Optionally you can pass the starting order number as the second argument.
+
 ```php
 /**
  * the record for model id 3 will have record_column value 11

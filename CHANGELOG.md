@@ -7,6 +7,7 @@ All Notable changes to `eloquent-sortable` will be documented in this file
 - Sortable is now SortableTrait
 - getHighestOrderNumber() now retrieves the highest existing order number (not a new one)
 - setHighestOrderNumber() no longer requires a Sortable object parameter
+- sort_when_creating option
 - Added test coverage
 
 ## 1.1.2
@@ -18,4 +19,3 @@ All Notable changes to `eloquent-sortable` will be documented in this file
 ## 1.1.0
 - Added an argument to `setNewOrder` to specify the starting order
 - Adopted psr-2 and psr-4
-
