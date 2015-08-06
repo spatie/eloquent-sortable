@@ -46,12 +46,12 @@ To add sortable behaviour to your model you must:<br />
 
 ```php
 use Spatie\EloquentSortable\Sortable;
-use Spatie\EloquentSortable\SortableInterface;
+use Spatie\EloquentSortable\SortableTrait;
 
-class MyModel extends Eloquent implements SortableInterface
+class MyModel extends Eloquent implements Sortable
 {
 
-    use Sortable;
+    use SortableTrait;
 
     public $sortable = [
         'order_column_name' => 'order_column',
