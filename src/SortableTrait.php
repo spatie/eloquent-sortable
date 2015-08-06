@@ -2,8 +2,6 @@
 
 namespace Spatie\EloquentSortable;
 
-use Illuminate\Database\Query\Builder;
-
 trait SortableTrait
 {
     /**
@@ -43,14 +41,14 @@ trait SortableTrait
      *
      * A starting order number can be optionally supplied (defaults to 1).
      *
-     * @param array   $ids
-     * @param integer $startOrder
+     * @param array $ids
+     * @param int   $startOrder
      *
      * @throws SortableException
      */
     public static function setNewOrder($ids, $startOrder = 1)
     {
-        if (! is_array($ids)) {
+        if (!is_array($ids)) {
             throw new SortableException('You must pass an array to setNewOrder');
         }
 
@@ -77,5 +75,23 @@ trait SortableTrait
         }
 
         return 'order_column';
+    }
+
+    /**
+     * Determine if the order column should be set when saving a new model instance.
+     *
+     * @return bool
+     */
+    public function shouldSortWhenCreating()
+    {
+        if (!isset($this->sortable)) {
+            return true;
+        }
+
+        if (!isset($this->sortable['sort_when_creating'])) {
+            return true;
+        }
+
+        return $this->sortable['sort_when_creating'];
     }
 }

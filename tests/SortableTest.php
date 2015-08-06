@@ -21,7 +21,7 @@ class SortableTest extends TestCase
      */
     public function it_can_get_the_highest_order_number()
     {
-        $this->assertEquals(Dummy::all()->count(), (new Dummy)->getHighestOrderNumber());
+        $this->assertEquals(Dummy::all()->count(), (new Dummy())->getHighestOrderNumber());
     }
 
     /**
@@ -36,5 +36,39 @@ class SortableTest extends TestCase
         foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
             $this->assertEquals($newOrder[$i], $dummy->id);
         }
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_determine_to_sort_when_creating_if_sortable_attribute_does_not_exist()
+    {
+        $model = new Dummy();
+
+        $this->assertTrue($model->shouldSortWhenCreating());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_determine_to_sort_when_creating_if_sort_when_creating_setting_does_not_exist()
+    {
+        $model = new DummyWithSortableSetting();
+
+        $this->assertTrue($model->shouldSortWhenCreating());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_respect_the_sort_when_creating_setting()
+    {
+        $model = new DummyWithSortableSetting();
+
+        $model->sortable['sort_when_creating'] = true;
+        $this->assertTrue($model->shouldSortWhenCreating());
+
+        $model->sortable['sort_when_creating'] = false;
+        $this->assertFalse($model->shouldSortWhenCreating());
     }
 }

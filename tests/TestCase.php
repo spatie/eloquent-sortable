@@ -28,8 +28,6 @@ abstract class TestCase extends Orchestra
 
     /**
      * @param \Illuminate\Foundation\Application $app
-     * 
-     * @return void
      */
     protected function getEnvironmentSetUp($app)
     {

@@ -2,8 +2,6 @@
 
 namespace Spatie\EloquentSortable;
 
-use Illuminate\Database\Query\Builder;
-
 interface Sortable
 {
     /**
@@ -14,9 +12,9 @@ interface Sortable
     /**
      * Let's be nice and provide an ordered scope.
      *
-     * @param $query
+     * @param \Illuminate\Database\Query\Builder $query
      *
-     * @return mixed
+     * @return \Illuminate\Database\Query\Builder
      */
     public function scopeOrdered($query);
 
@@ -26,7 +24,14 @@ interface Sortable
      *
      * @param array $ids
      *
-     * @throws SortableException
+     * @throws \Spatie\EloquentSortable\SortableException
      */
     public static function setNewOrder($ids);
+
+    /**
+     * Determine if the order column should be set when saving a new model instance.
+     *
+     * @return bool
+     */
+    public function shouldSortWhenCreating();
 }

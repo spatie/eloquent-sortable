@@ -29,20 +29,13 @@ class SortableServiceProvider extends ServiceProvider
     }
 
     /**
-     * Perform actions on Eloquent's Creating-event.
+     * Perform actions on Eloquent's creating-event.
      */
     public function bootEvents()
     {
         $this->app['events']->listen('eloquent.creating*', function ($model) {
-            if ($model instanceof Sortable) {
-                if (
-                    isset($model->sortable) &&
-                    isset($model->sortable['sort_when_creating']) &&
-                    $model->sortable['sort_when_creating'] === false
-                ) {
-                    return;
-                }
 
+            if ($model instanceof Sortable && $model->shouldSortWhenCreating()) {
                 $model->setHighestOrderNumber();
             }
         });
