@@ -25,7 +25,7 @@ We accept contributions via Pull Requests on [Github](https://github.com/thephps
 ## Running Tests
 
 ``` bash
-$ phpunit
+$ vendor/bin/phpunit
 ```
 
 
