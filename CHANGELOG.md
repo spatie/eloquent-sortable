@@ -2,6 +2,9 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
+## 2.0.1
+- Fixed typehinting on scope
+
 ## 2.0.0
 - SortableInterface is now Sortable
 - Sortable is now SortableTrait

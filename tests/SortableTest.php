@@ -71,4 +71,16 @@ class SortableTest extends TestCase
         $model->sortable['sort_when_creating'] = false;
         $this->assertFalse($model->shouldSortWhenCreating());
     }
+
+    /**
+     * @test
+     */
+    public function it_provides_an_ordered_trait()
+    {
+        $i = 1;
+
+        foreach (Dummy::ordered()->get()->lists('order_column') as $order) {
+            $this->assertEquals($i++, $order);
+        };
+    }
 }
