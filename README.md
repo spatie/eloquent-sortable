@@ -14,7 +14,7 @@ The value of the ordercolumn of a new record of a model is determined by the max
 
 The package also provides a query scope to fetch all the records in the right order.
 
-Spatie is webdesign agency in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
+Spatie is a webdesign agency in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
 
 ## Installation
 
@@ -131,7 +131,7 @@ If you discover any security related issues, please email freek@spatie.be instea
 - [All Contributors](../../contributors)
 
 ## About Spatie
-Spatie is webdesign agency in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
+Spatie is a webdesign agency in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
 
 ## License
 
