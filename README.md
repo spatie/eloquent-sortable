@@ -132,6 +132,7 @@ If you discover any security related issues, please email freek@spatie.be instea
 
 ## Alternatives
 [Listify](https://github.com/lookitsatravis/listify)
+[Rutorike-sortable](https://github.com/boxfrommars/rutorika-sortable)
 
 ## About Spatie
 Spatie is a webdesign agency in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
