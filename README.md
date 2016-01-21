@@ -62,7 +62,7 @@ class MyModel extends Eloquent implements Sortable
 }
 ```
 
-If you don't set a value ```$sortable['order_column_name']``` the package will asume that your order column name will be 'order_column'; 
+If you don't set a value ```$sortable['order_column_name']``` the package will assume that your order column name will be 'order_column'; 
 
 If you don't set a value ```$sortable['sort_when_creating']``` the package will automatically assign the highest order number to a new model;
 
