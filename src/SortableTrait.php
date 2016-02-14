@@ -65,7 +65,7 @@ trait SortableTrait
      *
      * @return string
      */
-    protected function determineOrderColumnName()
+    public function determineOrderColumnName()
     {
         if (
             isset($this->sortable['order_column_name']) &&
@@ -93,5 +93,74 @@ trait SortableTrait
         }
 
         return $this->sortable['sort_when_creating'];
+    }
+
+    /**
+     * Swaps the order of this model with the model 'below' this model
+     *
+     * @return $this
+     *
+     * @throws SortableException
+     */
+    public function moveOrderDown()
+    {
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $swapWithModel = static::limit(1)
+            ->ordered()
+            ->where($orderColumnName, '>', $this->$orderColumnName)
+            ->first();
+
+        if (!$swapWithModel) {
+            throw new SortableException('The model you try to move down has already the lowest order');
+        }
+
+        return $this->swapOrderWithModel($swapWithModel);
+    }
+
+    /**
+     * Swaps the order of this model with the model 'above' this model
+     *
+     * @return $this
+     *
+     * @throws SortableException
+     */
+    public function moveOrderUp()
+    {
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $swapWithModel = static::limit(1)
+            ->ordered()
+            ->where($orderColumnName, '<', $this->$orderColumnName)
+            ->first();
+
+        if (!$swapWithModel) {
+            throw new SortableException('The model you try to move up has already the highest order');
+        }
+
+        return $this->swapOrderWithModel($swapWithModel);
+    }
+
+    /**
+     * Swap the order of this model with the order of another model
+     *
+     * @param \Spatie\EloquentSortable\Sortable $model
+     *
+     * @return $this
+     */
+    protected function swapOrderWithModel(Sortable $model)
+    {
+        $thisModelColumnName  = $this->determineOrderColumnName();
+        $otherModelColumnName = $model->determineOrderColumnName();
+
+        $currentOtherModelOrder = $model->$otherModelColumnName;
+
+        $model->$otherModelColumnName = $this->$thisModelColumnName;
+        $model->save();
+
+        $this->$thisModelColumnName = $currentOtherModelOrder;
+        $this->save();
+
+        return $this;
     }
 }

@@ -83,4 +83,68 @@ class SortableTest extends TestCase
             $this->assertEquals($i++, $order);
         };
     }
+
+    /**
+     * @test
+     */
+    public function it_can_move_the_order_down()
+    {
+        $firstModel  = Dummy::find(1);
+        $secondModel = Dummy::find(2);
+
+        $this->assertEquals($firstModel->order_column, 1);
+        $this->assertEquals($secondModel->order_column, 2);
+
+        $firstModel->moveOrderDown();
+
+        $firstModel  = Dummy::find(1);
+        $secondModel = Dummy::find(2);
+
+        $this->assertEquals($firstModel->order_column, 2);
+        $this->assertEquals($secondModel->order_column, 1);
+    }
+
+    /**
+     * @test
+     * @expectedException Spatie\EloquentSortable\SortableException
+     */
+    public function it_throws_an_exception_when_it_cant_move_the_order_down()
+    {
+        $lastModel = Dummy::all()->last();
+
+        $this->assertEquals($lastModel->order_column, 20);
+        $lastModel->moveOrderDown();
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_move_the_order_up()
+    {
+        $firstModel  = Dummy::find(1);
+        $secondModel = Dummy::find(2);
+
+        $this->assertEquals($firstModel->order_column, 1);
+        $this->assertEquals($secondModel->order_column, 2);
+
+        $secondModel->moveOrderUp();
+
+        $firstModel  = Dummy::find(1);
+        $secondModel = Dummy::find(2);
+
+        $this->assertEquals($firstModel->order_column, 2);
+        $this->assertEquals($secondModel->order_column, 1);
+    }
+
+    /**
+     * @test
+     * @expectedException Spatie\EloquentSortable\SortableException
+     */
+    public function it_throws_an_exception_when_it_cant_move_the_order_up()
+    {
+        $lastModel = Dummy::first();
+
+        $this->assertEquals($lastModel->order_column, 1);
+        $lastModel->moveOrderUp();
+    }
 }
