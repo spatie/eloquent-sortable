@@ -65,7 +65,7 @@ trait SortableTrait
      *
      * @return string
      */
-    public function determineOrderColumnName()
+    protected function determineOrderColumnName()
     {
         if (
             isset($this->sortable['order_column_name']) &&
@@ -148,17 +148,15 @@ trait SortableTrait
      *
      * @return $this
      */
-    protected function swapOrderWithModel(Sortable $model)
+    protected function swapOrderWithModel(self $model)
     {
-        $thisModelColumnName  = $this->determineOrderColumnName();
-        $otherModelColumnName = $model->determineOrderColumnName();
+        $orderColumnName  = $this->determineOrderColumnName();
+        $oldOrderOfOtherModel = $model->$orderColumnName;
 
-        $currentOtherModelOrder = $model->$otherModelColumnName;
-
-        $model->$otherModelColumnName = $this->$thisModelColumnName;
+        $model->$orderColumnName = $this->$orderColumnName;
         $model->save();
 
-        $this->$thisModelColumnName = $currentOtherModelOrder;
+        $this->$orderColumnName = $oldOrderOfOtherModel;
         $this->save();
 
         return $this;
