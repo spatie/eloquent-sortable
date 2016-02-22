@@ -98,9 +98,7 @@ trait SortableTrait
     /**
      * Swaps the order of this model with the model 'below' this model
      *
-     * @return $this
-     *
-     * @throws SortableException
+     * @return bool|$this
      */
     public function moveOrderDown()
     {
@@ -112,7 +110,7 @@ trait SortableTrait
             ->first();
 
         if (!$swapWithModel) {
-            throw new SortableException('The model you try to move down has already the lowest order');
+            return false;
         }
 
         return $this->swapOrderWithModel($swapWithModel);
@@ -121,9 +119,7 @@ trait SortableTrait
     /**
      * Swaps the order of this model with the model 'above' this model
      *
-     * @return $this
-     *
-     * @throws SortableException
+     * @return bool|$this
      */
     public function moveOrderUp()
     {
@@ -135,7 +131,7 @@ trait SortableTrait
             ->first();
 
         if (!$swapWithModel) {
-            throw new SortableException('The model you try to move up has already the highest order');
+            return false;
         }
 
         return $this->swapOrderWithModel($swapWithModel);

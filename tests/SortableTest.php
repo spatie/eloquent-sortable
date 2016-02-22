@@ -95,7 +95,7 @@ class SortableTest extends TestCase
         $this->assertEquals($firstModel->order_column, 1);
         $this->assertEquals($secondModel->order_column, 2);
 
-        $firstModel->moveOrderDown();
+        $this->assertNotFalse($firstModel->moveOrderDown());
 
         $firstModel  = Dummy::find(1);
         $secondModel = Dummy::find(2);
@@ -106,14 +106,13 @@ class SortableTest extends TestCase
 
     /**
      * @test
-     * @expectedException Spatie\EloquentSortable\SortableException
      */
     public function it_throws_an_exception_when_it_cant_move_the_order_down()
     {
         $lastModel = Dummy::all()->last();
 
         $this->assertEquals($lastModel->order_column, 20);
-        $lastModel->moveOrderDown();
+        $this->assertFalse($lastModel->moveOrderDown());
     }
 
     /**
@@ -127,7 +126,7 @@ class SortableTest extends TestCase
         $this->assertEquals($firstModel->order_column, 1);
         $this->assertEquals($secondModel->order_column, 2);
 
-        $secondModel->moveOrderUp();
+        $this->assertNotFalse($secondModel->moveOrderUp());
 
         $firstModel  = Dummy::find(1);
         $secondModel = Dummy::find(2);
@@ -138,13 +137,12 @@ class SortableTest extends TestCase
 
     /**
      * @test
-     * @expectedException Spatie\EloquentSortable\SortableException
      */
     public function it_throws_an_exception_when_it_cant_move_the_order_up()
     {
         $lastModel = Dummy::first();
 
         $this->assertEquals($lastModel->order_column, 1);
-        $lastModel->moveOrderUp();
+        $this->assertFalse($lastModel->moveOrderUp());
     }
 }
