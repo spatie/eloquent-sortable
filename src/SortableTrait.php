@@ -94,4 +94,67 @@ trait SortableTrait
 
         return $this->sortable['sort_when_creating'];
     }
+
+    /**
+     * Swaps the order of this model with the model 'below' this model
+     *
+     * @return bool|$this
+     */
+    public function moveOrderDown()
+    {
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $swapWithModel = static::limit(1)
+            ->ordered()
+            ->where($orderColumnName, '>', $this->$orderColumnName)
+            ->first();
+
+        if (!$swapWithModel) {
+            return false;
+        }
+
+        return $this->swapOrderWithModel($swapWithModel);
+    }
+
+    /**
+     * Swaps the order of this model with the model 'above' this model
+     *
+     * @return bool|$this
+     */
+    public function moveOrderUp()
+    {
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $swapWithModel = static::limit(1)
+            ->ordered()
+            ->where($orderColumnName, '<', $this->$orderColumnName)
+            ->first();
+
+        if (!$swapWithModel) {
+            return false;
+        }
+
+        return $this->swapOrderWithModel($swapWithModel);
+    }
+
+    /**
+     * Swap the order of this model with the order of another model
+     *
+     * @param \Spatie\EloquentSortable\Sortable $model
+     *
+     * @return $this
+     */
+    protected function swapOrderWithModel(self $model)
+    {
+        $orderColumnName  = $this->determineOrderColumnName();
+        $oldOrderOfOtherModel = $model->$orderColumnName;
+
+        $model->$orderColumnName = $this->$orderColumnName;
+        $model->save();
+
+        $this->$orderColumnName = $oldOrderOfOtherModel;
+        $this->save();
+
+        return $this;
+    }
 }
