@@ -105,6 +105,13 @@ Optionally you can pass the starting order number as the second argument.
 MyModel::setNewOrder([3,1,2], 10);
 ```
 
+You can also move a model up or down with these methods:
+
+```php 
+$myModel->moveOrderDown();
+$myModel->moveOrderUp();
+```
+
 ## Tests
 
 The package contains some integration/smoke tests, set up with Orchestra. The tests can be run via phpunit.

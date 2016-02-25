@@ -49,7 +49,7 @@ abstract class TestCase extends Orchestra
             $table->integer('order_column');
         });
 
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 20; ++$i) {
             Dummy::create(['name' => $i]);
         }
     }

@@ -89,7 +89,7 @@ class SortableTest extends TestCase
      */
     public function it_can_move_the_order_down()
     {
-        $firstModel  = Dummy::find(1);
+        $firstModel = Dummy::find(1);
         $secondModel = Dummy::find(2);
 
         $this->assertEquals($firstModel->order_column, 1);
@@ -97,7 +97,7 @@ class SortableTest extends TestCase
 
         $this->assertNotFalse($firstModel->moveOrderDown());
 
-        $firstModel  = Dummy::find(1);
+        $firstModel = Dummy::find(1);
         $secondModel = Dummy::find(2);
 
         $this->assertEquals($firstModel->order_column, 2);
@@ -107,12 +107,12 @@ class SortableTest extends TestCase
     /**
      * @test
      */
-    public function it_throws_an_exception_when_it_cant_move_the_order_down()
+    public function it_will_not_fail_when_it_cant_move_the_order_down()
     {
         $lastModel = Dummy::all()->last();
 
         $this->assertEquals($lastModel->order_column, 20);
-        $this->assertFalse($lastModel->moveOrderDown());
+        $this->assertEquals($lastModel, $lastModel->moveOrderDown());
     }
 
     /**
@@ -120,7 +120,7 @@ class SortableTest extends TestCase
      */
     public function it_can_move_the_order_up()
     {
-        $firstModel  = Dummy::find(1);
+        $firstModel = Dummy::find(1);
         $secondModel = Dummy::find(2);
 
         $this->assertEquals($firstModel->order_column, 1);
@@ -128,7 +128,7 @@ class SortableTest extends TestCase
 
         $this->assertNotFalse($secondModel->moveOrderUp());
 
-        $firstModel  = Dummy::find(1);
+        $firstModel = Dummy::find(1);
         $secondModel = Dummy::find(2);
 
         $this->assertEquals($firstModel->order_column, 2);
@@ -138,11 +138,11 @@ class SortableTest extends TestCase
     /**
      * @test
      */
-    public function it_throws_an_exception_when_it_cant_move_the_order_up()
+    public function it_will_not_when_it_cant_move_the_order_up()
     {
         $lastModel = Dummy::first();
 
         $this->assertEquals($lastModel->order_column, 1);
-        $this->assertFalse($lastModel->moveOrderUp());
+        $this->assertEquals($lastModel, $lastModel->moveOrderUp());
     }
 }

@@ -20,7 +20,7 @@ trait SortableTrait
      */
     public function getHighestOrderNumber()
     {
-        return ((int) static::max($this->determineOrderColumnName()));
+        return (int) static::max($this->determineOrderColumnName());
     }
 
     /**
@@ -96,9 +96,9 @@ trait SortableTrait
     }
 
     /**
-     * Swaps the order of this model with the model 'below' this model
+     * Swaps the order of this model with the model 'below' this model.
      *
-     * @return bool|$this
+     * @return $this
      */
     public function moveOrderDown()
     {
@@ -110,16 +110,16 @@ trait SortableTrait
             ->first();
 
         if (!$swapWithModel) {
-            return false;
+            return $this;
         }
 
         return $this->swapOrderWithModel($swapWithModel);
     }
 
     /**
-     * Swaps the order of this model with the model 'above' this model
+     * Swaps the order of this model with the model 'above' this model.
      *
-     * @return bool|$this
+     * @return $this
      */
     public function moveOrderUp()
     {
@@ -131,14 +131,14 @@ trait SortableTrait
             ->first();
 
         if (!$swapWithModel) {
-            return false;
+            return $this;
         }
 
         return $this->swapOrderWithModel($swapWithModel);
     }
 
     /**
-     * Swap the order of this model with the order of another model
+     * Swap the order of this model with the order of another model.
      *
      * @param \Spatie\EloquentSortable\Sortable $model
      *
@@ -146,7 +146,7 @@ trait SortableTrait
      */
     protected function swapOrderWithModel(self $model)
     {
-        $orderColumnName  = $this->determineOrderColumnName();
+        $orderColumnName = $this->determineOrderColumnName();
         $oldOrderOfOtherModel = $model->$orderColumnName;
 
         $model->$orderColumnName = $this->$orderColumnName;

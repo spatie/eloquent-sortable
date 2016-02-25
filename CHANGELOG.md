@@ -2,6 +2,9 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
+## 2.1.0
+- Added `moveOrderUp`- and `moveOrderDown`-methods
+
 ## 2.0.1
 - Fixed typehinting on scope
 
