@@ -65,7 +65,7 @@ trait SortableTrait
      *
      * @return string
      */
-    protected function determineOrderColumnName()
+    public function determineOrderColumnName()
     {
         if (
             isset($this->sortable['order_column_name']) &&
