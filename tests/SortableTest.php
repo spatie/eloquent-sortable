@@ -89,19 +89,19 @@ class SortableTest extends TestCase
      */
     public function it_can_move_the_order_down()
     {
-        $firstModel = Dummy::find(1);
-        $secondModel = Dummy::find(2);
+        $firstModel = Dummy::find(3);
+        $secondModel = Dummy::find(4);
 
-        $this->assertEquals($firstModel->order_column, 1);
-        $this->assertEquals($secondModel->order_column, 2);
+        $this->assertEquals($firstModel->order_column, 3);
+        $this->assertEquals($secondModel->order_column, 4);
 
         $this->assertNotFalse($firstModel->moveOrderDown());
 
-        $firstModel = Dummy::find(1);
-        $secondModel = Dummy::find(2);
+        $firstModel = Dummy::find(3);
+        $secondModel = Dummy::find(4);
 
-        $this->assertEquals($firstModel->order_column, 2);
-        $this->assertEquals($secondModel->order_column, 1);
+        $this->assertEquals($firstModel->order_column, 4);
+        $this->assertEquals($secondModel->order_column, 3);
     }
 
     /**
@@ -120,19 +120,19 @@ class SortableTest extends TestCase
      */
     public function it_can_move_the_order_up()
     {
-        $firstModel = Dummy::find(1);
-        $secondModel = Dummy::find(2);
+        $firstModel = Dummy::find(3);
+        $secondModel = Dummy::find(4);
 
-        $this->assertEquals($firstModel->order_column, 1);
-        $this->assertEquals($secondModel->order_column, 2);
+        $this->assertEquals($firstModel->order_column, 3);
+        $this->assertEquals($secondModel->order_column, 4);
 
         $this->assertNotFalse($secondModel->moveOrderUp());
 
-        $firstModel = Dummy::find(1);
-        $secondModel = Dummy::find(2);
+        $firstModel = Dummy::find(3);
+        $secondModel = Dummy::find(4);
 
-        $this->assertEquals($firstModel->order_column, 2);
-        $this->assertEquals($secondModel->order_column, 1);
+        $this->assertEquals($firstModel->order_column, 4);
+        $this->assertEquals($secondModel->order_column, 3);
     }
 
     /**

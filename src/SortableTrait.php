@@ -27,12 +27,13 @@ trait SortableTrait
      * Let's be nice and provide an ordered scope.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     *
+     * @param string                                $direction
+     * 
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeOrdered(\Illuminate\Database\Eloquent\Builder $query)
+    public function scopeOrdered(\Illuminate\Database\Eloquent\Builder $query, $direction = 'asc')
     {
-        return $query->orderBy($this->determineOrderColumnName());
+        return $query->orderBy($this->determineOrderColumnName(), $direction);
     }
 
     /**
@@ -126,7 +127,7 @@ trait SortableTrait
         $orderColumnName = $this->determineOrderColumnName();
 
         $swapWithModel = static::limit(1)
-            ->ordered()
+            ->ordered('desc')
             ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
 
