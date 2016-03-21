@@ -2,7 +2,7 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
-## 2.1.1
+## 2.1.1 - 2016-03-21
 - Fixed a bug in `moveOrderUp` (see #13)
 
 ## 2.1.0
