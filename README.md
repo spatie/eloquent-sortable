@@ -10,7 +10,7 @@ Sortable behaviour for Eloquent models
 
 This package provides a trait that adds sortable behaviour to an Eloquent model.
 
-The value of the ordercolumn of a new record of a model is determined by the maximum value of the ordercolumn of all records of that model + 1.
+The value of the order column of a new record of a model is determined by the maximum value of the order column of all records of that model + 1.
 
 The package also provides a query scope to fetch all the records in the right order.
 
@@ -40,7 +40,7 @@ You must add this service provider:
 To add sortable behaviour to your model you must:<br />
 1. specify that the model will conform to ```Spatie\EloquentSortable\Sortable```<br />
 2. use the trait ```Spatie\EloquentSortable\SortableTrait```<br />
-3. specify which column will be used as the ordercolumn<br />
+3. specify which column will be used as the order column<br />
 
 ### Example
 
