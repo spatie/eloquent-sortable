@@ -145,4 +145,63 @@ class SortableTest extends TestCase
         $this->assertEquals($lastModel->order_column, 1);
         $this->assertEquals($lastModel, $lastModel->moveOrderUp());
     }
+
+    /**
+     * @test
+     */
+    public function it_can_move_the_order_first()
+    {
+        $pos = 3;
+
+        $oldModels = Dummy::where('id', '!=', $pos)->get();
+
+        $model = Dummy::find($pos);
+
+        $this->assertEquals(3, $model->order_column);
+
+        $model = $model->moveToStart();
+
+        $this->assertEquals(1, $model->order_column);
+
+        $oldModels = $oldModels->lists('order_column', 'id');
+
+        $newModels = Dummy::where('id', '!=', $pos)->get()->lists('order_column', 'id');
+
+        foreach ($oldModels as $key => $oldModel) {
+
+            $this->assertEquals($oldModel + 1 , $newModels[$key]);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_move_the_order_last()
+    {
+        $pos = 3;
+
+        $oldModels = Dummy::where('id', '!=', $pos)->get();
+
+        $model = Dummy::find($pos);
+
+        $this->assertNotEquals(20, $model->order_column);
+
+        $model = $model->moveToEnd();
+
+        $this->assertEquals(20, $model->order_column);
+
+        $oldModels = $oldModels->lists('order_column', 'id');
+
+        $newModels = Dummy::where('id', '!=', $pos)->get()->lists('order_column', 'id');
+
+        foreach ($oldModels as $key => $order) {
+
+            if ($order > $pos) {
+                $this->assertEquals($order - 1 , $newModels[$key]);
+            } else {
+                $this->assertEquals($order , $newModels[$key]);
+            }
+        }
+    }
+
 }

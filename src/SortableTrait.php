@@ -158,4 +158,57 @@ trait SortableTrait
 
         return $this;
     }
+
+    /**
+     * Moves this model to the first position
+     *
+     * @return $this
+     */
+    public function moveToStart()
+    {
+        $firstModel = static::limit(1)
+            ->ordered()
+            ->first();
+
+        if ($firstModel->id == $this->id) {
+            return $this;
+        }
+
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $this->$orderColumnName = $firstModel->$orderColumnName;
+        $this->save();
+
+        self::where($this->getKeyName(), '!=', $this->id)
+            ->increment($orderColumnName);
+
+        return $this;
+    }
+
+    /**
+     * Moves this model to the last position
+     *
+     * @return $this
+     */
+    public function moveToEnd()
+    {
+        $maxOrder = $this->getHighestOrderNumber();
+
+        $orderColumnName = $this->determineOrderColumnName();
+
+        if ($this->$orderColumnName == $maxOrder) {
+            return $this;
+        }
+
+        $oldOrder = $this->$orderColumnName;
+
+        $this->$orderColumnName = $maxOrder;
+        $this->save();
+
+        self::where($this->getKeyName(), '!=', $this->id)
+            ->where($orderColumnName, '>', $oldOrder)
+            ->decrement($orderColumnName);
+
+        return $this;
+    }
 }
