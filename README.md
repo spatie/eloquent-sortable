@@ -120,6 +120,13 @@ $myModel->moveOrderDown();
 $myModel->moveOrderUp();
 ```
 
+You can also move a model to the first or last position:
+
+```php 
+$myModel->moveToStart();
+$myModel->moveToEnd();
+```
+
 ## Tests
 
 The package contains some integration/smoke tests, set up with Orchestra. The tests can be run via phpunit.
