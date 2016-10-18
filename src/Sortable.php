@@ -34,9 +34,4 @@ interface Sortable
      * @return bool
      */
     public function shouldSortWhenCreating();
-
-    /**
-     * Reorder the records
-     */
-    public function reorder();
 }
