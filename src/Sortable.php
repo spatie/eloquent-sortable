@@ -34,18 +34,4 @@ interface Sortable
      * @return bool
      */
     public function shouldSortWhenCreating();
-
-    /**
-     * Moves this model to the first position
-     *
-     * @return $this
-     */
-    public function moveToStart();
-
-    /**
-     * Moves this model to the last position
-     *
-     * @return $this
-     */
-    public function moveToEnd();
 }
