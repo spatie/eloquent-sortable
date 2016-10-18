@@ -2,6 +2,9 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
+## ???
+- short_when_deleting option
+
 ## 2.1.1 - 2016-03-21
 - Fixed a bug in `moveOrderUp` (see #13)
 

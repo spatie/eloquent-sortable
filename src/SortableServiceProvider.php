@@ -39,5 +39,12 @@ class SortableServiceProvider extends ServiceProvider
                 $model->setHighestOrderNumber();
             }
         });
+
+        $this->app['events']->listen('eloquent.deleted*', function ($model) {
+
+            if ($model instanceof Sortable && $model->shouldSortWhenDeleting()) {
+                $model->reorder();
+            }
+        });
     }
 }

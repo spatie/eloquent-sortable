@@ -64,6 +64,7 @@ class MyModel extends Eloquent implements Sortable
     public $sortable = [
         'order_column_name' => 'order_column',
         'sort_when_creating' => true,
+        'sort_when_deleting' => true,
     ];
     
     ...
@@ -73,6 +74,8 @@ class MyModel extends Eloquent implements Sortable
 If you don't set a value ```$sortable['order_column_name']``` the package will assume that your order column name will be 'order_column'; 
 
 If you don't set a value ```$sortable['sort_when_creating']``` the package will automatically assign the highest order number to a new model;
+
+If you don't set a value ```$sortable['sort_when_deleting']``` the package will automatically reorder the table if you delete a record;
 
 Assuming that the db-table for ```MyModel``` is empty:
 
