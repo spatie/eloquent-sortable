@@ -97,6 +97,24 @@ trait SortableTrait
     }
 
     /**
+     * Determine if the table should be reorder when deleting
+     *
+     * @return bool
+     */
+    public function shouldSortWhenDeleting()
+    {
+        if (!isset($this->sortable)) {
+            return true;
+        }
+
+        if (!isset($this->sortable['sort_when_deleting'])) {
+            return true;
+        }
+
+        return $this->sortable['sort_when_deleting'];
+    }
+
+    /**
      * Swaps the order of this model with the model 'below' this model.
      *
      * @return $this
@@ -157,5 +175,26 @@ trait SortableTrait
         $this->save();
 
         return $this;
+    }
+
+    /**
+     * Reorder the records
+     */
+    public function reorder()
+    {
+        $startOrder = 1;
+
+        foreach (self::ordered()->select([$this->getKeyName(), $this->determineOrderColumnName()])->get() as $model) {
+            
+            $orderColumnName = $model->determineOrderColumnName();
+
+            if ((int) $model->$orderColumnName !== $startOrder) {
+                $model->$orderColumnName = $startOrder;
+                $model->save();
+            }
+
+            $startOrder++;
+        }
+
     }
 }
