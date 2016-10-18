@@ -182,18 +182,18 @@ trait SortableTrait
      */
     public function reorder()
     {
-        $startOrder = 1;
+        $order = 1;
 
-        foreach (self::ordered()->select([$this->getKeyName(), $this->determineOrderColumnName()])->get() as $model) {
-            
-            $orderColumnName = $model->determineOrderColumnName();
+        $orderColumnName = $this->determineOrderColumnName();
 
-            if ((int) $model->$orderColumnName !== $startOrder) {
-                $model->$orderColumnName = $startOrder;
+        foreach (self::ordered()->select([$this->getKeyName(), $orderColumnName])->get() as $model) {
+
+            if ((int) $model->$orderColumnName !== $order) {
+                $model->$orderColumnName = $order;
                 $model->save();
             }
 
-            $startOrder++;
+            $order++;
         }
 
     }
