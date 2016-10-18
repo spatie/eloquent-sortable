@@ -34,7 +34,6 @@ class SortableServiceProvider extends ServiceProvider
     public function bootEvents()
     {
         $this->app['events']->listen('eloquent.creating*', function ($model) {
-
             if ($model instanceof Sortable && $model->shouldSortWhenCreating()) {
                 $model->setHighestOrderNumber();
             }
