@@ -34,4 +34,11 @@ interface Sortable
      * @return bool
      */
     public function shouldSortWhenCreating();
+
+    /**
+     * Determine if the table should be reorder when deleting
+     *
+     * @return bool
+     */
+    public function shouldSortWhenDeleting();
 }
