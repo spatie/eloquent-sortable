@@ -81,7 +81,7 @@ class SortableTest extends TestCase
 
         foreach (Dummy::ordered()->get()->pluck('order_column') as $order) {
             $this->assertEquals($i++, $order);
-        };
+        }
     }
 
     /**
