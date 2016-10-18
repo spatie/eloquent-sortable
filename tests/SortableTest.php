@@ -163,9 +163,9 @@ class SortableTest extends TestCase
 
         $this->assertEquals(1, $model->order_column);
 
-        $oldModels = $oldModels->lists('order_column', 'id');
+        $oldModels = $oldModels->pluck('order_column', 'id');
 
-        $newModels = Dummy::where('id', '!=', $pos)->get()->lists('order_column', 'id');
+        $newModels = Dummy::where('id', '!=', $pos)->get()->pluck('order_column', 'id');
 
         foreach ($oldModels as $key => $oldModel) {
 
@@ -190,9 +190,9 @@ class SortableTest extends TestCase
 
         $this->assertEquals(20, $model->order_column);
 
-        $oldModels = $oldModels->lists('order_column', 'id');
+        $oldModels = $oldModels->pluck('order_column', 'id');
 
-        $newModels = Dummy::where('id', '!=', $pos)->get()->lists('order_column', 'id');
+        $newModels = Dummy::where('id', '!=', $pos)->get()->pluck('order_column', 'id');
 
         foreach ($oldModels as $key => $order) {
 
