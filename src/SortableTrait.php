@@ -161,7 +161,7 @@ trait SortableTrait
     }
 
     /**
-     * Swap the order of two models
+     * Swap the order of two models.
      *
      * @param \Spatie\EloquentSortable\Sortable $model
      * @param \Spatie\EloquentSortable\Sortable $model
@@ -174,7 +174,7 @@ trait SortableTrait
     }
 
     /**
-     * Moves this model to the first position
+     * Moves this model to the first position.
      *
      * @return $this
      */
@@ -200,7 +200,7 @@ trait SortableTrait
     }
 
     /**
-     * Moves this model to the last position
+     * Moves this model to the last position.
      *
      * @return $this
      */
