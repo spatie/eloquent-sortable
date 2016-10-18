@@ -171,7 +171,7 @@ trait SortableTrait
             ->ordered()
             ->first();
 
-        if ($firstModel->id == $this->id) {
+        if ($firstModel->id === $this->id) {
             return $this;
         }
 
@@ -180,7 +180,7 @@ trait SortableTrait
         $this->$orderColumnName = $firstModel->$orderColumnName;
         $this->save();
 
-        self::where($this->getKeyName(), '!=', $this->id)
+        static::where($this->getKeyName(), '!=', $this->id)
             ->increment($orderColumnName);
 
         return $this;
@@ -197,7 +197,7 @@ trait SortableTrait
 
         $orderColumnName = $this->determineOrderColumnName();
 
-        if ($this->$orderColumnName == $maxOrder) {
+        if ($this->$orderColumnName === $maxOrder) {
             return $this;
         }
 
@@ -206,7 +206,7 @@ trait SortableTrait
         $this->$orderColumnName = $maxOrder;
         $this->save();
 
-        self::where($this->getKeyName(), '!=', $this->id)
+        static::where($this->getKeyName(), '!=', $this->id)
             ->where($orderColumnName, '>', $oldOrder)
             ->decrement($orderColumnName);
 

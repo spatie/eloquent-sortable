@@ -151,11 +151,11 @@ class SortableTest extends TestCase
      */
     public function it_can_move_the_order_first()
     {
-        $pos = 3;
+        $position = 3;
 
-        $oldModels = Dummy::where('id', '!=', $pos)->get();
+        $oldModels = Dummy::whereNot('id', $position)->get();
 
-        $model = Dummy::find($pos);
+        $model = Dummy::find($position);
 
         $this->assertEquals(3, $model->order_column);
 
@@ -164,11 +164,9 @@ class SortableTest extends TestCase
         $this->assertEquals(1, $model->order_column);
 
         $oldModels = $oldModels->pluck('order_column', 'id');
-
-        $newModels = Dummy::where('id', '!=', $pos)->get()->pluck('order_column', 'id');
+        $newModels = Dummy::whereNot('id', $position)->get()->pluck('order_column', 'id');
 
         foreach ($oldModels as $key => $oldModel) {
-
             $this->assertEquals($oldModel + 1 , $newModels[$key]);
         }
     }
@@ -178,11 +176,11 @@ class SortableTest extends TestCase
      */
     public function it_can_move_the_order_last()
     {
-        $pos = 3;
+        $position = 3;
 
-        $oldModels = Dummy::where('id', '!=', $pos)->get();
+        $oldModels = Dummy::whereNot('id', $position)->get();
 
-        $model = Dummy::find($pos);
+        $model = Dummy::find($position);
 
         $this->assertNotEquals(20, $model->order_column);
 
@@ -192,11 +190,11 @@ class SortableTest extends TestCase
 
         $oldModels = $oldModels->pluck('order_column', 'id');
 
-        $newModels = Dummy::where('id', '!=', $pos)->get()->pluck('order_column', 'id');
+        $newModels = Dummy::whereNot('id', $position)->get()->pluck('order_column', 'id');
 
         foreach ($oldModels as $key => $order) {
 
-            if ($order > $pos) {
+            if ($order > $position) {
                 $this->assertEquals($order - 1 , $newModels[$key]);
             } else {
                 $this->assertEquals($order , $newModels[$key]);
