@@ -141,17 +141,18 @@ trait SortableTrait
     /**
      * Swap the order of this model with the order of another model.
      *
-     * @param \Spatie\EloquentSortable\Sortable $model
+     * @param \Spatie\EloquentSortable\Sortable $otherModel
      *
      * @return $this
      */
-    protected function swapOrderWithModel(self $model)
+    protected function swapOrderWithModel($otherModel)
     {
         $orderColumnName = $this->determineOrderColumnName();
-        $oldOrderOfOtherModel = $model->$orderColumnName;
 
-        $model->$orderColumnName = $this->$orderColumnName;
-        $model->save();
+        $oldOrderOfOtherModel = $otherModel->$orderColumnName;
+
+        $otherModel->$orderColumnName = $this->$orderColumnName;
+        $otherModel->save();
 
         $this->$orderColumnName = $oldOrderOfOtherModel;
         $this->save();
@@ -169,5 +170,59 @@ trait SortableTrait
     public static function swapOrder(self $model, self $model2)
     {
         $model->swapOrderWithModel($model2);
+
+    }
+
+    /**
+     * Moves this model to the first position
+     *
+     * @return $this
+     */
+    public function moveToStart()
+    {
+        $firstModel = static::limit(1)
+            ->ordered()
+            ->first();
+
+        if ($firstModel->id === $this->id) {
+            return $this;
+        }
+
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $this->$orderColumnName = $firstModel->$orderColumnName;
+        $this->save();
+
+        static::where($this->getKeyName(), '!=', $this->id)
+            ->increment($orderColumnName);
+
+        return $this;
+    }
+
+    /**
+     * Moves this model to the last position
+     *
+     * @return $this
+     */
+    public function moveToEnd()
+    {
+        $maxOrder = $this->getHighestOrderNumber();
+
+        $orderColumnName = $this->determineOrderColumnName();
+
+        if ($this->$orderColumnName === $maxOrder) {
+            return $this;
+        }
+
+        $oldOrder = $this->$orderColumnName;
+
+        $this->$orderColumnName = $maxOrder;
+        $this->save();
+
+        static::where($this->getKeyName(), '!=', $this->id)
+            ->where($orderColumnName, '>', $oldOrder)
+            ->decrement($orderColumnName);
+
+        return $this;
     }
 }

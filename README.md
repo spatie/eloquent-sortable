@@ -120,6 +120,13 @@ $myModel->moveOrderDown();
 $myModel->moveOrderUp();
 ```
 
+You can also move a model to the first or last position:
+
+```php 
+$myModel->moveToStart();
+$myModel->moveToEnd();
+```
+
 You can swap the order of two models:
 
 ```php 

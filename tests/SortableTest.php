@@ -29,7 +29,7 @@ class SortableTest extends TestCase
      */
     public function it_can_set_a_new_order()
     {
-        $newOrder = Collection::make(Dummy::all()->lists('id'))->shuffle()->toArray();
+        $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
 
         Dummy::setNewOrder($newOrder);
 
@@ -79,7 +79,7 @@ class SortableTest extends TestCase
     {
         $i = 1;
 
-        foreach (Dummy::ordered()->get()->lists('order_column') as $order) {
+        foreach (Dummy::ordered()->get()->pluck('order_column') as $order) {
             $this->assertEquals($i++, $order);
         };
     }
@@ -166,4 +166,61 @@ class SortableTest extends TestCase
         $this->assertEquals($secondModel->order_column, 3);
 
     }
+
+    /**
+     * @test
+     */
+    public function it_can_move_the_order_first()
+    {
+        $position = 3;
+
+        $oldModels = Dummy::whereNot('id', $position)->get();
+
+        $model = Dummy::find($position);
+
+        $this->assertEquals(3, $model->order_column);
+
+        $model = $model->moveToStart();
+
+        $this->assertEquals(1, $model->order_column);
+
+        $oldModels = $oldModels->pluck('order_column', 'id');
+        $newModels = Dummy::whereNot('id', $position)->get()->pluck('order_column', 'id');
+
+        foreach ($oldModels as $key => $oldModel) {
+            $this->assertEquals($oldModel + 1 , $newModels[$key]);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_move_the_order_last()
+    {
+        $position = 3;
+
+        $oldModels = Dummy::whereNot('id', $position)->get();
+
+        $model = Dummy::find($position);
+
+        $this->assertNotEquals(20, $model->order_column);
+
+        $model = $model->moveToEnd();
+
+        $this->assertEquals(20, $model->order_column);
+
+        $oldModels = $oldModels->pluck('order_column', 'id');
+
+        $newModels = Dummy::whereNot('id', $position)->get()->pluck('order_column', 'id');
+
+        foreach ($oldModels as $key => $order) {
+
+            if ($order > $position) {
+                $this->assertEquals($order - 1 , $newModels[$key]);
+            } else {
+                $this->assertEquals($order , $newModels[$key]);
+            }
+        }
+    }
+
 }
