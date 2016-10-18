@@ -28,7 +28,7 @@ trait SortableTrait
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param string                                $direction
-     * 
+     *
      * @return \Illuminate\Database\Query\Builder
      */
     public function scopeOrdered(\Illuminate\Database\Eloquent\Builder $query, $direction = 'asc')
@@ -165,7 +165,6 @@ trait SortableTrait
      *
      * @param \Spatie\EloquentSortable\Sortable $model
      * @param \Spatie\EloquentSortable\Sortable $model
-     *
      */
     public static function swapOrder(self $model, self $model2)
     {

@@ -164,7 +164,6 @@ class SortableTest extends TestCase
 
         $this->assertEquals($firstModel->order_column, 4);
         $this->assertEquals($secondModel->order_column, 3);
-
     }
 
     /**
@@ -214,7 +213,6 @@ class SortableTest extends TestCase
         $newModels = Dummy::whereNot('id', $position)->get()->pluck('order_column', 'id');
 
         foreach ($oldModels as $key => $order) {
-
             if ($order > $position) {
                 $this->assertEquals($order - 1, $newModels[$key]);
             } else {
@@ -222,5 +220,4 @@ class SortableTest extends TestCase
             }
         }
     }
-
 }
