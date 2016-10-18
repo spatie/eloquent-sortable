@@ -53,7 +53,7 @@ trait SortableTrait
             throw new SortableException('You must pass an array to setNewOrder');
         }
 
-        $models = self::find($ids);
+        $models = self::find($ids); // Should take just what it needs, id and ordered_column
 
         $model = $models->first();
 
