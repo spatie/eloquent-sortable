@@ -28,7 +28,7 @@ trait SortableTrait
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param string                                $direction
-     * 
+     *
      * @return \Illuminate\Database\Query\Builder
      */
     public function scopeOrdered(\Illuminate\Database\Eloquent\Builder $query, $direction = 'asc')
@@ -49,7 +49,7 @@ trait SortableTrait
      */
     public static function setNewOrder($ids, $startOrder = 1)
     {
-        if (!is_array($ids)) {
+        if (! is_array($ids)) {
             throw new SortableException('You must pass an array to setNewOrder');
         }
 
@@ -58,18 +58,8 @@ trait SortableTrait
         $orderColumnName = $model->determineOrderColumnName();
         $primaryKeyColumn = $model->getKeyName();
 
-        $models = static::select($orderColumnName, $primaryKeyColumn)
-            ->find($ids);
-
-        $models = $models->sortBy(function ($q) use ($ids, $primaryKeyColumn) {
-
-            return array_search($q->$primaryKeyColumn, $ids);
-
-        });
-
-        foreach ($models as $model) {
-            $model->$orderColumnName = $startOrder++;
-            $model->save();
+        foreach ($ids as $id) {
+            static::where($primaryKeyColumn, $id)->update([$orderColumnName => $startOrder++]);
         }
     }
 
@@ -82,7 +72,7 @@ trait SortableTrait
     {
         if (
             isset($this->sortable['order_column_name']) &&
-            !empty($this->sortable['order_column_name'])
+            ! empty($this->sortable['order_column_name'])
         ) {
             return $this->sortable['order_column_name'];
         }
@@ -97,11 +87,11 @@ trait SortableTrait
      */
     public function shouldSortWhenCreating()
     {
-        if (!isset($this->sortable)) {
+        if (! isset($this->sortable)) {
             return true;
         }
 
-        if (!isset($this->sortable['sort_when_creating'])) {
+        if (! isset($this->sortable['sort_when_creating'])) {
             return true;
         }
 
@@ -122,7 +112,7 @@ trait SortableTrait
             ->where($orderColumnName, '>', $this->$orderColumnName)
             ->first();
 
-        if (!$swapWithModel) {
+        if (! $swapWithModel) {
             return $this;
         }
 
@@ -143,7 +133,7 @@ trait SortableTrait
             ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
 
-        if (!$swapWithModel) {
+        if (! $swapWithModel) {
             return $this;
         }
 
@@ -153,20 +143,74 @@ trait SortableTrait
     /**
      * Swap the order of this model with the order of another model.
      *
-     * @param \Spatie\EloquentSortable\Sortable $model
+     * @param \Spatie\EloquentSortable\Sortable $otherModel
      *
      * @return $this
      */
-    protected function swapOrderWithModel(self $model)
+    protected function swapOrderWithModel($otherModel)
     {
         $orderColumnName = $this->determineOrderColumnName();
-        $oldOrderOfOtherModel = $model->$orderColumnName;
 
-        $model->$orderColumnName = $this->$orderColumnName;
-        $model->save();
+        $oldOrderOfOtherModel = $otherModel->$orderColumnName;
+
+        $otherModel->$orderColumnName = $this->$orderColumnName;
+        $otherModel->save();
 
         $this->$orderColumnName = $oldOrderOfOtherModel;
         $this->save();
+
+        return $this;
+    }
+
+    /**
+     * Moves this model to the first position.
+     *
+     * @return $this
+     */
+    public function moveToStart()
+    {
+        $firstModel = static::limit(1)
+            ->ordered()
+            ->first();
+
+        if ($firstModel->id === $this->id) {
+            return $this;
+        }
+
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $this->$orderColumnName = $firstModel->$orderColumnName;
+        $this->save();
+
+        static::where($this->getKeyName(), '!=', $this->id)
+            ->increment($orderColumnName);
+
+        return $this;
+    }
+
+    /**
+     * Moves this model to the last position.
+     *
+     * @return $this
+     */
+    public function moveToEnd()
+    {
+        $maxOrder = $this->getHighestOrderNumber();
+
+        $orderColumnName = $this->determineOrderColumnName();
+
+        if ($this->$orderColumnName === $maxOrder) {
+            return $this;
+        }
+
+        $oldOrder = $this->$orderColumnName;
+
+        $this->$orderColumnName = $maxOrder;
+        $this->save();
+
+        static::where($this->getKeyName(), '!=', $this->id)
+            ->where($orderColumnName, '>', $oldOrder)
+            ->decrement($orderColumnName);
 
         return $this;
     }
