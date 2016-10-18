@@ -49,7 +49,7 @@ trait SortableTrait
      */
     public static function setNewOrder($ids, $startOrder = 1)
     {
-        if (!is_array($ids)) {
+        if (! is_array($ids)) {
             throw new SortableException('You must pass an array to setNewOrder');
         }
 
@@ -70,7 +70,7 @@ trait SortableTrait
     {
         if (
             isset($this->sortable['order_column_name']) &&
-            !empty($this->sortable['order_column_name'])
+            ! empty($this->sortable['order_column_name'])
         ) {
             return $this->sortable['order_column_name'];
         }
@@ -85,11 +85,11 @@ trait SortableTrait
      */
     public function shouldSortWhenCreating()
     {
-        if (!isset($this->sortable)) {
+        if (! isset($this->sortable)) {
             return true;
         }
 
-        if (!isset($this->sortable['sort_when_creating'])) {
+        if (! isset($this->sortable['sort_when_creating'])) {
             return true;
         }
 
@@ -110,7 +110,7 @@ trait SortableTrait
             ->where($orderColumnName, '>', $this->$orderColumnName)
             ->first();
 
-        if (!$swapWithModel) {
+        if (! $swapWithModel) {
             return $this;
         }
 
@@ -131,7 +131,7 @@ trait SortableTrait
             ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
 
-        if (!$swapWithModel) {
+        if (! $swapWithModel) {
             return $this;
         }
 
@@ -170,7 +170,6 @@ trait SortableTrait
     public static function swapOrder(self $model, self $model2)
     {
         $model->swapOrderWithModel($model2);
-
     }
 
     /**
