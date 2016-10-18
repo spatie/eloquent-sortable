@@ -120,6 +120,12 @@ $myModel->moveOrderDown();
 $myModel->moveOrderUp();
 ```
 
+You can swap the order of two models:
+
+```php 
+MyModel::swapOrder($myModel, $myModel2);
+```
+
 ## Tests
 
 The package contains some integration/smoke tests, set up with Orchestra. The tests can be run via phpunit.
