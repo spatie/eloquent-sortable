@@ -29,7 +29,7 @@ class SortableTest extends TestCase
      */
     public function it_can_set_a_new_order()
     {
-        $newOrder = Collection::make(Dummy::all()->lists('id'))->shuffle()->toArray();
+        $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
 
         Dummy::setNewOrder($newOrder);
 
@@ -79,7 +79,7 @@ class SortableTest extends TestCase
     {
         $i = 1;
 
-        foreach (Dummy::ordered()->get()->lists('order_column') as $order) {
+        foreach (Dummy::ordered()->get()->pluck('order_column') as $order) {
             $this->assertEquals($i++, $order);
         };
     }
