@@ -145,4 +145,37 @@ class SortableTest extends TestCase
         $this->assertEquals($lastModel->order_column, 1);
         $this->assertEquals($lastModel, $lastModel->moveOrderUp());
     }
+
+    /**
+     * @test
+     */
+    public function it_will_respect_the_sort_when_deleting_setting()
+    {
+        $model = new DummyWithSortableSetting();
+
+        $model->sortable['sort_when_deleting'] = true;
+        $this->assertTrue($model->shouldSortWhenDeleting());
+
+        $model->sortable['sort_when_deleting'] = false;
+        $this->assertFalse($model->shouldSortWhenDeleting());
+    }
+
+    /**
+     * @test
+     */
+    public function it_reorders_when_deleting()
+    {
+
+        $totalDummies = Dummy::count();
+
+        Dummy::all()->random()->delete();
+
+        $this->assertEquals($totalDummies - 1, Dummy::count());
+
+        $i = 1;
+
+        foreach (Dummy::ordered()->get() as $order) {
+            $this->assertEquals($i++, $order->order_column);
+        }
+    }
 }
