@@ -53,11 +53,13 @@ trait SortableTrait
             throw new SortableException('You must pass an array to setNewOrder');
         }
 
+        $model = new static;
+
+        $orderColumnName = $model->determineOrderColumnName();
+        $primaryKeyColumn = $model->getKeyName();
+
         foreach ($ids as $id) {
-            $model = static::find($id);
-            $orderColumnName = $model->determineOrderColumnName();
-            $model->$orderColumnName = $startOrder++;
-            $model->save();
+            static::where($primaryKeyColumn, $id)->update([$orderColumnName => $startOrder++]);
         }
     }
 
