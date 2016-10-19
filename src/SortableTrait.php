@@ -161,6 +161,17 @@ trait SortableTrait
     }
 
     /**
+     * Swap the order of two models.
+     *
+     * @param \Spatie\EloquentSortable\Sortable $model
+     * @param \Spatie\EloquentSortable\Sortable $model
+     */
+    public static function swapOrder(self $model, self $model2)
+    {
+        $model->swapOrderWithModel($model2);
+    }
+
+    /**
      * Moves this model to the first position.
      *
      * @return $this

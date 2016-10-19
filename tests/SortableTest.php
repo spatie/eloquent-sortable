@@ -149,6 +149,26 @@ class SortableTest extends TestCase
     /**
      * @test
      */
+    public function it_swaps_orders()
+    {
+        $firstModel = Dummy::find(3);
+        $secondModel = Dummy::find(4);
+
+        $this->assertEquals($firstModel->order_column, 3);
+        $this->assertEquals($secondModel->order_column, 4);
+
+        Dummy::swapOrder($firstModel, $secondModel);
+
+        $firstModel = Dummy::find(3);
+        $secondModel = Dummy::find(4);
+
+        $this->assertEquals($firstModel->order_column, 4);
+        $this->assertEquals($secondModel->order_column, 3);
+    }
+
+    /**
+     * @test
+     */
     public function it_can_move_the_order_first()
     {
         $position = 3;
