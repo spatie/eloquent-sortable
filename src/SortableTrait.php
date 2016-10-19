@@ -2,6 +2,8 @@
 
 namespace Spatie\EloquentSortable;
 
+use ArrayAccess;
+
 trait SortableTrait
 {
     /**
@@ -49,8 +51,8 @@ trait SortableTrait
      */
     public static function setNewOrder($ids, $startOrder = 1)
     {
-        if (! is_array($ids)) {
-            throw new SortableException('You must pass an array to setNewOrder');
+        if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
+            throw new SortableException('You must pass an array or ArrayAccess object to setNewOrder');
         }
 
         $model = new static;
