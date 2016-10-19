@@ -145,7 +145,7 @@ trait SortableTrait
      *
      * @return $this
      */
-    protected function swapOrderWithModel($otherModel)
+    public function swapOrderWithModel(Sortable $otherModel)
     {
         $orderColumnName = $this->determineOrderColumnName();
 
@@ -164,11 +164,11 @@ trait SortableTrait
      * Swap the order of two models.
      *
      * @param \Spatie\EloquentSortable\Sortable $model
-     * @param \Spatie\EloquentSortable\Sortable $model
+     * @param \Spatie\EloquentSortable\Sortable $otherModel
      */
-    public static function swapOrder(self $model, self $model2)
+    public static function swapOrder(Sortable $model, Sortable $otherModel)
     {
-        $model->swapOrderWithModel($model2);
+        $model->swapOrderWithModel($otherModel);
     }
 
     /**
@@ -191,8 +191,7 @@ trait SortableTrait
         $this->$orderColumnName = $firstModel->$orderColumnName;
         $this->save();
 
-        static::where($this->getKeyName(), '!=', $this->id)
-            ->increment($orderColumnName);
+        static::where($this->getKeyName(), '!=', $this->id)->increment($orderColumnName);
 
         return $this;
     }

@@ -6,9 +6,7 @@ use Illuminate\Support\Collection;
 
 class SortableTest extends TestCase
 {
-    /**
-     * @test
-     */
+    /** @test */
     public function it_sets_the_order_column_on_creation()
     {
         foreach (Dummy::all() as $dummy) {
@@ -16,17 +14,13 @@ class SortableTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_can_get_the_highest_order_number()
     {
         $this->assertEquals(Dummy::all()->count(), (new Dummy())->getHighestOrderNumber());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_can_set_a_new_order()
     {
         $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
@@ -38,9 +32,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_will_determine_to_sort_when_creating_if_sortable_attribute_does_not_exist()
     {
         $model = new Dummy();
@@ -48,9 +40,7 @@ class SortableTest extends TestCase
         $this->assertTrue($model->shouldSortWhenCreating());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_will_determine_to_sort_when_creating_if_sort_when_creating_setting_does_not_exist()
     {
         $model = new DummyWithSortableSetting();
@@ -58,9 +48,7 @@ class SortableTest extends TestCase
         $this->assertTrue($model->shouldSortWhenCreating());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_will_respect_the_sort_when_creating_setting()
     {
         $model = new DummyWithSortableSetting();
@@ -72,9 +60,7 @@ class SortableTest extends TestCase
         $this->assertFalse($model->shouldSortWhenCreating());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_provides_an_ordered_trait()
     {
         $i = 1;
@@ -84,9 +70,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_can_move_the_order_down()
     {
         $firstModel = Dummy::find(3);
@@ -104,9 +88,7 @@ class SortableTest extends TestCase
         $this->assertEquals($secondModel->order_column, 3);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_will_not_fail_when_it_cant_move_the_order_down()
     {
         $lastModel = Dummy::all()->last();
@@ -115,9 +97,7 @@ class SortableTest extends TestCase
         $this->assertEquals($lastModel, $lastModel->moveOrderDown());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_can_move_the_order_up()
     {
         $firstModel = Dummy::find(3);
@@ -135,10 +115,8 @@ class SortableTest extends TestCase
         $this->assertEquals($secondModel->order_column, 3);
     }
 
-    /**
-     * @test
-     */
-    public function it_will_not_when_it_cant_move_the_order_up()
+    /** @test */
+    public function it_will_not_break_when_it_cant_move_the_order_up()
     {
         $lastModel = Dummy::first();
 
@@ -146,10 +124,8 @@ class SortableTest extends TestCase
         $this->assertEquals($lastModel, $lastModel->moveOrderUp());
     }
 
-    /**
-     * @test
-     */
-    public function it_swaps_orders()
+    /** @test */
+    public function it_can_swap_the_position_of_two_given_models()
     {
         $firstModel = Dummy::find(3);
         $secondModel = Dummy::find(4);
@@ -159,17 +135,27 @@ class SortableTest extends TestCase
 
         Dummy::swapOrder($firstModel, $secondModel);
 
+        $this->assertEquals($firstModel->order_column, 4);
+        $this->assertEquals($secondModel->order_column, 3);
+    }
+
+    /** @test */
+    public function it_can_swap_itself_with_another_model()
+    {
         $firstModel = Dummy::find(3);
         $secondModel = Dummy::find(4);
+
+        $this->assertEquals($firstModel->order_column, 3);
+        $this->assertEquals($secondModel->order_column, 4);
+
+        $firstModel->swapOrderWithModel($secondModel);
 
         $this->assertEquals($firstModel->order_column, 4);
         $this->assertEquals($secondModel->order_column, 3);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_move_the_order_first()
+    /** @test */
+    public function it_can_move_a_model_to_the_first_place()
     {
         $position = 3;
 
@@ -194,7 +180,7 @@ class SortableTest extends TestCase
     /**
      * @test
      */
-    public function it_can_move_the_order_last()
+    public function it_can_move_a_model_to_the_last_place()
     {
         $position = 3;
 

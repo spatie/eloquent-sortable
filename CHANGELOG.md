@@ -2,6 +2,10 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
+## 2.2.0 - 2016-19
+
+- added `moveToStart`, `moveToEnd` and `swapOrder`
+
 ## 2.1.1 - 2016-03-21
 - Fixed a bug in `moveOrderUp` (see #13)
 

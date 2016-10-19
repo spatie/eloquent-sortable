@@ -131,7 +131,7 @@ $myModel->moveToEnd();
 You can swap the order of two models:
 
 ```php 
-MyModel::swapOrder($myModel, $myModel2);
+MyModel::swapOrder($myModel, $anotherModel);
 ```
 
 ## Tests
