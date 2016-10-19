@@ -33,6 +33,18 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_a_new_order_from_collection()
+    {
+        $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle();
+
+        Dummy::setNewOrder($newOrder);
+
+        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
     public function it_will_determine_to_sort_when_creating_if_sortable_attribute_does_not_exist()
     {
         $model = new Dummy();
