@@ -2,7 +2,11 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
-## 2.2.0 - 2016-19
+## 2.3.0 - 2016-10-19
+
+- added support for collections passed to `setNewOrder`
+
+## 2.2.0 - 2016-10-19
 
 - added `moveToStart`, `moveToEnd` and `swapOrder`
 
