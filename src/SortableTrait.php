@@ -31,7 +31,7 @@ trait SortableTrait
      */
     public function getHighestOrderNumber()
     {
-        return (int)static::max($this->determineOrderColumnName());
+        return (int) static::max($this->determineOrderColumnName());
     }
 
     /**
@@ -60,7 +60,7 @@ trait SortableTrait
      */
     public static function setNewOrder($ids, $startOrder = 1)
     {
-        if (!is_array($ids) && !$ids instanceof ArrayAccess) {
+        if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
             throw new SortableException('You must pass an array or ArrayAccess object to setNewOrder');
         }
 
@@ -83,7 +83,7 @@ trait SortableTrait
     {
         if (
             isset($this->sortable['order_column_name']) &&
-            !empty($this->sortable['order_column_name'])
+            ! empty($this->sortable['order_column_name'])
         ) {
             return $this->sortable['order_column_name'];
         }
@@ -98,11 +98,11 @@ trait SortableTrait
      */
     public function shouldSortWhenCreating()
     {
-        if (!isset($this->sortable)) {
+        if (! isset($this->sortable)) {
             return true;
         }
 
-        if (!isset($this->sortable['sort_when_creating'])) {
+        if (! isset($this->sortable['sort_when_creating'])) {
             return true;
         }
 
@@ -123,7 +123,7 @@ trait SortableTrait
             ->where($orderColumnName, '>', $this->$orderColumnName)
             ->first();
 
-        if (!$swapWithModel) {
+        if (! $swapWithModel) {
             return $this;
         }
 
@@ -144,7 +144,7 @@ trait SortableTrait
             ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
 
-        if (!$swapWithModel) {
+        if (! $swapWithModel) {
             return $this;
         }
 
