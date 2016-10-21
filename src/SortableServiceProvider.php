@@ -13,7 +13,6 @@ use Illuminate\Support\ServiceProvider;
  * provider will be removed in the next major version.
  *
  * Class SortableServiceProvider
- * @package Spatie\EloquentSortable
  */
 class SortableServiceProvider extends ServiceProvider
 {
@@ -44,6 +43,5 @@ class SortableServiceProvider extends ServiceProvider
      */
     public function bootEvents()
     {
-
     }
 }
