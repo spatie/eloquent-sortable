@@ -1,5 +1,5 @@
-Sortable behaviour for Eloquent models
-=================
+# Sortable behaviour for Eloquent models
+
 
 [![Latest Version](https://img.shields.io/github/release/spatie/eloquent-sortable.svg?style=flat-square)](https://github.com/spatie/eloquent-sortable/releases)
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/fb7765b9-7632-4897-8054-22d85b41ffda.svg)](https://insight.sensiolabs.com/projects/fb7765b9-7632-4897-8054-22d85b41ffda)
@@ -60,11 +60,11 @@ class MyModel extends Eloquent implements Sortable
 }
 ```
 
-If you don't set a value ```$sortable['order_column_name']``` the package will assume that your order column name will be 'order_column'; 
+If you don't set a value `$sortable['order_column_name']` the package will assume that your order column name will be named `order_column`.
 
-If you don't set a value ```$sortable['sort_when_creating']``` the package will automatically assign the highest order number to a new model;
+If you don't set a value `$sortable['sort_when_creating']` the package will automatically assign the highest order number to a new model;
 
-Assuming that the db-table for ```MyModel``` is empty:
+Assuming that the db-table for `MyModel` is empty:
 
 ```php
 $myModel = new MyModel();
