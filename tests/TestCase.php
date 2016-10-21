@@ -47,7 +47,7 @@ abstract class TestCase extends Orchestra
             $table->integer('order_column');
         });
 
-        collect(range(1,20))->each(function(int $i) {
+        collect(range(1, 20))->each(function (int $i) {
             Dummy::create(['name' => $i]);
         });
     }

@@ -26,7 +26,6 @@ interface Sortable
      *
      * @param array|\ArrayAccess $ids
      * @param int $startOrder
-     *
      */
     public static function setNewOrder($ids, int $startOrder = 1);
 
