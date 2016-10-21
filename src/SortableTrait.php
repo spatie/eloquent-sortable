@@ -6,6 +6,15 @@ use ArrayAccess;
 
 trait SortableTrait
 {
+    public static function bootSortableTrait()
+    {
+        static::creating(function ($model) {
+            if ($model instanceof Sortable && $model->shouldSortWhenCreating()) {
+                $model->setHighestOrderNumber();
+            }
+        });
+    }
+
     /**
      * Modify the order column value.
      */
@@ -22,14 +31,14 @@ trait SortableTrait
      */
     public function getHighestOrderNumber()
     {
-        return (int) static::max($this->determineOrderColumnName());
+        return (int)static::max($this->determineOrderColumnName());
     }
 
     /**
      * Let's be nice and provide an ordered scope.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string                                $direction
+     * @param string $direction
      *
      * @return \Illuminate\Database\Query\Builder
      */
@@ -45,13 +54,13 @@ trait SortableTrait
      * A starting order number can be optionally supplied (defaults to 1).
      *
      * @param array $ids
-     * @param int   $startOrder
+     * @param int $startOrder
      *
      * @throws SortableException
      */
     public static function setNewOrder($ids, $startOrder = 1)
     {
-        if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
+        if (!is_array($ids) && !$ids instanceof ArrayAccess) {
             throw new SortableException('You must pass an array or ArrayAccess object to setNewOrder');
         }
 
@@ -74,7 +83,7 @@ trait SortableTrait
     {
         if (
             isset($this->sortable['order_column_name']) &&
-            ! empty($this->sortable['order_column_name'])
+            !empty($this->sortable['order_column_name'])
         ) {
             return $this->sortable['order_column_name'];
         }
@@ -89,11 +98,11 @@ trait SortableTrait
      */
     public function shouldSortWhenCreating()
     {
-        if (! isset($this->sortable)) {
+        if (!isset($this->sortable)) {
             return true;
         }
 
-        if (! isset($this->sortable['sort_when_creating'])) {
+        if (!isset($this->sortable['sort_when_creating'])) {
             return true;
         }
 
@@ -114,7 +123,7 @@ trait SortableTrait
             ->where($orderColumnName, '>', $this->$orderColumnName)
             ->first();
 
-        if (! $swapWithModel) {
+        if (!$swapWithModel) {
             return $this;
         }
 
@@ -135,7 +144,7 @@ trait SortableTrait
             ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
 
-        if (! $swapWithModel) {
+        if (!$swapWithModel) {
             return $this;
         }
 

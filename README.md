@@ -33,17 +33,6 @@ This package can be installed through Composer.
 $ composer require spatie/eloquent-sortable
 ```
 
-You must add this service provider:
-```php
-// Laravel 4: app/config/app.php 
-// Laravel 5: config/app.php
-
-'providers' => [ 
-	'...',
-	'Spatie\EloquentSortable\SortableServiceProvider',
-];
-```
-
 ## Usage
 
 To add sortable behaviour to your model you must:<br />

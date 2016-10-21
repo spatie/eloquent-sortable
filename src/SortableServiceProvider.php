@@ -4,6 +4,17 @@ namespace Spatie\EloquentSortable;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * @deprecated
+ *
+ * Previous version of the package need this service provided to hook into the
+ * creating event of an eloquent model. This functionality has been moved
+ * to the `bootSortableTrait` method of `SortableTrait`. This service
+ * provider will be removed in the next major version.
+ *
+ * Class SortableServiceProvider
+ * @package Spatie\EloquentSortable
+ */
 class SortableServiceProvider extends ServiceProvider
 {
     /**
@@ -29,14 +40,10 @@ class SortableServiceProvider extends ServiceProvider
     }
 
     /**
-     * Perform actions on Eloquent's creating-event.
+     * @deprecated
      */
     public function bootEvents()
     {
-        $this->app['events']->listen('eloquent.creating*', function ($model) {
-            if ($model instanceof Sortable && $model->shouldSortWhenCreating()) {
-                $model->setHighestOrderNumber();
-            }
-        });
+
     }
 }

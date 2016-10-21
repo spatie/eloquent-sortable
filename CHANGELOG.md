@@ -2,6 +2,10 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
+## 2.4.0 - 2016-10-22
+
+- removed the need for a service provider
+
 ## 2.3.0 - 2016-10-19
 
 - added support for collections passed to `setNewOrder`
