@@ -11,7 +11,10 @@ class DummyWithSortableSetting extends Model implements Sortable
     use SortableTrait;
 
     protected $table = 'dummies';
+
     protected $guarded = [];
+
     public $timestamps = false;
+
     public $sortable = [];
 }

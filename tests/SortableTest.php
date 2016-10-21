@@ -55,7 +55,9 @@ class SortableTest extends TestCase
     /** @test */
     public function it_will_determine_to_sort_when_creating_if_sort_when_creating_setting_does_not_exist()
     {
-        $model = new DummyWithSortableSetting();
+        $model = new class extends Dummy {
+            public $sortable = [];
+        };
 
         $this->assertTrue($model->shouldSortWhenCreating());
     }
@@ -63,12 +65,15 @@ class SortableTest extends TestCase
     /** @test */
     public function it_will_respect_the_sort_when_creating_setting()
     {
-        $model = new DummyWithSortableSetting();
+        $model = new class extends Dummy {
+            public $sortable = ['sort_when_creating' => true];
+        };
 
-        $model->sortable['sort_when_creating'] = true;
         $this->assertTrue($model->shouldSortWhenCreating());
 
-        $model->sortable['sort_when_creating'] = false;
+        $model = new class extends Dummy {
+            public $sortable = ['sort_when_creating' => false];
+        };
         $this->assertFalse($model->shouldSortWhenCreating());
     }
 

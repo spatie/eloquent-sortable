@@ -93,15 +93,7 @@ trait SortableTrait
      */
     public function shouldSortWhenCreating(): bool
     {
-        if (! isset($this->sortable)) {
-            return true;
-        }
-
-        if (! isset($this->sortable['sort_when_creating'])) {
-            return true;
-        }
-
-        return $this->sortable['sort_when_creating'];
+        return $this->sortable['sort_when_creating'] ?? true;
     }
 
     /**
