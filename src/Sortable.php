@@ -2,6 +2,8 @@
 
 namespace Spatie\EloquentSortable;
 
+use Illuminate\Database\Eloquent\Builder;
+
 interface Sortable
 {
     /**
@@ -16,22 +18,20 @@ interface Sortable
      *
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeOrdered(\Illuminate\Database\Eloquent\Builder $query);
+    public function scopeOrdered(Builder $query);
 
     /**
      * This function reorders the records: the record with the first id in the array
      * will get order 1, the record with the second it will get order 2,...
      *
-     * @param array $ids
+     * @param array|\ArrayAccess $ids
+     * @param int $startOrder
      *
-     * @throws \Spatie\EloquentSortable\SortableException
      */
-    public static function setNewOrder($ids);
+    public static function setNewOrder($ids, int $startOrder = 1);
 
     /**
      * Determine if the order column should be set when saving a new model instance.
-     *
-     * @return bool
      */
-    public function shouldSortWhenCreating();
+    public function shouldSortWhenCreating(): bool;
 }

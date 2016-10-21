@@ -3,6 +3,8 @@
 namespace Spatie\EloquentSortable;
 
 use ArrayAccess;
+use Illuminate\Database\Eloquent\Builder;
+use InvalidArgumentException;
 
 trait SortableTrait
 {
@@ -21,15 +23,14 @@ trait SortableTrait
     public function setHighestOrderNumber()
     {
         $orderColumnName = $this->determineOrderColumnName();
+
         $this->$orderColumnName = $this->getHighestOrderNumber() + 1;
     }
 
     /**
      * Determine the order value for the new record.
-     *
-     * @return int
      */
-    public function getHighestOrderNumber()
+    public function getHighestOrderNumber(): int
     {
         return (int) static::max($this->determineOrderColumnName());
     }
@@ -42,7 +43,7 @@ trait SortableTrait
      *
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeOrdered(\Illuminate\Database\Eloquent\Builder $query, $direction = 'asc')
+    public function scopeOrdered(Builder $query, string $direction = 'asc')
     {
         return $query->orderBy($this->determineOrderColumnName(), $direction);
     }
@@ -53,15 +54,13 @@ trait SortableTrait
      *
      * A starting order number can be optionally supplied (defaults to 1).
      *
-     * @param array $ids
+     * @param array|\ArrayAccess $ids
      * @param int $startOrder
-     *
-     * @throws SortableException
      */
-    public static function setNewOrder($ids, $startOrder = 1)
+    public static function setNewOrder($ids, int $startOrder = 1)
     {
         if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
-            throw new SortableException('You must pass an array or ArrayAccess object to setNewOrder');
+            throw new InvalidArgumentException('You must pass an array or ArrayAccess object to setNewOrder');
         }
 
         $model = new static;
@@ -74,12 +73,10 @@ trait SortableTrait
         }
     }
 
-    /**
+    /*
      * Determine the column name of the order column.
-     *
-     * @return string
      */
-    protected function determineOrderColumnName()
+    protected function determineOrderColumnName(): string
     {
         if (
             isset($this->sortable['order_column_name']) &&
@@ -93,10 +90,8 @@ trait SortableTrait
 
     /**
      * Determine if the order column should be set when saving a new model instance.
-     *
-     * @return bool
      */
-    public function shouldSortWhenCreating()
+    public function shouldSortWhenCreating(): bool
     {
         if (! isset($this->sortable)) {
             return true;
