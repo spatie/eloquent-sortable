@@ -4,6 +4,7 @@ namespace Spatie\EloquentSortable;
 
 use ArrayAccess;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use InvalidArgumentException;
 
 trait SortableTrait
@@ -49,6 +50,32 @@ trait SortableTrait
     }
 
     /**
+     * Query records which are ordered above the given position.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $position
+     *
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeAbove(Builder $query, int $position)
+    {
+        return $query->where($this->determineOrderColumnName(), '<', $position);
+    }
+
+    /**
+     * Query records which are ordered below the given position.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $position
+     *
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeBelow(Builder $query, int $position)
+    {
+        return $query->where($this->determineOrderColumnName(), '>', $position);
+    }
+
+    /**
      * This function reorders the records: the record with the first id in the array
      * will get order 1, the record with the second it will get order 2, ...
      *
@@ -69,7 +96,9 @@ trait SortableTrait
         $primaryKeyColumn = $model->getKeyName();
 
         foreach ($ids as $id) {
-            static::where($primaryKeyColumn, $id)->update([$orderColumnName => $startOrder++]);
+            static::withoutGlobalScope(SoftDeletingScope::class)
+                ->where($primaryKeyColumn, $id)
+                ->update([$orderColumnName => $startOrder++]);
         }
     }
 
@@ -107,7 +136,7 @@ trait SortableTrait
 
         $swapWithModel = static::limit(1)
             ->ordered()
-            ->where($orderColumnName, '>', $this->$orderColumnName)
+            ->below($this->$orderColumnName)
             ->first();
 
         if (! $swapWithModel) {
@@ -128,7 +157,7 @@ trait SortableTrait
 
         $swapWithModel = static::limit(1)
             ->ordered('desc')
-            ->where($orderColumnName, '<', $this->$orderColumnName)
+            ->above($this->$orderColumnName)
             ->first();
 
         if (! $swapWithModel) {
@@ -217,7 +246,7 @@ trait SortableTrait
         $this->save();
 
         static::where($this->getKeyName(), '!=', $this->id)
-            ->where($orderColumnName, '>', $oldOrder)
+            ->below($oldOrder)
             ->decrement($orderColumnName);
 
         return $this;

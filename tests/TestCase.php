@@ -51,4 +51,11 @@ abstract class TestCase extends Orchestra
             Dummy::create(['name' => $i]);
         });
     }
+
+    protected function setUpSoftDeletes()
+    {
+        $this->app['db']->connection()->getSchemaBuilder()->table('dummies', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+    }
 }
