@@ -4,6 +4,7 @@ namespace Spatie\EloquentSortable;
 
 use ArrayAccess;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use InvalidArgumentException;
 
 trait SortableTrait
@@ -69,7 +70,9 @@ trait SortableTrait
         $primaryKeyColumn = $model->getKeyName();
 
         foreach ($ids as $id) {
-            static::where($primaryKeyColumn, $id)->update([$orderColumnName => $startOrder++]);
+            static::withoutGlobalScope(SoftDeletingScope::class)
+                ->where($primaryKeyColumn, $id)
+                ->update([$orderColumnName => $startOrder++]);
         }
     }
 

@@ -21,6 +21,16 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_get_the_highest_order_number_with_trashed_models()
+    {
+        $this->setUpSoftDeletes();
+
+        DummyWithSoftDeletes::first()->delete();
+
+        $this->assertEquals(DummyWithSoftDeletes::withTrashed()->count(), (new DummyWithSoftDeletes())->getHighestOrderNumber());
+    }
+
+    /** @test */
     public function it_can_set_a_new_order()
     {
         $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
@@ -40,6 +50,40 @@ class SortableTest extends TestCase
         Dummy::setNewOrder($newOrder);
 
         foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
+    public function it_can_set_a_new_order_with_trashed_models()
+    {
+        $this->setUpSoftDeletes();
+
+        $dummies = DummyWithSoftDeletes::all();
+
+        $dummies->random()->delete();
+
+        $newOrder = Collection::make($dummies->pluck('id'))->shuffle();
+
+        DummyWithSoftDeletes::setNewOrder($newOrder);
+
+        foreach (DummyWithSoftDeletes::withTrashed()->orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
+    public function it_can_set_a_new_order_without_trashed_models()
+    {
+        $this->setUpSoftDeletes();
+
+        DummyWithSoftDeletes::first()->delete();
+
+        $newOrder = Collection::make(DummyWithSoftDeletes::pluck('id'))->shuffle();
+
+        DummyWithSoftDeletes::setNewOrder($newOrder);
+
+        foreach (DummyWithSoftDeletes::orderBy('order_column')->get() as $i => $dummy) {
             $this->assertEquals($newOrder[$i], $dummy->id);
         }
     }
