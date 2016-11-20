@@ -50,32 +50,6 @@ trait SortableTrait
     }
 
     /**
-     * Query records which are ordered above the given position.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $position
-     *
-     * @return \Illuminate\Database\Query\Builder
-     */
-    public function scopeAbove(Builder $query, int $position)
-    {
-        return $query->where($this->determineOrderColumnName(), '<', $position);
-    }
-
-    /**
-     * Query records which are ordered below the given position.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $position
-     *
-     * @return \Illuminate\Database\Query\Builder
-     */
-    public function scopeBelow(Builder $query, int $position)
-    {
-        return $query->where($this->determineOrderColumnName(), '>', $position);
-    }
-
-    /**
      * This function reorders the records: the record with the first id in the array
      * will get order 1, the record with the second it will get order 2, ...
      *
@@ -136,7 +110,7 @@ trait SortableTrait
 
         $swapWithModel = static::limit(1)
             ->ordered()
-            ->below($this->$orderColumnName)
+            ->where($orderColumnName, '>', $this->$orderColumnName)
             ->first();
 
         if (! $swapWithModel) {
@@ -157,7 +131,7 @@ trait SortableTrait
 
         $swapWithModel = static::limit(1)
             ->ordered('desc')
-            ->above($this->$orderColumnName)
+            ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
 
         if (! $swapWithModel) {
@@ -246,7 +220,7 @@ trait SortableTrait
         $this->save();
 
         static::where($this->getKeyName(), '!=', $this->id)
-            ->below($oldOrder)
+            ->where($orderColumnName, '>', $oldOrder)
             ->decrement($orderColumnName);
 
         return $this;
