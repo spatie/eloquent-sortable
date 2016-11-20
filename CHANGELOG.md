@@ -2,6 +2,10 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.1.0 - 2016-11-20
+
+- added support for `SoftDeletes`
+
 ## 3.0.0 - 2016-10-22
 
 - removed the need for a service provider
