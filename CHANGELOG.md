@@ -2,6 +2,10 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.2.0 - 2017-01-23
+
+- add compatibility with Laravel 5.4
+
 ## 3.1.0 - 2016-11-20
 
 - added support for `SoftDeletes`
