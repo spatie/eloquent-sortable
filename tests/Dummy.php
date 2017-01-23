@@ -2,8 +2,8 @@
 
 namespace Spatie\EloquentSortable\Test;
 
-use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\Sortable;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\SortableTrait;
 
 class Dummy extends Model implements Sortable
