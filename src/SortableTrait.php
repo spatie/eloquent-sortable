@@ -236,7 +236,6 @@ trait SortableTrait
      */
     protected static function applySortableGroup($query, $model)
     {
-
         $sortableGroupField = static::getSortableGroupField();
 
         if (is_array($sortableGroupField)) {
@@ -256,7 +255,7 @@ trait SortableTrait
     public static function getSortableGroupField()
     {
         $sortableGroupField = isset($this->sortable['sort_by_group_column']) ? $this->sortable['sort_by_group_column'] : null;
+
         return $sortableGroupField;
     }
-
 }
