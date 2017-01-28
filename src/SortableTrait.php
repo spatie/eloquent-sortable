@@ -18,6 +18,8 @@ trait SortableTrait
         });
     }
 
+    abstract public function newQuery();
+
     /**
      * Modify the order column value.
      */
@@ -33,7 +35,7 @@ trait SortableTrait
      */
     public function getHighestOrderNumber(): int
     {
-        return (int) static::max($this->determineOrderColumnName());
+        return (int) static::applySortableGroup($this->newQuery(), $this)->max($this->determineOrderColumnName());
     }
 
     /**
@@ -70,7 +72,7 @@ trait SortableTrait
         $primaryKeyColumn = $model->getKeyName();
 
         foreach ($ids as $id) {
-            static::withoutGlobalScope(SoftDeletingScope::class)
+            static::applySortableGroup($this->newQuery(), $this)->withoutGlobalScope(SoftDeletingScope::class)
                 ->where($primaryKeyColumn, $id)
                 ->update([$orderColumnName => $startOrder++]);
         }
@@ -108,7 +110,7 @@ trait SortableTrait
     {
         $orderColumnName = $this->determineOrderColumnName();
 
-        $swapWithModel = static::limit(1)
+        $swapWithModel = static::applySortableGroup($this->newQuery(), $this)->limit(1)
             ->ordered()
             ->where($orderColumnName, '>', $this->$orderColumnName)
             ->first();
@@ -129,7 +131,7 @@ trait SortableTrait
     {
         $orderColumnName = $this->determineOrderColumnName();
 
-        $swapWithModel = static::limit(1)
+        $swapWithModel = static::applySortableGroup($this->newQuery(), $this)->limit(1)
             ->ordered('desc')
             ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
@@ -194,7 +196,7 @@ trait SortableTrait
         $this->$orderColumnName = $firstModel->$orderColumnName;
         $this->save();
 
-        static::where($this->getKeyName(), '!=', $this->id)->increment($orderColumnName);
+        static::applySortableGroup($this->newQuery(), $this)->where($this->getKeyName(), '!=', $this->id)->increment($orderColumnName);
 
         return $this;
     }
@@ -219,10 +221,40 @@ trait SortableTrait
         $this->$orderColumnName = $maxOrder;
         $this->save();
 
-        static::where($this->getKeyName(), '!=', $this->id)
+        static::applySortableGroup($this->newQuery(), $this)->where($this->getKeyName(), '!=', $this->id)
             ->where($orderColumnName, '>', $oldOrder)
             ->decrement($orderColumnName);
 
         return $this;
     }
+
+    /**
+     * @param QueryBuilder        $query
+     * @param Model|SortableTrait $model
+     *
+     * @return QueryBuilder
+     */
+    protected static function applySortableGroup($query, $model) {
+
+        $sortableGroupField = static::getSortableGroupField();
+
+        if (is_array($sortableGroupField)) {
+            foreach ($sortableGroupField as $field) {
+                $query = $query->where($field, $model->$field);
+            }
+        } elseif ($sortableGroupField !== null) {
+            $query = $query->where($sortableGroupField, $model->$sortableGroupField);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getSortableGroupField() {
+        $sortableGroupField = isset($this->sortable['sort_by_group_column']) ? $this->sortable['sort_by_group_column'] : null;
+        return $sortableGroupField;
+    }
+
 }
