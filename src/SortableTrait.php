@@ -234,7 +234,8 @@ trait SortableTrait
      *
      * @return QueryBuilder
      */
-    protected static function applySortableGroup($query, $model) {
+    protected static function applySortableGroup($query, $model)
+    {
 
         $sortableGroupField = static::getSortableGroupField();
 
@@ -252,7 +253,8 @@ trait SortableTrait
     /**
      * @return string|null
      */
-    public static function getSortableGroupField() {
+    public static function getSortableGroupField()
+    {
         $sortableGroupField = isset($this->sortable['sort_by_group_column']) ? $this->sortable['sort_by_group_column'] : null;
         return $sortableGroupField;
     }
