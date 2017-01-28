@@ -54,8 +54,9 @@ class MyModel extends Eloquent implements Sortable
     public $sortable = [
         'order_column_name' => 'order_column',
         'sort_when_creating' => true,
+        'sort_by_group_column' => 'group_by_column'
     ];
-    
+
     ...
 }
 ```
@@ -63,6 +64,8 @@ class MyModel extends Eloquent implements Sortable
 If you don't set a value `$sortable['order_column_name']` the package will assume that your order column name will be named `order_column`.
 
 If you don't set a value `$sortable['sort_when_creating']` the package will automatically assign the highest order number to a new model;
+
+If you don't set a value `$sortable['sort_by_group_column']` the package will automatically order by table order. If you specify this value it will sort only the rows which are set as column in the same table;
 
 Assuming that the db-table for `MyModel` is empty:
 
@@ -78,7 +81,7 @@ $myModel->save(); // order_column for this record will be set to 3
 
 
 //the trait also provides the ordered query scope
-$orderedRecords = MyModel::ordered()->get(); 
+$orderedRecords = MyModel::ordered()->get();
 ```
 
 You can set a new order for all the records using the `setNewOrder`-method
@@ -105,21 +108,21 @@ MyModel::setNewOrder([3,1,2], 10);
 
 You can also move a model up or down with these methods:
 
-```php 
+```php
 $myModel->moveOrderDown();
 $myModel->moveOrderUp();
 ```
 
 You can also move a model to the first or last position:
 
-```php 
+```php
 $myModel->moveToStart();
 $myModel->moveToEnd();
 ```
 
 You can swap the order of two models:
 
-```php 
+```php
 MyModel::swapOrder($myModel, $anotherModel);
 ```
 
@@ -158,4 +161,3 @@ Spatie is a webdesign agency in Antwerp, Belgium. You'll find an overview of all
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
