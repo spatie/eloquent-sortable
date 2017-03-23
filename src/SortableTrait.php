@@ -16,12 +16,17 @@ trait SortableTrait
     }
 
     /**
-     * Determine the order value for the new record.
+     * Determine the Record with the highest order (located at the "End").
      *
      * @return int
      */
     public function getHighestOrderNumber()
     {
+        if ($this->hasSortScope()) {
+            return static::where($this->determineSortScope(), $this->{$this->determineSortScope()})
+                ->max($this->determineOrderColumnName());
+        }
+
         return (int) static::max($this->determineOrderColumnName());
     }
 
@@ -82,6 +87,21 @@ trait SortableTrait
         return 'order_column';
     }
 
+    public function determineSortScope() {
+        if (
+            isset($this->sortable['sort_scope']) &&
+            ! empty($this->sortable['sort_scope'])
+        ) {
+            return $this->sortable['sort_scope'];
+        }
+
+        return '';
+    }
+
+    public function hasSortScope() {
+        return !empty($this->determineSortScope());
+    }
+
     /**
      * Determine if the order column should be set when saving a new model instance.
      *
@@ -111,8 +131,14 @@ trait SortableTrait
 
         $swapWithModel = static::limit(1)
             ->ordered()
-            ->where($orderColumnName, '>', $this->$orderColumnName)
-            ->first();
+            ->where($orderColumnName, '>', $this->$orderColumnName);
+
+
+        if ($this->hasSortScope()) {
+            $swapWithModel = $swapWithModel->where($this->determineSortScope(), $this->{$this->determineSortScope()});
+        }
+
+        $swapWithModel = $swapWithModel->first();
 
         if (! $swapWithModel) {
             return $this;
@@ -120,7 +146,7 @@ trait SortableTrait
 
         return $this->swapOrderWithModel($swapWithModel);
     }
-
+        
     /**
      * Swaps the order of this model with the model 'above' this model.
      *
@@ -132,8 +158,13 @@ trait SortableTrait
 
         $swapWithModel = static::limit(1)
             ->ordered('desc')
-            ->where($orderColumnName, '<', $this->$orderColumnName)
-            ->first();
+            ->where($orderColumnName, '<', $this->$orderColumnName);
+
+        if ($this->hasSortScope()) {
+            $swapWithModel = $swapWithModel->where($this->determineSortScope(), $this->{$this->determineSortScope()});
+        }
+
+        $swapWithModel = $swapWithModel->first();
 
         if (! $swapWithModel) {
             return $this;
@@ -195,7 +226,13 @@ trait SortableTrait
         $this->$orderColumnName = $firstModel->$orderColumnName;
         $this->save();
 
-        static::where($this->getKeyName(), '!=', $this->id)->increment($orderColumnName);
+        $fixOtherRecords = static::where($this->getKeyName(), '!=', $this->id);
+        
+        if ($this->hasSortScope()) {
+            $fixOtherRecords = $fixOtherRecords->where($this->determineSortScope(), $this->{$this->determineSortScope()});
+        }
+            
+        $fixOtherRecords->increment($orderColumnName);
 
         return $this;
     }
@@ -220,9 +257,14 @@ trait SortableTrait
         $this->$orderColumnName = $maxOrder;
         $this->save();
 
-        static::where($this->getKeyName(), '!=', $this->id)
-            ->where($orderColumnName, '>', $oldOrder)
-            ->decrement($orderColumnName);
+        $fixOtherRecords = static::where($this->getKeyName(), '!=', $this->id)
+            ->where($orderColumnName, '>', $oldOrder);
+
+        if ($this->hasSortScope()) {
+            $fixOtherRecords = $fixOtherRecords->where($this->determineSortScope(), $this->{$this->determineSortScope()});
+        }
+
+        $fixOtherRecords->decrement($orderColumnName);
 
         return $this;
     }
