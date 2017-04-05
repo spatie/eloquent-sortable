@@ -21,6 +21,16 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_get_the_highest_order_number_with_trashed_models()
+    {
+        $this->setUpSoftDeletes();
+
+        DummyWithSoftDeletes::first()->delete();
+
+        $this->assertEquals(DummyWithSoftDeletes::withTrashed()->count(), (new DummyWithSoftDeletes())->getHighestOrderNumber());
+    }
+
+    /** @test */
     public function it_can_set_a_new_order()
     {
         $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
@@ -45,6 +55,40 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_a_new_order_with_trashed_models()
+    {
+        $this->setUpSoftDeletes();
+
+        $dummies = DummyWithSoftDeletes::all();
+
+        $dummies->random()->delete();
+
+        $newOrder = Collection::make($dummies->pluck('id'))->shuffle();
+
+        DummyWithSoftDeletes::setNewOrder($newOrder);
+
+        foreach (DummyWithSoftDeletes::withTrashed()->orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
+    public function it_can_set_a_new_order_without_trashed_models()
+    {
+        $this->setUpSoftDeletes();
+
+        DummyWithSoftDeletes::first()->delete();
+
+        $newOrder = Collection::make(DummyWithSoftDeletes::pluck('id'))->shuffle();
+
+        DummyWithSoftDeletes::setNewOrder($newOrder);
+
+        foreach (DummyWithSoftDeletes::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
     public function it_will_determine_to_sort_when_creating_if_sortable_attribute_does_not_exist()
     {
         $model = new Dummy();
@@ -55,7 +99,9 @@ class SortableTest extends TestCase
     /** @test */
     public function it_will_determine_to_sort_when_creating_if_sort_when_creating_setting_does_not_exist()
     {
-        $model = new DummyWithSortableSetting();
+        $model = new class extends Dummy {
+            public $sortable = [];
+        };
 
         $this->assertTrue($model->shouldSortWhenCreating());
     }
@@ -63,12 +109,15 @@ class SortableTest extends TestCase
     /** @test */
     public function it_will_respect_the_sort_when_creating_setting()
     {
-        $model = new DummyWithSortableSetting();
+        $model = new class extends Dummy {
+            public $sortable = ['sort_when_creating' => true];
+        };
 
-        $model->sortable['sort_when_creating'] = true;
         $this->assertTrue($model->shouldSortWhenCreating());
 
-        $model->sortable['sort_when_creating'] = false;
+        $model = new class extends Dummy {
+            public $sortable = ['sort_when_creating' => false];
+        };
         $this->assertFalse($model->shouldSortWhenCreating());
     }
 

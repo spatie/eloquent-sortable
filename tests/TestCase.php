@@ -22,7 +22,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            'Spatie\EloquentSortable\SortableServiceProvider',
+
         ];
     }
 
@@ -34,23 +34,28 @@ abstract class TestCase extends Orchestra
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
             'driver' => 'sqlite',
-            'database' => __DIR__.'/database.sqlite',
+            'database' => ':memory:',
             'prefix' => '',
         ]);
     }
 
     protected function setUpDatabase()
     {
-        file_put_contents(__DIR__.'/database.sqlite', null);
-
         $this->app['db']->connection()->getSchemaBuilder()->create('dummies', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->integer('order_column');
         });
 
-        for ($i = 1; $i <= 20; ++$i) {
+        collect(range(1, 20))->each(function (int $i) {
             Dummy::create(['name' => $i]);
-        }
+        });
+    }
+
+    protected function setUpSoftDeletes()
+    {
+        $this->app['db']->connection()->getSchemaBuilder()->table('dummies', function (Blueprint $table) {
+            $table->softDeletes();
+        });
     }
 }

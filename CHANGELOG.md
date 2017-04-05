@@ -2,6 +2,23 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.2.1 - 2017-01-23
+
+- release without changes. Made to kickstart Packagist.
+
+## 3.2.0 - 2017-01-23
+
+- add compatibility with Laravel 5.4
+
+## 3.1.0 - 2016-11-20
+
+- added support for `SoftDeletes`
+
+## 3.0.0 - 2016-10-22
+
+- removed the need for a service provider
+- some cleanup
+
 ## 2.3.0 - 2016-10-19
 
 - added support for collections passed to `setNewOrder`

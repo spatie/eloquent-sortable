@@ -2,16 +2,16 @@
 
 namespace Spatie\EloquentSortable\Test;
 
-use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\Sortable;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\SortableTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DummyWithSortableSetting extends Model implements Sortable
+class DummyWithSoftDeletes extends Model implements Sortable
 {
-    use SortableTrait;
+    use SoftDeletes, SortableTrait;
 
     protected $table = 'dummies';
     protected $guarded = [];
     public $timestamps = false;
-    public $sortable = [];
 }
