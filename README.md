@@ -54,6 +54,7 @@ class MyModel extends Eloquent implements Sortable
     public $sortable = [
         'order_column_name' => 'order_column',
         'sort_when_creating' => true,
+		'sort_scope' => 'column_name_with_belongsTo_relation'
     ];
     
     ...
@@ -122,6 +123,19 @@ You can swap the order of two models:
 ```php 
 MyModel::swapOrder($myModel, $anotherModel);
 ```
+
+You can optionally define a sort_scope parameter inside the sortable array. That should be the name of a column (it has to be a real column in the database - not an accessor or any of that nature). When it's set, all sort options (including sorting a newly created record) will only occur among all items whose column value equals the one of the currently sorted item. 
+As a consequence: If you define a column that is a belongsTo relation, you only sort the models that have the same foreign key.
+That way you don't end up in a situation where you destroy the order while sorting filtered results.
+
+```php
+    public $sortable = [
+        'order_column_name' => 'order_column',
+        'sort_when_creating' => true,
+		'sort_scope' => 'column_name_of_model'
+    ];
+```
+
 
 ## Tests
 
