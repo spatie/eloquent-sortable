@@ -102,7 +102,7 @@ trait SortableTrait
     {
         if (
             isset($this->sortable['sort_scope']) &&
-            !empty($this->sortable['sort_scope'])
+            ! empty($this->sortable['sort_scope'])
         ) {
             return $this->sortable['sort_scope'];
         }
@@ -112,7 +112,7 @@ trait SortableTrait
 
     public function hasSortScope()
     {
-        return !empty($this->determineSortScope());
+        return ! empty($this->determineSortScope());
     }
 
     /**
