@@ -102,7 +102,7 @@ trait SortableTrait
     {
         if (
             isset($this->sortable['sort_scope']) &&
-            ! empty($this->sortable['sort_scope'])
+            !empty($this->sortable['sort_scope'])
         ) {
             return $this->sortable['sort_scope'];
         }
@@ -136,7 +136,6 @@ trait SortableTrait
             ->ordered()
             ->where($orderColumnName, '>', $this->$orderColumnName);
 
-
         if ($this->hasSortScope()) {
             $swapWithModel = $swapWithModel->where($this->determineSortScope(), $this->{$this->determineSortScope()});
         }
@@ -149,7 +148,7 @@ trait SortableTrait
 
         return $this->swapOrderWithModel($swapWithModel);
     }
-        
+
     /**
      * Swaps the order of this model with the model 'above' this model.
      *
@@ -162,7 +161,6 @@ trait SortableTrait
         $swapWithModel = static::limit(1)
             ->ordered('desc')
             ->where($orderColumnName, '<', $this->$orderColumnName);
-
         if ($this->hasSortScope()) {
             $swapWithModel = $swapWithModel->where($this->determineSortScope(), $this->{$this->determineSortScope()});
         }
@@ -175,7 +173,7 @@ trait SortableTrait
 
         return $this->swapOrderWithModel($swapWithModel);
     }
-    
+
     /**
      * Swap the order of this model with the order of another model.
      *
