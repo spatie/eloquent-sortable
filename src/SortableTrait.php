@@ -98,7 +98,8 @@ trait SortableTrait
         return 'order_column';
     }
 
-    public function determineSortScope() {
+    public function determineSortScope()
+    {
         if (
             isset($this->sortable['sort_scope']) &&
             ! empty($this->sortable['sort_scope'])
@@ -109,7 +110,8 @@ trait SortableTrait
         return '';
     }
 
-    public function hasSortScope() {
+    public function hasSortScope()
+    {
         return !empty($this->determineSortScope());
     }
 
@@ -173,7 +175,7 @@ trait SortableTrait
 
         return $this->swapOrderWithModel($swapWithModel);
     }
-
+    
     /**
      * Swap the order of this model with the order of another model.
      *
@@ -228,11 +230,11 @@ trait SortableTrait
         $this->save();
 
         $fixOtherRecords = static::where($this->getKeyName(), '!=', $this->id);
-        
+
         if ($this->hasSortScope()) {
             $fixOtherRecords = $fixOtherRecords->where($this->determineSortScope(), $this->{$this->determineSortScope()});
         }
-            
+
         $fixOtherRecords->increment($orderColumnName);
 
         return $this;
