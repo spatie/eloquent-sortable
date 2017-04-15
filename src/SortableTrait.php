@@ -33,7 +33,7 @@ trait SortableTrait
      */
     public function getHighestOrderNumber(): int
     {
-        return (int) static::max($this->determineOrderColumnName());
+        return (int) $this->buildSortQuery()->max($this->determineOrderColumnName());
     }
 
     /**
@@ -108,7 +108,7 @@ trait SortableTrait
     {
         $orderColumnName = $this->determineOrderColumnName();
 
-        $swapWithModel = static::limit(1)
+        $swapWithModel = $this->buildSortQuery()->limit(1)
             ->ordered()
             ->where($orderColumnName, '>', $this->$orderColumnName)
             ->first();
@@ -129,7 +129,7 @@ trait SortableTrait
     {
         $orderColumnName = $this->determineOrderColumnName();
 
-        $swapWithModel = static::limit(1)
+        $swapWithModel = $this->buildSortQuery()->limit(1)
             ->ordered('desc')
             ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
@@ -181,7 +181,7 @@ trait SortableTrait
      */
     public function moveToStart()
     {
-        $firstModel = static::limit(1)
+        $firstModel = $this->buildSortQuery()->limit(1)
             ->ordered()
             ->first();
 
@@ -194,7 +194,7 @@ trait SortableTrait
         $this->$orderColumnName = $firstModel->$orderColumnName;
         $this->save();
 
-        static::where($this->getKeyName(), '!=', $this->id)->increment($orderColumnName);
+        $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->id)->increment($orderColumnName);
 
         return $this;
     }
@@ -219,10 +219,20 @@ trait SortableTrait
         $this->$orderColumnName = $maxOrder;
         $this->save();
 
-        static::where($this->getKeyName(), '!=', $this->id)
+        $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->id)
             ->where($orderColumnName, '>', $oldOrder)
             ->decrement($orderColumnName);
 
         return $this;
+    }
+
+    /**
+     * Build eloquent builder of sortable.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function buildSortQuery()
+    {
+        return static::query();
     }
 }
