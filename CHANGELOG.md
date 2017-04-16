@@ -2,6 +2,10 @@
 
 All Notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.3.0 - 2017-04-16
+
+- add `buildSortQuery()`
+
 ## 3.2.1 - 2017-01-23
 
 - release without changes. Made to kickstart Packagist.
