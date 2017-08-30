@@ -2,9 +2,9 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
-## Unreleased on laravel-55 branch
+## 3.4.0
 
-- add compatibility with Laravel 5.5, only changed deps, no code changed
+- add compatibility with Laravel 5.5
 
 ## 3.3.0 - 2017-04-16
 
