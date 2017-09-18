@@ -240,16 +240,16 @@ trait SortableTrait
             isset($this->sortable['order_unique']) &&
             ! empty($this->sortable['order_unique'])
         ) {
-            if(is_array($this->sortable['order_unique'])) {
+            if (is_array($this->sortable['order_unique'])) {
                 foreach($this->sortable['order_unique'] as $key){
-                    if(empty($this->$key)){
+                    if (empty($this->$key)) {
                         throw new \Exception('Unique sorting key must be set first ('.$key.')');
                     }
                     $query->where($key, '=', $this->$key);
                 }
             } else {
                 $key = $this->sortable['order_unique'];
-                if(empty($this->$key)){
+                if (empty($this->$key)) {
                     throw new \Exception('Unique sorting key must be set first ('.$key.')');
                 }
                 $query->where($key, '=', $this->$key);
