@@ -54,6 +54,7 @@ class MyModel extends Eloquent implements Sortable
     public $sortable = [
         'order_column_name' => 'order_column',
         'sort_when_creating' => true,
+        /* 'order_unique' => ['another_key'], // optional additional keys for allowing multiple sorts in a table. */
     ];
     
     ...
@@ -63,6 +64,8 @@ class MyModel extends Eloquent implements Sortable
 If you don't set a value `$sortable['order_column_name']` the package will assume that your order column name will be named `order_column`.
 
 If you don't set a value `$sortable['sort_when_creating']` the package will automatically assign the highest order number to a new model;
+
+If you don't set a value `$sortable['order_unique']` the package will assume that your model will sort all values. If it is set, then sorting will be done with matching the key(s) provided.
 
 Assuming that the db-table for `MyModel` is empty:
 
