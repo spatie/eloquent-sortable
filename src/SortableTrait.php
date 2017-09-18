@@ -241,7 +241,7 @@ trait SortableTrait
             ! empty($this->sortable['order_unique'])
         ) {
             if (is_array($this->sortable['order_unique'])) {
-                foreach($this->sortable['order_unique'] as $key){
+                foreach ($this->sortable['order_unique'] as $key) {
                     if (empty($this->$key)) {
                         throw new \Exception('Unique sorting key must be set first ('.$key.')');
                     }
