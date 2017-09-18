@@ -255,7 +255,7 @@ trait SortableTrait
                 $query->where($key, '=', $this->$key);
             }
         }
-        
+
         return $query;
     }
 }
