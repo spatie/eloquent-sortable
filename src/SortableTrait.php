@@ -235,4 +235,26 @@ trait SortableTrait
     {
         return static::query();
     }
+
+    /**
+     * Moves the model after the passed one
+     *
+     * @param Sortable $model
+     */
+    public function moveAfter(Sortable $model)
+    {
+        $moveModels = new MoveModels($this->determineOrderColumnName());
+        $moveModels('moveAfter', $this, $model);
+    }
+
+    /**
+     * Moves the model before the passed one
+     *
+     * @param Sortable $model
+     */
+    public function moveBefore(Sortable $model)
+    {
+        $moveModels = new MoveModels($this->determineOrderColumnName());
+        $moveModels('moveBefore', $this, $model);
+    }
 }
