@@ -91,6 +91,38 @@ trait SortableTrait
         return 'order_column';
     }
 
+    /*
+     * Determine the column name of the group column.
+     */
+    protected function determineGroupColumnName(): string
+    {
+        if (
+            isset($this->sortable['group_column_name']) &&
+            ! empty($this->sortable['group_column_name'])
+        ) {
+            return $this->sortable['group_column_name'];
+        }
+
+        return 'group_column';
+    }
+
+    /**
+     * Determine the order value for the new record.
+     */
+    public function getGroupColumnValue()
+    {
+        $groupColumnName = $this->determineGroupColumnName();
+        return $this->$groupColumnName;
+    }
+
+    /**
+     * Determine if it should be sorted by group column.
+     */
+    public function shouldSortByGroup(): bool
+    {
+        return $this->sortable['sort_by_group'] ?? false;
+    }
+
     /**
      * Determine if the order column should be set when saving a new model instance.
      */
@@ -233,6 +265,10 @@ trait SortableTrait
      */
     public function buildSortQuery()
     {
-        return static::query();
+        if ($this->shouldSortByGroup() && $groupColumnName = $this->determineGroupColumnName()) {
+            return static::query()->where($groupColumnName, $this->getGroupColumnValue());
+        } else {
+            return static::query();
+        }
     }
 }
