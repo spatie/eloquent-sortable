@@ -58,4 +58,21 @@ abstract class TestCase extends Orchestra
             $table->softDeletes();
         });
     }
+
+    protected function setUpGroupColumn()
+    {
+        $this->app['db']->connection()->getSchemaBuilder()->table('dummies', function (Blueprint $table) {
+            $table->integer('group_column')->nullable();
+        });
+
+        Dummy::truncate();
+
+        collect(range(1, 20))->each(function (int $i) {
+            DummyWithGroupColumn::create(['name' => $i, 'group_column' => 1]);
+        });
+
+        collect(range(1, 20))->each(function (int $i) {
+            DummyWithGroupColumn::create(['name' => $i, 'group_column' => 2]);
+        });
+    }
 }

@@ -21,6 +21,16 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_get_the_highest_order_number_by_group()
+    {
+        $this->setUpGroupColumn();
+
+        $dummy = new DummyWithGroupColumn();
+        $dummy->group_column = 1;
+        $this->assertEquals(DummyWithGroupColumn::where('group_column', 1)->count(), $dummy->getHighestOrderNumber());
+    }
+
+    /** @test */
     public function it_can_get_the_highest_order_number_with_trashed_models()
     {
         $this->setUpSoftDeletes();
@@ -127,6 +137,18 @@ class SortableTest extends TestCase
         $i = 1;
 
         foreach (Dummy::ordered()->get()->pluck('order_column') as $order) {
+            $this->assertEquals($i++, $order);
+        }
+    }
+
+    /** @test */
+    public function it_provides_an_ordered_trait_by_group()
+    {
+        $this->setUpGroupColumn();
+
+        $i = 1;
+
+        foreach (DummyWithGroupColumn::where('group_column', 2)->ordered()->get()->pluck('order_column') as $order) {
             $this->assertEquals($i++, $order);
         }
     }
