@@ -112,6 +112,7 @@ trait SortableTrait
     public function getGroupColumnValue()
     {
         $groupColumnName = $this->determineGroupColumnName();
+
         return $this->$groupColumnName;
     }
 

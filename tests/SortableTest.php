@@ -24,7 +24,7 @@ class SortableTest extends TestCase
     public function it_can_get_the_highest_order_number_by_group()
     {
         $this->setUpGroupColumn();
-        
+
         $dummy = new DummyWithGroupColumn();
         $dummy->group_column = 1;
         $this->assertEquals(DummyWithGroupColumn::where('group_column', 1)->count(), $dummy->getHighestOrderNumber());
