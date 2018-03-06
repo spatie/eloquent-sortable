@@ -225,7 +225,7 @@ trait SortableTrait
 
         return $this;
     }
-    
+
     /**
      * Moves this model to a specified position
      *
