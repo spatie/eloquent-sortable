@@ -267,4 +267,29 @@ class SortableTest extends TestCase
             }
         }
     }
+    
+    /** 
+     * @test 
+     */
+    public function it_can_move_a_model_to_a_specified_position()
+    {
+        $position = 3;
+
+        $oldModels = Dummy::whereNot('id', $position)->get();
+
+        $model = Dummy::find($position);
+
+        $this->assertEquals(3, $model->order_column);
+
+        $model = $model->moveToPosition(15);
+
+        $this->assertEquals(15, $model->order_column);
+
+        $oldModels = $oldModels->pluck('order_column', 'id');
+        $newModels = Dummy::whereNot('id', $position)->get()->pluck('order_column', 'id');
+
+        foreach ($oldModels as $key => $oldModel) {
+            $this->assertEquals($oldModel + 1, $newModels[$key]);
+        }
+    }
 }
