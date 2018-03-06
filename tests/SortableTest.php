@@ -267,7 +267,7 @@ class SortableTest extends TestCase
             }
         }
     }
-    
+
     /** 
      * @test 
      */
