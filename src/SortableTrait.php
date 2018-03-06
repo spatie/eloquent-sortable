@@ -227,7 +227,7 @@ trait SortableTrait
     }
 
     /**
-     * Moves this model to a specified position
+     * Moves this model to a specified position.
      *
      * @param integer $position
      *
