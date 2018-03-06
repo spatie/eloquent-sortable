@@ -225,6 +225,30 @@ trait SortableTrait
 
         return $this;
     }
+    
+    /**
+     * Moves this model to a specified position
+     *
+     * @param integer $position
+     *
+     * @return $this
+     */
+    public function moveToPosition($position)
+    {
+        $position = max(1, min($position, $this->getHighestOrderNumber()));
+
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $this->buildSortQuery()
+            ->where($this->getKeyName(), '!=', $this->id)
+            ->where($orderColumnName, '>=', $position)
+            ->increment($orderColumnName);
+
+        $this->$orderColumnName = $position;
+        $this->save();
+
+        return $this;
+    }
 
     /**
      * Build eloquent builder of sortable.
