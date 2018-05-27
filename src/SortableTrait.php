@@ -44,7 +44,7 @@ trait SortableTrait
      *
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeOrdered(Builder $query, string $direction = 'asc')
+    public function scopeOrdered(Builder $query, string $direction = 'asc'): Builder
     {
         return $query->orderBy($this->determineOrderColumnName(), $direction);
     }
@@ -58,7 +58,7 @@ trait SortableTrait
      * @param array|\ArrayAccess $ids
      * @param int $startOrder
      */
-    public static function setNewOrder($ids, int $startOrder = 1)
+    public static function setNewOrder(array $ids, int $startOrder = 1)
     {
         if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
             throw new InvalidArgumentException('You must pass an array or ArrayAccess object to setNewOrder');
