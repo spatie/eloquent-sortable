@@ -27,7 +27,7 @@ interface Sortable
      * @param array|\ArrayAccess $ids
      * @param int $startOrder
      */
-    public static function setNewOrder($ids, int $startOrder = 1);
+    public static function setNewOrder(array $ids, int $startOrder = 1);
 
     /**
      * Determine if the order column should be set when saving a new model instance.
