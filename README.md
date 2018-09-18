@@ -26,10 +26,10 @@ composer require spatie/eloquent-sortable
 
 ## Usage
 
-To add sortable behaviour to your model you must:<br />
-1. specify that the model will conform to ```Spatie\EloquentSortable\Sortable```<br />
-2. use the trait ```Spatie\EloquentSortable\SortableTrait```<br />
-3. specify which column will be used as the order column<br />
+To add sortable behaviour to your model you must:
+1. Implement the `Spatie\EloquentSortable\Sortable` interface.
+2. Use the trait `Spatie\EloquentSortable\SortableTrait`.
+3. Optionally specify which column will be used as the order column. The default is `order_column`.
 
 ### Example
 
