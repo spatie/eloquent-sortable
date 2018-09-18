@@ -21,7 +21,7 @@ Spatie is a webdesign agency in Antwerp, Belgium. You'll find an overview of all
 This package can be installed through Composer.
 
 ```
-$ composer require spatie/eloquent-sortable
+composer require spatie/eloquent-sortable
 ```
 
 ## Usage
