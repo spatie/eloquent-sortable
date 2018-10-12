@@ -37,6 +37,21 @@ trait SortableTrait
     }
 
     /**
+     * Determine the order value of a model at a specified Nth position.
+     *
+     *  @param int $position The position of the model. Positions start at 1.
+     *
+     * @return int
+     */
+    public function getOrderNumberAtPosition(int $position): int
+    {
+        $position--;
+        $position = max($position,0);
+
+        return (int) $this->buildSortQuery()->orderBy($this->determineOrderColumnName())->skip($position)->limit(1)->value($this->determineOrderColumnName());
+    }
+
+    /**
      * Let's be nice and provide an ordered scope.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -224,6 +239,43 @@ trait SortableTrait
             ->decrement($orderColumnName);
 
         return $this;
+    }
+
+    /**
+     * Move a model into a specified position
+     * Positions starts at 1. 0 would be the same as start.
+     *
+     * @param int $newPosition
+     *
+     * @return $this
+     */
+    public function moveToPosition( int $newPosition ): self
+    {
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $newPosition = max($newPosition, 0);
+
+        $currentPosition = (int) $this->$orderColumnName;
+        $orderAtPosition = $this->getOrderNumberAtPosition($newPosition);
+
+        // No need to do anything, it is already in the correct position
+        if ($currentPosition === $newPosition){
+            return $this;
+        }
+
+        if ( $newPosition > $currentPosition ){
+            // The model is moving up
+            $this->buildSortQuery()->where([[$this->getKeyName(), '!=', $this->id], [$orderColumnName, '>', $currentPosition], [$orderColumnName, '<=', $orderAtPosition]])->decrement($orderColumnName);
+        } else {
+            // The model is moving down
+            $this->buildSortQuery()->where([[$this->getKeyName(), '!=', $this->id], [$orderColumnName, '<', $currentPosition], [$orderColumnName, '>=', $orderAtPosition]])->increment($orderColumnName);
+        }
+
+        $this->$orderColumnName = $orderAtPosition;
+        $this->save();
+
+        return $this;
+
     }
 
     /**

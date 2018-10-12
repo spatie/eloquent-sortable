@@ -114,6 +114,12 @@ You can swap the order of two models:
 MyModel::swapOrder($myModel, $anotherModel);
 ```
 
+You can move a model to a specific position:
+
+```php 
+MyModel::moveToPosition(4);
+```
+
 ## Tests
 
 The package contains some integration/smoke tests, set up with Orchestra. The tests can be run via phpunit.
