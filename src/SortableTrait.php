@@ -46,7 +46,7 @@ trait SortableTrait
     public function getOrderNumberAtPosition(int $position): int
     {
         $position--;
-        $position = max($position,0);
+        $position = max($position, 0);
 
         return (int) $this->buildSortQuery()->orderBy($this->determineOrderColumnName())->skip($position)->limit(1)->value($this->determineOrderColumnName());
     }
@@ -249,7 +249,7 @@ trait SortableTrait
      *
      * @return $this
      */
-    public function moveToPosition( int $newPosition ): self
+    public function moveToPosition(int $newPosition): self
     {
         $orderColumnName = $this->determineOrderColumnName();
 
@@ -259,11 +259,11 @@ trait SortableTrait
         $orderAtPosition = $this->getOrderNumberAtPosition($newPosition);
 
         // No need to do anything, it is already in the correct position
-        if ($currentPosition === $newPosition){
+        if ($currentPosition === $newPosition) {
             return $this;
         }
 
-        if ( $newPosition > $currentPosition ){
+        if ($newPosition > $currentPosition) {
             // The model is moving up
             $this->buildSortQuery()->where([[$this->getKeyName(), '!=', $this->id], [$orderColumnName, '>', $currentPosition], [$orderColumnName, '<=', $orderAtPosition]])->decrement($orderColumnName);
         } else {
@@ -275,7 +275,6 @@ trait SortableTrait
         $this->save();
 
         return $this;
-
     }
 
     /**

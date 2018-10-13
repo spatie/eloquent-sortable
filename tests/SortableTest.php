@@ -20,7 +20,6 @@ class SortableTest extends TestCase
         $this->assertEquals(Dummy::all()->count(), (new Dummy())->getHighestOrderNumber());
     }
 
-
     /** @test */
     public function it_can_get_the_highest_order_number_with_trashed_models()
     {
@@ -324,11 +323,11 @@ class SortableTest extends TestCase
 
         $all = Dummy::all()->sortBy('order_column');
         $all->values()->all();
-        $count = $all->where('order_column', '<=', $newPosition )->count();
+        $count = $all->where('order_column', '<=', $newPosition)->count();
         $this->assertEquals($newPosition, $count);
 
         $counter = 1;
-        foreach( $all as $m ){
+        foreach($all as $m) {
             $this->assertEquals($m->order_column, $counter);
             $counter++;
         }
@@ -343,7 +342,7 @@ class SortableTest extends TestCase
         $this->assertEquals($originalPosition, $model->order_column);
         $this->assertEquals($newPosition, $modelAtPosition->order_column);
 
-        $model = $model->moveToPosition( $newPosition );
+        $model = $model->moveToPosition($newPosition);
 
         $this->assertEquals($newPosition, $model->order_column);
 
@@ -352,14 +351,13 @@ class SortableTest extends TestCase
 
         $all = Dummy::all()->sortBy('order_column');
         $all->values()->all();
-        $count = $all->where('order_column', '<=', $newPosition )->count();
+        $count = $all->where('order_column', '<=', $newPosition)->count();
         $this->assertEquals($newPosition, $count);
 
         $counter = 1;
-        foreach( $all as $m ){
+        foreach($all as $m) {
             $this->assertEquals($m->order_column, $counter);
             $counter++;
         }
     }
-
 }
