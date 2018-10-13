@@ -327,7 +327,7 @@ class SortableTest extends TestCase
         $this->assertEquals($newPosition, $count);
 
         $counter = 1;
-        foreach($all as $m) {
+        foreach ($all as $m) {
             $this->assertEquals($m->order_column, $counter);
             $counter++;
         }
@@ -355,7 +355,7 @@ class SortableTest extends TestCase
         $this->assertEquals($newPosition, $count);
 
         $counter = 1;
-        foreach($all as $m) {
+        foreach ($all as $m) {
             $this->assertEquals($m->order_column, $counter);
             $counter++;
         }
