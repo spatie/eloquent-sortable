@@ -31,6 +31,37 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_get_the_order_number_at_a_specific_position()
+    {
+        $all = Dummy::all();
+
+        $first = $all->first();
+        $this->assertEquals($first->order_column, (new Dummy())->getOrderNumberAtPosition(0));
+
+        $fourth = $all->slice(3, 1)->first();
+        $this->assertEquals($fourth->order_column, (new Dummy())->getOrderNumberAtPosition(4));
+
+        $seventh = $all->slice(6, 1)->first();
+        $this->assertEquals($seventh->order_column, (new Dummy())->getOrderNumberAtPosition(7));
+    }
+
+    /** @test */
+    public function it_can_get_the_order_number_at_a_specific_position_with_trashed_models()
+    {
+        $this->setUpSoftDeletes();
+        $all = DummyWithSoftDeletes::all();
+
+        $first = $all->first();
+        $this->assertEquals($first->order_column, (new Dummy())->getOrderNumberAtPosition(0));
+
+        $fourth = $all->slice(3, 1)->first();
+        $this->assertEquals($fourth->order_column, (new Dummy())->getOrderNumberAtPosition(4));
+
+        $seventh = $all->slice(6, 1)->first();
+        $this->assertEquals($seventh->order_column, (new Dummy())->getOrderNumberAtPosition(7));
+    }
+
+    /** @test */
     public function it_can_set_a_new_order()
     {
         $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
@@ -265,6 +296,68 @@ class SortableTest extends TestCase
             } else {
                 $this->assertEquals($order, $newModels[$key]);
             }
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_move_a_model_to_a_specified_position()
+    {
+        // Move the model up
+        $originalPosition = 3;
+        $newPosition = 7;
+
+        $model = Dummy::find($originalPosition);
+        $modelAtPosition = Dummy::find($newPosition);
+
+        $this->assertEquals($originalPosition, $model->order_column);
+        $this->assertEquals($newPosition, $modelAtPosition->order_column);
+
+        $model = $model->moveToPosition($newPosition);
+
+        $this->assertEquals($newPosition, $model->order_column);
+
+        $modelAtPosition->refresh();
+        $this->assertEquals($newPosition - 1, $modelAtPosition->order_column);
+
+        $all = Dummy::all()->sortBy('order_column');
+        $all->values()->all();
+        $count = $all->where('order_column', '<=', $newPosition)->count();
+        $this->assertEquals($newPosition, $count);
+
+        $counter = 1;
+        foreach ($all as $m) {
+            $this->assertEquals($m->order_column, $counter);
+            $counter++;
+        }
+
+        // Move the model down
+        $originalPosition = 10;
+        $newPosition = 2;
+
+        $model = Dummy::find($originalPosition);
+        $modelAtPosition = Dummy::find($newPosition);
+
+        $this->assertEquals($originalPosition, $model->order_column);
+        $this->assertEquals($newPosition, $modelAtPosition->order_column);
+
+        $model = $model->moveToPosition($newPosition);
+
+        $this->assertEquals($newPosition, $model->order_column);
+
+        $modelAtPosition->refresh();
+        $this->assertEquals($newPosition + 1, $modelAtPosition->order_column);
+
+        $all = Dummy::all()->sortBy('order_column');
+        $all->values()->all();
+        $count = $all->where('order_column', '<=', $newPosition)->count();
+        $this->assertEquals($newPosition, $count);
+
+        $counter = 1;
+        foreach ($all as $m) {
+            $this->assertEquals($m->order_column, $counter);
+            $counter++;
         }
     }
 }
