@@ -2,7 +2,6 @@
 
 
 [![Latest Version](https://img.shields.io/github/release/spatie/eloquent-sortable.svg?style=flat-square)](https://github.com/spatie/eloquent-sortable/releases)
-[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/fb7765b9-7632-4897-8054-22d85b41ffda.svg)](https://insight.sensiolabs.com/projects/fb7765b9-7632-4897-8054-22d85b41ffda)
 [![Build Status](https://img.shields.io/travis/spatie/eloquent-sortable.svg?style=flat-square)](https://travis-ci.org/spatie/eloquent-sortable)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/eloquent-sortable.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/eloquent-sortable)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
@@ -22,15 +21,15 @@ Spatie is a webdesign agency in Antwerp, Belgium. You'll find an overview of all
 This package can be installed through Composer.
 
 ```
-$ composer require spatie/eloquent-sortable
+composer require spatie/eloquent-sortable
 ```
 
 ## Usage
 
-To add sortable behaviour to your model you must:<br />
-1. specify that the model will conform to ```Spatie\EloquentSortable\Sortable```<br />
-2. use the trait ```Spatie\EloquentSortable\SortableTrait```<br />
-3. specify which column will be used as the order column<br />
+To add sortable behaviour to your model you must:
+1. Implement the `Spatie\EloquentSortable\Sortable` interface.
+2. Use the trait `Spatie\EloquentSortable\SortableTrait`.
+3. Optionally specify which column will be used as the order column. The default is `order_column`.
 
 ### Example
 
@@ -114,6 +113,19 @@ You can swap the order of two models:
 ```php 
 MyModel::swapOrder($myModel, $anotherModel);
 ```
+
+### Grouping
+
+If your model/table has a grouping field (usually a foreign key): `id, `**`user_id`**`, title, order_column`
+and you'd like the above methods to take it into considerations, you can create a `buildSortQuery` method at your model:
+```php
+  public function buildSortQuery()
+    {
+        return static::query()->where('user_id', $this->user_id);
+    }
+```
+This will restrict the calculations to fields value of the model instance.
+
 
 ## Tests
 
