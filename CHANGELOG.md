@@ -2,6 +2,10 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.4.4 - 2019-02-27
+
+- add support for Laravel 5.8
+
 ## 3.4.3 - 2018-08-24
 
 - add support for Laravel 5.7
