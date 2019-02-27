@@ -2,6 +2,10 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.5.0 - 2019-02-27
+
+- drop support for L5.7 and below, PHP 7.1 and PHPUnit 7
+
 ## 3.4.4 - 2019-02-27
 
 - add support for Laravel 5.8
