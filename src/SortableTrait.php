@@ -57,8 +57,9 @@ trait SortableTrait
      *
      * @param array|\ArrayAccess $ids
      * @param int $startOrder
+     * @param string $primaryKeyColumn
      */
-    public static function setNewOrder($ids, int $startOrder = 1)
+    public static function setNewOrder($ids, int $startOrder = 1, $primaryKeyColumn = null)
     {
         if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
             throw new InvalidArgumentException('You must pass an array or ArrayAccess object to setNewOrder');
@@ -67,7 +68,10 @@ trait SortableTrait
         $model = new static;
 
         $orderColumnName = $model->determineOrderColumnName();
-        $primaryKeyColumn = $model->getKeyName();
+
+        if (is_null($primaryKeyColumn)) {
+            $primaryKeyColumn = $model->getKeyName();
+        }
 
         foreach ($ids as $id) {
             static::withoutGlobalScope(SoftDeletingScope::class)
