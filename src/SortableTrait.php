@@ -90,7 +90,8 @@ trait SortableTrait
      * @param array|\ArrayAccess $ids
      * @param int $startOrder
      */
-    public static function setNewOrderByCustomColumn(string $primaryKeyColumn, $ids, int $startOrder = 1){
+    public static function setNewOrderByCustomColumn(string $primaryKeyColumn, $ids, int $startOrder = 1)
+    {
         self::setNewOrder($ids, $startOrder, $primaryKeyColumn);
     }
 
