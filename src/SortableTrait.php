@@ -80,6 +80,20 @@ trait SortableTrait
         }
     }
 
+    /**
+     * This function reorders the records using an alternate column
+     * than the model's primary key.
+     *
+     * A starting order number can be optionally supplied (defaults to 1).
+     *
+     * @param string $primaryKeyColumn
+     * @param array|\ArrayAccess $ids
+     * @param int $startOrder
+     */
+    public static function setNewOrderByCustomColumn(string $primaryKeyColumn, $ids, int $startOrder = 1){
+        self::setNewOrder($ids, $startOrder, $primaryKeyColumn);
+    }
+
     /*
      * Determine the column name of the order column.
      */
