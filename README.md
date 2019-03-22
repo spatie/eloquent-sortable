@@ -94,6 +94,28 @@ Optionally you can pass the starting order number as the second argument.
 MyModel::setNewOrder([3,1,2], 10);
 ```
 
+To sort using a column other than the primary key, use the `setNewOrderByCustomColumn`-method.
+
+```php
+/**
+ * the record for model uid '7a051131-d387-4276-bfda-e7c376099715' will have record_column value 1
+ * the record for model uid '40324562-c7ca-4c69-8018-aff81bff8c95' will have record_column value 2
+ * the record for model uid '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1' will have record_column value 3
+ */
+MyModel::setNewOrderByCustomColumn('uid', ['7a051131-d387-4276-bfda-e7c376099715', '40324562-c7ca-4c69-8018-aff81bff8c95', '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1']);
+```
+
+As with `setNewOrder`, `setNewOrderByCustomColumn` will also accept an optional starting order argument.
+
+```php
+/**
+ * the record for model uid '7a051131-d387-4276-bfda-e7c376099715' will have record_column value 10
+ * the record for model uid '40324562-c7ca-4c69-8018-aff81bff8c95' will have record_column value 11
+ * the record for model uid '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1' will have record_column value 12
+ */
+MyModel::setNewOrderByCustomColumn('uid', ['7a051131-d387-4276-bfda-e7c376099715', '40324562-c7ca-4c69-8018-aff81bff8c95', '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1'], 10);
+```
+
 You can also move a model up or down with these methods:
 
 ```php 
