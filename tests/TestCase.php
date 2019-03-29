@@ -51,7 +51,7 @@ abstract class TestCase extends Orchestra
         collect(range(1, 20))->each(function (int $i) {
             Dummy::create([
                 'name' => $i,
-                'custom_column_sort' => chr(123 - $i), // backwards from z
+                'custom_column_sort' => rand(),
             ]);
         });
     }
