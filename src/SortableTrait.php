@@ -18,9 +18,6 @@ trait SortableTrait
         });
     }
 
-    /**
-     * Modify the order column value.
-     */
     public function setHighestOrderNumber()
     {
         $orderColumnName = $this->determineOrderColumnName();
@@ -28,37 +25,16 @@ trait SortableTrait
         $this->$orderColumnName = $this->getHighestOrderNumber() + 1;
     }
 
-    /**
-     * Determine the order value for the new record.
-     */
     public function getHighestOrderNumber(): int
     {
         return (int) $this->buildSortQuery()->max($this->determineOrderColumnName());
     }
 
-    /**
-     * Let's be nice and provide an ordered scope.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $direction
-     *
-     * @return \Illuminate\Database\Query\Builder
-     */
     public function scopeOrdered(Builder $query, string $direction = 'asc')
     {
         return $query->orderBy($this->determineOrderColumnName(), $direction);
     }
 
-    /**
-     * This function reorders the records: the record with the first id in the array
-     * will get order 1, the record with the second it will get order 2, ...
-     *
-     * A starting order number can be optionally supplied (defaults to 1).
-     *
-     * @param array|\ArrayAccess $ids
-     * @param int $startOrder
-     * @param string $primaryKeyColumn
-     */
     public static function setNewOrder($ids, int $startOrder = 1, string $primaryKeyColumn = null)
     {
         if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
@@ -80,24 +56,11 @@ trait SortableTrait
         }
     }
 
-    /**
-     * This function reorders the records using an alternate column
-     * than the model's primary key.
-     *
-     * A starting order number can be optionally supplied (defaults to 1).
-     *
-     * @param string $primaryKeyColumn
-     * @param array|\ArrayAccess $ids
-     * @param int $startOrder
-     */
     public static function setNewOrderByCustomColumn(string $primaryKeyColumn, $ids, int $startOrder = 1)
     {
         self::setNewOrder($ids, $startOrder, $primaryKeyColumn);
     }
 
-    /*
-     * Determine the column name of the order column.
-     */
     protected function determineOrderColumnName(): string
     {
         if (
@@ -118,11 +81,6 @@ trait SortableTrait
         return $this->sortable['sort_when_creating'] ?? true;
     }
 
-    /**
-     * Swaps the order of this model with the model 'below' this model.
-     *
-     * @return $this
-     */
     public function moveOrderDown()
     {
         $orderColumnName = $this->determineOrderColumnName();
@@ -139,11 +97,6 @@ trait SortableTrait
         return $this->swapOrderWithModel($swapWithModel);
     }
 
-    /**
-     * Swaps the order of this model with the model 'above' this model.
-     *
-     * @return $this
-     */
     public function moveOrderUp()
     {
         $orderColumnName = $this->determineOrderColumnName();
@@ -160,13 +113,6 @@ trait SortableTrait
         return $this->swapOrderWithModel($swapWithModel);
     }
 
-    /**
-     * Swap the order of this model with the order of another model.
-     *
-     * @param \Spatie\EloquentSortable\Sortable $otherModel
-     *
-     * @return $this
-     */
     public function swapOrderWithModel(Sortable $otherModel)
     {
         $orderColumnName = $this->determineOrderColumnName();
@@ -182,22 +128,11 @@ trait SortableTrait
         return $this;
     }
 
-    /**
-     * Swap the order of two models.
-     *
-     * @param \Spatie\EloquentSortable\Sortable $model
-     * @param \Spatie\EloquentSortable\Sortable $otherModel
-     */
     public static function swapOrder(Sortable $model, Sortable $otherModel)
     {
         $model->swapOrderWithModel($otherModel);
     }
 
-    /**
-     * Moves this model to the first position.
-     *
-     * @return $this
-     */
     public function moveToStart()
     {
         $firstModel = $this->buildSortQuery()->limit(1)
@@ -218,11 +153,6 @@ trait SortableTrait
         return $this;
     }
 
-    /**
-     * Moves this model to the last position.
-     *
-     * @return $this
-     */
     public function moveToEnd()
     {
         $maxOrder = $this->getHighestOrderNumber();
@@ -245,11 +175,6 @@ trait SortableTrait
         return $this;
     }
 
-    /**
-     * Build eloquent builder of sortable.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function buildSortQuery()
     {
         return static::query();
