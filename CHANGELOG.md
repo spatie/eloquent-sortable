@@ -2,6 +2,10 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.6.0 - 2019-04-01
+
+- allow `setNewOrder` to accept a custom sort column
+
 ## 3.5.0 - 2019-02-27
 
 - drop support for L5.7 and below, PHP 7.1 and PHPUnit 7
