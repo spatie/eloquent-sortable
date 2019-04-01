@@ -44,11 +44,15 @@ abstract class TestCase extends Orchestra
         $this->app['db']->connection()->getSchemaBuilder()->create('dummies', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('custom_column_sort');
             $table->integer('order_column');
         });
 
         collect(range(1, 20))->each(function (int $i) {
-            Dummy::create(['name' => $i]);
+            Dummy::create([
+                'name' => $i,
+                'custom_column_sort' => rand(),
+            ]);
         });
     }
 

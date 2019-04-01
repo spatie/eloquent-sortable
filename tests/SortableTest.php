@@ -43,6 +43,18 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_a_new_order_by_custom_column()
+    {
+        $newOrder = Collection::make(Dummy::all()->pluck('custom_column_sort'))->shuffle()->toArray();
+
+        Dummy::setNewOrderByCustomColumn('custom_column_sort', $newOrder);
+
+        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->custom_column_sort);
+        }
+    }
+
+    /** @test */
     public function it_can_set_a_new_order_from_collection()
     {
         $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle();
@@ -51,6 +63,18 @@ class SortableTest extends TestCase
 
         foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
             $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
+    public function it_can_set_a_new_order_by_custom_column_from_collection()
+    {
+        $newOrder = Collection::make(Dummy::all()->pluck('custom_column_sort'))->shuffle();
+
+        Dummy::setNewOrderByCustomColumn('custom_column_sort', $newOrder);
+
+        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->custom_column_sort);
         }
     }
 
@@ -73,6 +97,24 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_a_new_order_by_custom_column_with_trashed_models()
+    {
+        $this->setUpSoftDeletes();
+
+        $dummies = DummyWithSoftDeletes::all();
+
+        $dummies->random()->delete();
+
+        $newOrder = Collection::make($dummies->pluck('custom_column_sort'))->shuffle();
+
+        DummyWithSoftDeletes::setNewOrderByCustomColumn('custom_column_sort', $newOrder);
+
+        foreach (DummyWithSoftDeletes::withTrashed()->orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->custom_column_sort);
+        }
+    }
+
+    /** @test */
     public function it_can_set_a_new_order_without_trashed_models()
     {
         $this->setUpSoftDeletes();
@@ -85,6 +127,22 @@ class SortableTest extends TestCase
 
         foreach (DummyWithSoftDeletes::orderBy('order_column')->get() as $i => $dummy) {
             $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
+    public function it_can_set_a_new_order_by_custom_column_without_trashed_models()
+    {
+        $this->setUpSoftDeletes();
+
+        DummyWithSoftDeletes::first()->delete();
+
+        $newOrder = Collection::make(DummyWithSoftDeletes::pluck('custom_column_sort'))->shuffle();
+
+        DummyWithSoftDeletes::setNewOrderByCustomColumn('custom_column_sort', $newOrder);
+
+        foreach (DummyWithSoftDeletes::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->custom_column_sort);
         }
     }
 
