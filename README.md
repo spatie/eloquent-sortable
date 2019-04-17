@@ -161,8 +161,8 @@ This will restrict the calculations to fields value of the model instance.
 
 The package contains some integration/smoke tests, set up with Orchestra. The tests can be run via phpunit.
 
-```
-$ vendor/bin/phpunit
+```bash
+vendor/bin/phpunit
 ```
 
 ## Changelog
