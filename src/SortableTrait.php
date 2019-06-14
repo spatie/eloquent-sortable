@@ -35,6 +35,29 @@ trait SortableTrait
         return $query->orderBy($this->determineOrderColumnName(), $direction);
     }
 
+    public function setOrderAfter($id)
+    {
+        if (! $afterModel = $this->buildSortQuery()->find($id)) {
+            throw new InvalidArgumentException('You must pass an existing model id');
+        }
+
+        if ($afterModel->id === $this->id) {
+            return $this;
+        }
+
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $this->$orderColumnName = $afterModel->$orderColumnName + 1;
+        $this->save();
+
+        $this->buildSortQuery()
+            ->where($this->getKeyName(), '!=', $this->$id)
+            ->where($orderColumnName, '>=', $this->$orderColumnName)
+            ->increment($orderColumnName);
+
+        return $this;
+    }
+
     public static function setNewOrder($ids, int $startOrder = 1, string $primaryKeyColumn = null)
     {
         if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
