@@ -47,15 +47,29 @@ trait SortableTrait
 
         $orderColumnName = $this->determineOrderColumnName();
 
-        $this->$orderColumnName = $afterModel->$orderColumnName + 1;
-        $this->save();
+        if ($afterModel->$orderColumnName === $this->$orderColumnName) {
+            return $this;
+        }
+
+        if ($this->$orderColumnName < $afterModel->$orderColumnName) {
+            $this->buildSortQuery()
+                ->where($orderColumnName, '>', $this->$orderColumnName)
+                ->where($orderColumnName, '<=', $afterModel->$orderColumnName)
+                ->decrement($orderColumnName);
+
+            return tap($this)->update([
+                $orderColumnName => $afterModel->$orderColumnName
+            ]);
+        }
 
         $this->buildSortQuery()
-            ->where($this->getKeyName(), '!=', $this->$id)
-            ->where($orderColumnName, '>=', $this->$orderColumnName)
+            ->where($orderColumnName, '>', $afterModel->$orderColumnName)
+            ->where($orderColumnName, '<', $this->$orderColumnName)
             ->increment($orderColumnName);
 
-        return $this;
+        return tap($this)->update([
+            $orderColumnName => $afterModel->$orderColumnName + 1
+        ]);
     }
 
     public static function setNewOrder($ids, int $startOrder = 1, string $primaryKeyColumn = null)
