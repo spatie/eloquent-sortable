@@ -2,6 +2,10 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.7.0 - 2019-09-04
+
+- add support for Laravel 6
+
 ## 3.6.0 - 2019-04-01
 
 - allow `setNewOrder` to accept a custom sort column
