@@ -76,9 +76,9 @@ You can set a new order for all the records using the `setNewOrder`-method
 
 ```php
 /**
- * the record for model id 3 will have record_column value 1
- * the record for model id 1 will have record_column value 2
- * the record for model id 2 will have record_column value 3
+ * the record for model id 3 will have order_column value 1
+ * the record for model id 1 will have order_column value 2
+ * the record for model id 2 will have order_column value 3
  */
 MyModel::setNewOrder([3,1,2]);
 ```
@@ -87,9 +87,9 @@ Optionally you can pass the starting order number as the second argument.
 
 ```php
 /**
- * the record for model id 3 will have record_column value 11
- * the record for model id 1 will have record_column value 12
- * the record for model id 2 will have record_column value 13
+ * the record for model id 3 will have order_column value 11
+ * the record for model id 1 will have order_column value 12
+ * the record for model id 2 will have order_column value 13
  */
 MyModel::setNewOrder([3,1,2], 10);
 ```
@@ -98,9 +98,9 @@ To sort using a column other than the primary key, use the `setNewOrderByCustomC
 
 ```php
 /**
- * the record for model uuid '7a051131-d387-4276-bfda-e7c376099715' will have record_column value 1
- * the record for model uuid '40324562-c7ca-4c69-8018-aff81bff8c95' will have record_column value 2
- * the record for model uuid '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1' will have record_column value 3
+ * the record for model uuid '7a051131-d387-4276-bfda-e7c376099715' will have order_column value 1
+ * the record for model uuid '40324562-c7ca-4c69-8018-aff81bff8c95' will have order_column value 2
+ * the record for model uuid '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1' will have order_column value 3
  */
 MyModel::setNewOrderByCustomColumn('uuid', [
    '7a051131-d387-4276-bfda-e7c376099715',
@@ -113,9 +113,9 @@ As with `setNewOrder`, `setNewOrderByCustomColumn` will also accept an optional 
 
 ```php
 /**
- * the record for model uuid '7a051131-d387-4276-bfda-e7c376099715' will have record_column value 10
- * the record for model uuid '40324562-c7ca-4c69-8018-aff81bff8c95' will have record_column value 11
- * the record for model uuid '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1' will have record_column value 12
+ * the record for model uuid '7a051131-d387-4276-bfda-e7c376099715' will have order_column value 10
+ * the record for model uuid '40324562-c7ca-4c69-8018-aff81bff8c95' will have order_column value 11
+ * the record for model uuid '5dc4d0f4-0c88-43a4-b293-7c7902a3cfd1' will have order_column value 12
  */
 MyModel::setNewOrderByCustomColumn('uuid', [
    '7a051131-d387-4276-bfda-e7c376099715',
