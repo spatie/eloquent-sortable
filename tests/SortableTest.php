@@ -325,4 +325,46 @@ class SortableTest extends TestCase
             }
         }
     }
+
+    /**
+     * @test
+     */
+    public function it_can_move_a_model_to_specific_position_above_current()
+    {
+        $moveModelPosition = 10;
+        $moveModel = Dummy::find($moveModelPosition);
+        $oldModels = Dummy::ordered()->pluck('order_column', 'id');
+
+        $targetPosition = 5;
+        $model = $moveModel->moveToPosition($targetPosition);
+
+        $this->assertEquals($targetPosition, $model->order_column);
+        $newModels = Dummy::ordered()->pluck('order_column', 'id');
+        foreach ($oldModels as $key => $order) {
+            if ($order < $moveModelPosition && $order > $targetPosition) {
+                $this->assertEquals($order + 1, $newModels[$key]);
+            }
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_move_a_model_to_specific_position_below_current()
+    {
+        $moveModelPosition = 5;
+        $moveModel = Dummy::find($moveModelPosition);
+        $oldModels = Dummy::ordered()->pluck('order_column', 'id');
+
+        $targetPosition = 10;
+        $model = $moveModel->moveToPosition($targetPosition);
+
+        $this->assertEquals($targetPosition, $model->order_column);
+        $newModels = Dummy::ordered()->pluck('order_column', 'id');
+        foreach ($oldModels as $key => $order) {
+            if ($order > $moveModelPosition && $order < $targetPosition) {
+                $this->assertEquals($order - 1, $newModels[$key]);
+            }
+        }
+    }
 }

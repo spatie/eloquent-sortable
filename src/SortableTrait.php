@@ -175,6 +175,31 @@ trait SortableTrait
         return $this;
     }
 
+    public function moveToPosition($targetPosition)
+    {
+        $orderColumnName = $this->determineOrderColumnName();
+        $oldOrder = $this->$orderColumnName;
+        if ($oldOrder === $targetPosition) {
+            return $this;
+        }
+
+        if ($oldOrder >= $targetPosition) {
+            $this->buildSortQuery()
+                ->where($orderColumnName, '>=' ,$targetPosition)
+                ->where($orderColumnName, '<' ,$oldOrder)
+                ->increment($orderColumnName);
+        } else {
+            $this->buildSortQuery()
+                ->where($orderColumnName, '<=' ,$targetPosition)
+                ->where($orderColumnName, '>' ,$oldOrder)
+                ->decrement($orderColumnName);
+        }
+
+        $this->$orderColumnName = $targetPosition;
+        $this->save();
+        return $this;
+    }
+
     public function buildSortQuery()
     {
         return static::query();

@@ -138,6 +138,12 @@ $myModel->moveToStart();
 $myModel->moveToEnd();
 ```
 
+You can also move a model to a specific position:
+
+```php 
+$myModel->moveToPosition($postion);
+```
+
 You can swap the order of two models:
 
 ```php 
