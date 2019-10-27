@@ -185,13 +185,13 @@ trait SortableTrait
 
         if ($oldOrder >= $targetPosition) {
             $this->buildSortQuery()
-                ->where($orderColumnName, '>=' ,$targetPosition)
-                ->where($orderColumnName, '<' ,$oldOrder)
+                ->where($orderColumnName, '>=', $targetPosition)
+                ->where($orderColumnName, '<', $oldOrder)
                 ->increment($orderColumnName);
         } else {
             $this->buildSortQuery()
-                ->where($orderColumnName, '<=' ,$targetPosition)
-                ->where($orderColumnName, '>' ,$oldOrder)
+                ->where($orderColumnName, '<=', $targetPosition)
+                ->where($orderColumnName, '>', $oldOrder)
                 ->decrement($orderColumnName);
         }
 
