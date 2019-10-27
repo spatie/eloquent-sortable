@@ -197,6 +197,7 @@ trait SortableTrait
 
         $this->$orderColumnName = $targetPosition;
         $this->save();
+
         return $this;
     }
 
