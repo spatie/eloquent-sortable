@@ -63,14 +63,7 @@ trait SortableTrait
 
     protected function determineOrderColumnName(): string
     {
-        if (
-            isset($this->sortable['order_column_name']) &&
-            ! empty($this->sortable['order_column_name'])
-        ) {
-            return $this->sortable['order_column_name'];
-        }
-
-        return 'order_column';
+        return $this->sortable['order_column_name'] ?? 'order_column';
     }
 
     /**
