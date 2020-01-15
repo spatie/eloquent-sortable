@@ -3,9 +3,9 @@
 namespace Spatie\EloquentSortable;
 
 use ArrayAccess;
-use InvalidArgumentException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use InvalidArgumentException;
 
 trait SortableTrait
 {

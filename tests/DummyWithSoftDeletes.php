@@ -2,10 +2,10 @@
 
 namespace Spatie\EloquentSortable\Test;
 
-use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 class DummyWithSoftDeletes extends Model implements Sortable
 {
