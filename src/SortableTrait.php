@@ -18,6 +18,26 @@ trait SortableTrait
         });
     }
 
+    public function getNextInOrder()
+    {
+        $orderColumn = $this->determineOrderColumnName();
+
+        return $this->buildSortQuery()
+            ->ordered()
+            ->where($orderColumn, '>', $this->$orderColumn)
+            ->first();
+    }
+
+    public function getPreviousInOrder()
+    {
+        $orderColumn = $this->determineOrderColumnName();
+
+        return $this->buildSortQuery()
+            ->ordered('desc')
+            ->where($orderColumn, '<', $this->$orderColumn)
+            ->first();
+    }
+
     public function setHighestOrderNumber()
     {
         $orderColumnName = $this->determineOrderColumnName();

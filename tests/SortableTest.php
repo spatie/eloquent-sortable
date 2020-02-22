@@ -296,9 +296,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_can_move_a_model_to_the_last_place()
     {
         $position = 3;
@@ -324,5 +322,23 @@ class SortableTest extends TestCase
                 $this->assertEquals($order, $newModels[$key]);
             }
         }
+    }
+
+    /** @test */
+    public function it_can_get_the_next_model_in_order()
+    {
+        $activeModel = Dummy::find(3);
+        $nextModel = Dummy::find(4);
+
+        $this->assertEquals($activeModel->getNextInOrder(), $nextModel);
+    }
+
+    /** @test */
+    public function it_can_get_the_previous_model_in_order()
+    {
+        $activeModel = Dummy::find(3);
+        $previousModel = Dummy::find(2);
+
+        $this->assertEquals($activeModel->getPreviousInOrder(), $previousModel);
     }
 }
