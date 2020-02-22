@@ -144,6 +144,13 @@ You can swap the order of two models:
 MyModel::swapOrder($myModel, $anotherModel);
 ```
 
+You can retrieve the next or previous instance of a sortable model:
+
+```php 
+$myModel->getNextInOrder();
+$myModel->getPreviousInOrder();
+```
+
 ### Grouping
 
 If your model/table has a grouping field (usually a foreign key): `id, `**`user_id`**`, title, order_column`
