@@ -1,8 +1,7 @@
 # Sortable behaviour for Eloquent models
 
-
 [![Latest Version](https://img.shields.io/github/release/spatie/eloquent-sortable.svg?style=flat-square)](https://github.com/spatie/eloquent-sortable/releases)
-[![Build Status](https://img.shields.io/travis/spatie/eloquent-sortable.svg?style=flat-square)](https://travis-ci.org/spatie/eloquent-sortable)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/eloquent-sortable/run-tests?label=tests)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/eloquent-sortable.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/eloquent-sortable)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![StyleCI](https://styleci.io/repos/21866232/shield?branch=master)](https://styleci.io/repos/21866232)
