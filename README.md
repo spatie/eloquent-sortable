@@ -15,6 +15,16 @@ The package also provides a query scope to fetch all the records in the right or
 
 Spatie is a webdesign agency in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
 
+## Support us
+
+Learn how to create a package like this one, by watching our premium video course:
+
+[![Laravel Package training](https://spatie.be/github/package-training.jpg)](https://laravelpackage.training)
+
+We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+
+We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+
 ## Installation
 
 This package can be installed through Composer.
@@ -22,12 +32,6 @@ This package can be installed through Composer.
 ```
 composer require spatie/eloquent-sortable
 ```
-
-## Support us
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us). 
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Usage
 
@@ -161,7 +165,6 @@ and you'd like the above methods to take it into considerations, you can create 
 ```
 This will restrict the calculations to fields value of the model instance.
 
-
 ## Tests
 
 The package contains some integration/smoke tests, set up with Orchestra. The tests can be run via phpunit.
@@ -201,4 +204,3 @@ All pledges will be dedicated to allocating workforce on maintenance and new awe
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
