@@ -2,6 +2,10 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.8.1 - 2020-06-26
+
+- models don't always have an id as key, use `getKey` instead
+
 ## 3.8.0 - 2020-03-02
 
 - add support for Laravel 7
