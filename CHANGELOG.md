@@ -2,6 +2,10 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.8.2 - 2020-07-08
+
+- reduce dependency tree (#89)
+
 ## 3.8.1 - 2020-06-26
 
 - models don't always have an id as key, use `getKey` instead
