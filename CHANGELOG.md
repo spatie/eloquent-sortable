@@ -2,6 +2,12 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.0.0 - 2020-08-23
+
+- Added Laravel 8 support.
+- Dropped Laravel 5.8 and 6 support.
+- Dropped PHP 7.2 and 7.3 support.
+
 ## 3.8.2 - 2020-07-08
 
 - reduce dependency tree (#89)
