@@ -37,6 +37,13 @@
             "Spatie\\EloquentSortable\\Test\\": "tests"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Spatie\\EloquentSortable\\EloquentSortableServiceProvider"
+            ]
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
