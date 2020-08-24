@@ -61,9 +61,9 @@ trait SortableTrait
         self::setNewOrder($ids, $startOrder, $primaryKeyColumn);
     }
 
-    protected function determineOrderColumnName(): string
+    public function determineOrderColumnName(): string
     {
-        return $this->sortable['order_column_name'] ?? 'order_column';
+        return $this->sortable['order_column_name'] ?? config('eloquent-sortable.order_column_name');
     }
 
     /**

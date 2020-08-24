@@ -33,4 +33,9 @@ interface Sortable
      * Determine if the order column should be set when saving a new model instance.
      */
     public function shouldSortWhenCreating(): bool;
+
+    /**
+     * Display the order column name that is been set.
+     */
+    public function determineOrderColumnName(): string;
 }
