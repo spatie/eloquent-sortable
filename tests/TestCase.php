@@ -23,7 +23,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            EloquentSortableServiceProvider::class
+            EloquentSortableServiceProvider::class,
         ];
     }
 
