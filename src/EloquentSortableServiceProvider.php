@@ -13,6 +13,5 @@ class EloquentSortableServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->mergeConfigFrom(__DIR__.'/../config/eloquent-sortable.php', 'eloquent-sortable');
-
     }
 }
