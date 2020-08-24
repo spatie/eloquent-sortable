@@ -4,6 +4,7 @@ namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\EloquentSortable\EloquentSortableServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -22,7 +23,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-
+            EloquentSortableServiceProvider::class
         ];
     }
 
@@ -60,6 +61,15 @@ abstract class TestCase extends Orchestra
     {
         $this->app['db']->connection()->getSchemaBuilder()->table('dummies', function (Blueprint $table) {
             $table->softDeletes();
+        });
+    }
+
+    protected function setUpCustomSortColumns()
+    {
+        $this->app['db']->connection()->getSchemaBuilder()->create('dummy_customs', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->integer('custom_order_column_name');
         });
     }
 }

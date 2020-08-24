@@ -325,4 +325,52 @@ class SortableTest extends TestCase
             }
         }
     }
+
+    /**
+     * @test
+     */
+    public function it_can_set_custom_name_for_sort_column_through_config()
+    {
+        $this->setUpCustomSortColumns();
+
+        config(['eloquent-sortable.order_column_name' => 'custom_order_column_name']);
+
+        for ($i = 1; $i <= 5; $i++) {
+            DummyCustom::create([
+                'name' => $i,
+            ]);
+        }
+
+        foreach (DummyCustom::all() as $dummyCustom) {
+            $this->assertEquals($dummyCustom->name, $dummyCustom->custom_order_column_name);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_prioritize_column_name_setting_in_model_instead_of_global_config()
+    {
+        $this->setUpCustomSortColumns();
+
+        // Order column Name not set
+        $model = new class extends DummyCustom {
+            public $sortable = [];
+        };
+        $this->assertEquals($model->determineOrderColumnName(), 'order_column');
+
+        // Order column Name set in config
+        config(['eloquent-sortable.order_column_name' => 'global_column_name']);
+
+        $model = new class extends DummyCustom {
+            public $sortable = [];
+        };
+        $this->assertEquals($model->determineOrderColumnName(), 'global_column_name');
+
+        // Order column Name set in model
+        $model = new class extends DummyCustom {
+            public $sortable = ['order_column_name' => 'specific_order_column'];
+        };
+        $this->assertEquals($model->determineOrderColumnName(), 'specific_order_column');
+    }
 }
