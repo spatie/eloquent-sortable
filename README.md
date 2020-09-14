@@ -46,7 +46,7 @@ Optionally you can publish the config file with:
 php artisan vendor:publish --provider="Spatie\EloquentSortable\EloquentSortableServiceProvider" --tag="config"
 ```
 
-This is the content of the file that will be published in `config/json-api-paginate.php`
+This is the content of the file that will be published in `config/eloquent-sortable.php`
 
 ```php
 return [
