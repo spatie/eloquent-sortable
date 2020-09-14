@@ -6,6 +6,11 @@
         {
             "name": "Freek Van der Herten",
             "email": "freek@spatie.be"
+        },
+        {
+            "name": "Tim Wickstrom",
+            "email": "tim@wickstrom.me",
+            "role": "Contributor"
         }
     ],
     "keywords":
@@ -43,5 +48,12 @@
     "scripts": {
         "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
         "test": "vendor/bin/phpunit"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Spatie\\EloquentSortable\\EloquentSortableServiceProvider"
+            ]
+        }
     }
 }

@@ -31,6 +31,38 @@ This package can be installed through Composer.
 composer require spatie/eloquent-sortable
 ```
 
+In Laravel 5.5 and above the service provider will automatically get registered. In older versions of the framework just add the service provider in `config/app.php` file:
+
+```php
+'providers' => [
+    ...
+    Spatie\EloquentSortable\EloquentSortableServiceProvider::class,
+];
+```
+
+Optionally you can publish the config file with:
+
+```bash
+php artisan vendor:publish --provider="Spatie\EloquentSortable\EloquentSortableServiceProvider" --tag="config"
+```
+
+This is the content of the file that will be published in `config/json-api-paginate.php`
+
+```php
+return [
+  /*
+   * Which column will be used as the order column.
+   */
+  'order_column_name' => 'order_column',
+
+  /*
+   * Define if the models should sort when creating.
+   * When true, the package will automatically assign the highest order number to a new mode
+   */
+  'sort_when_creating' => true,
+];
+```
+
 ## Usage
 
 To add sortable behaviour to your model you must:
@@ -53,7 +85,7 @@ class MyModel extends Eloquent implements Sortable
         'order_column_name' => 'order_column',
         'sort_when_creating' => true,
     ];
-    
+
     ...
 }
 ```
@@ -76,7 +108,7 @@ $myModel->save(); // order_column for this record will be set to 3
 
 
 //the trait also provides the ordered query scope
-$orderedRecords = MyModel::ordered()->get(); 
+$orderedRecords = MyModel::ordered()->get();
 ```
 
 You can set a new order for all the records using the `setNewOrder`-method
@@ -133,21 +165,21 @@ MyModel::setNewOrderByCustomColumn('uuid', [
 
 You can also move a model up or down with these methods:
 
-```php 
+```php
 $myModel->moveOrderDown();
 $myModel->moveOrderUp();
 ```
 
 You can also move a model to the first or last position:
 
-```php 
+```php
 $myModel->moveToStart();
 $myModel->moveToEnd();
 ```
 
 You can swap the order of two models:
 
-```php 
+```php
 MyModel::swapOrder($myModel, $anotherModel);
 ```
 
