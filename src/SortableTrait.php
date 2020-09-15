@@ -63,7 +63,9 @@ trait SortableTrait
 
     public function determineOrderColumnName(): string
     {
-        return isset($this->sortable['order_column_name']) ? $this->sortable['order_column_name'] : config('eloquent-sortable.order_column_name', 'order_column');
+        return isset($this->sortable['order_column_name']) 
+            ? $this->sortable['order_column_name'] 
+            : config('eloquent-sortable.order_column_name', 'order_column');
     }
 
     /**
@@ -71,7 +73,9 @@ trait SortableTrait
      */
     public function shouldSortWhenCreating(): bool
     {
-        return isset($this->sortable['sort_when_creating']) ? $this->sortable['sort_when_creating'] : config('eloquent-sortable.sort_when_creating', true);
+        return isset($this->sortable['sort_when_creating']) 
+            ? $this->sortable['sort_when_creating'] 
+            : config('eloquent-sortable.sort_when_creating', true);
     }
 
     public function moveOrderDown()
