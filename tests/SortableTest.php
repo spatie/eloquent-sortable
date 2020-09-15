@@ -328,30 +328,30 @@ class SortableTest extends TestCase
     /** @test */
     public function it_can_use_config_properties()
     {
-      config([
+        config([
         'eloquent-sortable.order_column_name' => 'order_column',
         'eloquent-sortable.sort_when_creating' => true,
       ]);
 
-      $model = new class extends Dummy {
-          public $sortable = [];
-      };
+        $model = new class extends Dummy {
+            public $sortable = [];
+        };
 
-      $this->assertEquals(config('eloquent-sortable.order_column_name'), $model->determineOrderColumnName());
-      $this->assertEquals(config('eloquent-sortable.sort_when_creating'), $model->shouldSortWhenCreating());
+        $this->assertEquals(config('eloquent-sortable.order_column_name'), $model->determineOrderColumnName());
+        $this->assertEquals(config('eloquent-sortable.sort_when_creating'), $model->shouldSortWhenCreating());
     }
 
     /** @test */
     public function it_can_override_config_properties()
     {
-      $model = new class extends Dummy {
-          public $sortable = [
+        $model = new class extends Dummy {
+            public $sortable = [
             'order_column_name' => 'my_custom_order_column',
             'sort_when_creating' => false,
           ];
-      };
+        };
 
-      $this->assertEquals($model->determineOrderColumnName(), 'my_custom_order_column');
-      $this->assertFalse($model->shouldSortWhenCreating());
+        $this->assertEquals($model->determineOrderColumnName(), 'my_custom_order_column');
+        $this->assertFalse($model->shouldSortWhenCreating());
     }
 }
