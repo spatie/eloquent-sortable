@@ -325,9 +325,7 @@ class SortableTest extends TestCase
             }
         }
     }
-    /**
-     * @test
-     */
+    /** @test */
     public function it_can_read_config_properties()
     {
       config([
@@ -343,9 +341,7 @@ class SortableTest extends TestCase
       $this->assertEquals(config('eloquent-sortable.sort_when_creating'), $model->shouldSortWhenCreating());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_can_override_config_properties()
     {
       $model = new class extends Dummy {
