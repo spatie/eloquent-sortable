@@ -51,13 +51,13 @@ This is the content of the file that will be published in `config/eloquent-sorta
 ```php
 return [
   /*
-   * Which column will be used as the order column.
+   * The name of the column that will be used to sort models.
    */
   'order_column_name' => 'order_column',
 
   /*
-   * Define if the models should sort when creating.
-   * When true, the package will automatically assign the highest order number to a new mode
+   * Define if the models should sort when creating. When true, the package
+   * will automatically assign the highest order number to a new model
    */
   'sort_when_creating' => true,
 ];
