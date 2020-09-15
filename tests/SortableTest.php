@@ -326,11 +326,11 @@ class SortableTest extends TestCase
         }
     }
     /** @test */
-    public function it_can_read_config_properties()
+    public function it_can_use_config_properties()
     {
       config([
         'eloquent-sortable.order_column_name' => 'order_column',
-        'eloquent-sortable.sort_when_creating' => true
+        'eloquent-sortable.sort_when_creating' => true,
       ]);
 
       $model = new class extends Dummy {
@@ -347,7 +347,7 @@ class SortableTest extends TestCase
       $model = new class extends Dummy {
           public $sortable = [
             'order_column_name' => 'my_custom_order_column',
-            'sort_when_creating' => false
+            'sort_when_creating' => false,
           ];
       };
 
