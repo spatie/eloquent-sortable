@@ -43,5 +43,12 @@
     "scripts": {
         "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
         "test": "vendor/bin/phpunit"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Spatie\\EloquentSortable\\EloquentSortableServiceProvider"
+            ]
+        }
     }
 }
