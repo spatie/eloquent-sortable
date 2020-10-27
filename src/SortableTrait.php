@@ -16,6 +16,12 @@ trait SortableTrait
                 $model->setHighestOrderNumber();
             }
         });
+        
+        static::deleting(function ($model) {
+            if ($model instanceof Sortable) {
+                $model->moveToEnd();
+            }
+        });
     }
 
     public function setHighestOrderNumber()
