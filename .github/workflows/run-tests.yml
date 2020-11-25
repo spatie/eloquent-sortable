@@ -4,13 +4,13 @@ on: [push, pull_request]
 
 jobs:
     test:
-
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: true
             matrix:
+                os: [ubuntu-latest]
                 php: [8.0, 7.4, 7.3]
-                laravel: [5.8.*, 6.*, 7.*, 8.*]
+                laravel: [8.*, 7.*, 6.*]
                 dependency-version: [prefer-lowest, prefer-stable]
                 include:
                     -   laravel: 8.*
@@ -19,10 +19,8 @@ jobs:
                         testbench: 5.*
                     -   laravel: 6.*
                         testbench: 4.*
-                    -   laravel: 5.8.*
-                        testbench: 3.8.*
 
-        name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
+        name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
         steps:
             -   name: Checkout code
@@ -34,6 +32,11 @@ jobs:
                     php-version: ${{ matrix.php }}
                     extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
                     coverage: none
+
+            -   name: Setup problem matchers
+                run: |
+                    echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+                    echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
             -   name: Install dependencies
                 run: |
