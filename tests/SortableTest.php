@@ -354,4 +354,20 @@ class SortableTest extends TestCase
         $this->assertEquals($model->determineOrderColumnName(), 'my_custom_order_column');
         $this->assertFalse($model->shouldSortWhenCreating());
     }
+
+    /** @test */
+    public function it_can_tell_if_element_is_first_in_order()
+    {
+        $model = (new Dummy())->buildSortQuery()->get();
+        $this->assertTrue($model[0]->isFirstInOrder());
+        $this->assertFalse($model[1]->isFirstInOrder());
+    }
+
+    /** @test */
+    public function it_can_tell_if_element_is_last_in_order()
+    {
+        $model = (new Dummy())->buildSortQuery()->get();
+        $this->assertTrue($model[$model->count()-1]->isLastInOrder());
+        $this->assertFalse($model[$model->count()-2]->isLastInOrder());
+    }
 }

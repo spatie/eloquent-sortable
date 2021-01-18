@@ -175,6 +175,13 @@ $myModel->moveToStart();
 $myModel->moveToEnd();
 ```
 
+You can determine whether an element is first or last in order:
+
+```php
+$myModel->isFirstInOrder();
+$myModel->isLastInOrder();
+```
+
 You can swap the order of two models:
 
 ```php
