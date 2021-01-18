@@ -367,7 +367,7 @@ class SortableTest extends TestCase
     public function it_can_tell_if_element_is_last_in_order()
     {
         $model = (new Dummy())->buildSortQuery()->get();
-        $this->assertTrue($model[$model->count()-1]->isLastInOrder());
-        $this->assertFalse($model[$model->count()-2]->isLastInOrder());
+        $this->assertTrue($model[$model->count() - 1]->isLastInOrder());
+        $this->assertFalse($model[$model->count() - 2]->isLastInOrder());
     }
 }
