@@ -2,6 +2,10 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 3.11.0 - 2021-01-18
+
+- add methods to determine whether element is the last or first in order (#102)
+
 ## 3.10.0 - 2020-11-25
 
 - add support for PHP 8.0
