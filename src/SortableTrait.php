@@ -177,18 +177,18 @@ trait SortableTrait
         return $this;
     }
 
-    public function isLastInOrder() : bool
+    public function isLastInOrder(): bool
     {
         $orderColumnName = $this->determineOrderColumnName();
 
-        return $this->$orderColumnName === $this->getHighestOrderNumber();
+        return (int)$this->$orderColumnName === $this->getHighestOrderNumber();
     }
 
-    public function isFirstInOrder() : bool
+    public function isFirstInOrder(): bool
     {
         $orderColumnName = $this->determineOrderColumnName();
 
-        return $this->$orderColumnName === $this->getLowestOrderNumber();
+        return (int)$this->$orderColumnName === $this->getLowestOrderNumber();
     }
 
     public function buildSortQuery()
