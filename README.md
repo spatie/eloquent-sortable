@@ -175,7 +175,7 @@ $myModel->moveToStart();
 $myModel->moveToEnd();
 ```
 
-You can test if an element is first or last in order
+You can determine whether an element is first or last in order:
 
 ```php
 $myModel->isFirstInOrder();
