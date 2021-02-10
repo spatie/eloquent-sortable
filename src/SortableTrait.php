@@ -171,7 +171,7 @@ trait SortableTrait
         $this->save();
 
         $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->getKey())
-            ->where($orderColumnName, '>', $oldOrder)
+            ->where($orderColumnName, '>=', $oldOrder)
             ->decrement($orderColumnName);
 
         return $this;
