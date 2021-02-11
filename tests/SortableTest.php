@@ -3,6 +3,7 @@
 namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Support\Collection;
+use function rand;
 
 class SortableTest extends TestCase
 {
@@ -311,7 +312,7 @@ class SortableTest extends TestCase
 
         $model = $model->moveToEnd();
 
-        $this->assertEquals(20, $model->order_column);
+        $this->assertEquals(21, $model->order_column);
 
         $oldModels = $oldModels->pluck('order_column', 'id');
 
@@ -369,5 +370,82 @@ class SortableTest extends TestCase
         $model = (new Dummy())->buildSortQuery()->get();
         $this->assertTrue($model[$model->count() - 1]->isLastInOrder());
         $this->assertFalse($model[$model->count() - 2]->isLastInOrder());
+    }
+
+    /**
+     * @test
+     */
+    function it_can_move_a_model_with_grouping_field_to_the_last_place()
+    {
+
+        /** @var DummyWithSortQuery $dummy21 */
+        $dummy21 = DummyWithSortQuery::create([
+            'name' => 21,
+            'custom_column_sort' => rand(),
+        ]);
+
+        // checks the column order set on creation
+        $this->assertEquals(21, $dummy21->order_column);
+
+        // simulate association with a fake Model (like: $fakeModel->dummies()->save($dummy21);
+        $dummy21->fake_foreign_key_id = 1;
+        $dummy21->save();
+
+        // let's crate another object
+        /** @var DummyWithSortQuery $dummy22 */
+        $dummy22 = DummyWithSortQuery::create([
+            'name' => 22,
+            'custom_column_sort' => rand(),
+        ]);
+
+        // checks the column order set on creation
+        $this->assertEquals(21, $dummy22->order_column);
+
+        // simulate association with the same fake Model of $dummy21 (like: $fakeModel->dummies()->save($dummy22);
+        $dummy22->fake_foreign_key_id = 1;
+        $dummy22->save();
+
+        $dummy22->moveToEnd();
+
+        // check it's now the last one, related to fake Model
+        $this->assertEquals(22, $dummy22->order_column);
+
+        // let's crate a third object
+        /** @var DummyWithSortQuery $dummy23 */
+        $dummy23 = DummyWithSortQuery::create([
+            'name' => 23,
+            'custom_column_sort' => rand(),
+        ]);
+
+        // checks the column order set on creation
+        $this->assertEquals(21, $dummy23->order_column);
+
+        // simulate association with the same fake Model of $dummy21 (like: $fakeModel->dummies()->save($dummy23);
+        $dummy23->fake_foreign_key_id = 1;
+        $dummy23->save();
+
+        $dummy23->moveToEnd();
+
+        // check it's now the last one, related to fake Model
+        $this->assertEquals(23, $dummy23->order_column);
+
+        // let's crate a fourth object
+        /** @var DummyWithSortQuery $dummy23 */
+        $dummy24 = DummyWithSortQuery::create([
+            'name' => 24,
+            'custom_column_sort' => rand(),
+        ]);
+
+        // checks the column order set on creation
+        $this->assertEquals(21, $dummy24->order_column);
+
+        // simulate association with the same fake Model of $dummy21 (like: $fakeModel->dummies()->save($dummy24);
+        $dummy24->fake_foreign_key_id = 1;
+        $dummy24->save();
+
+        $dummy24->moveToEnd();
+
+        // check it's now the last one, related to fake Model
+        $this->assertEquals(24, $dummy24->order_column);
     }
 }

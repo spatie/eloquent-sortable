@@ -46,6 +46,7 @@ abstract class TestCase extends Orchestra
             $table->string('name');
             $table->string('custom_column_sort');
             $table->integer('order_column');
+            $table->bigInteger('fake_foreign_key_id')->nullable();
         });
 
         collect(range(1, 20))->each(function (int $i) {
