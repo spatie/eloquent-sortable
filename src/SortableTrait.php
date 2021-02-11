@@ -162,18 +162,18 @@ trait SortableTrait
         $orderColumnName = $this->determineOrderColumnName();
 
         if ($this->$orderColumnName === $maxOrder) {
-            return $this;
+            if ($this->getLowestOrderNumber() != $maxOrder) {
+                return $this;
+            }
         }
-
         $oldOrder = $this->$orderColumnName;
 
-        $this->$orderColumnName = $maxOrder;
+        $this->$orderColumnName = $maxOrder + 1;
         $this->save();
 
         $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->getKey())
             ->where($orderColumnName, '>=', $oldOrder)
             ->decrement($orderColumnName);
-
         return $this;
     }
 
