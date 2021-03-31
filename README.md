@@ -23,6 +23,8 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 
 ## Installation
 
+> For Laravel 6.x or PHP 7.x, use version 3.x of this package.
+
 This package can be installed through Composer.
 
 ```
@@ -222,7 +224,7 @@ If you discover any security related issues, please email freek@spatie.be instea
 
 ## Credits
 
-- [Freek Van der Herten](https://murze.be)
+- [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
 
 ## Alternatives
