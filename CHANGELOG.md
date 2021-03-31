@@ -2,7 +2,7 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
-## 4.0.0 - unreleased
+## 4.0.0 - 2021-03-21
 
 - require PHP 8+
 - drop support for all PHP 7.x versions
