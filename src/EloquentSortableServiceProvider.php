@@ -2,16 +2,15 @@
 
 namespace Spatie\EloquentSortable;
 
-use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class EloquentSortableServiceProvider extends ServiceProvider
+class EloquentSortableServiceProvider extends PackageServiceProvider
 {
-    public function boot()
+    public function configurePackage(Package $package): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../config/eloquent-sortable.php' => config_path('eloquent-sortable.php'),
-            ], 'config');
-        }
+        $package
+            ->name('eloquent-sortable')
+            ->hasConfigFile();
     }
 }

@@ -9,7 +9,7 @@ interface Sortable
     /**
      * Modify the order column value.
      */
-    public function setHighestOrderNumber();
+    public function setHighestOrderNumber(): void;
 
     /**
      * Let's be nice and provide an ordered scope.
@@ -27,7 +27,7 @@ interface Sortable
      * @param array|\ArrayAccess $ids
      * @param int $startOrder
      */
-    public static function setNewOrder($ids, int $startOrder = 1);
+    public static function setNewOrder($ids, int $startOrder = 1): void;
 
     /**
      * Determine if the order column should be set when saving a new model instance.

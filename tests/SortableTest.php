@@ -325,6 +325,7 @@ class SortableTest extends TestCase
             }
         }
     }
+
     /** @test */
     public function it_can_use_config_properties()
     {
