@@ -21,7 +21,8 @@
     "require": {
         "php": "^8.0",
         "illuminate/database": "^7.0|^8.0",
-        "illuminate/support": "^7.0|^8.0"
+        "illuminate/support": "^7.0|^8.0",
+        "spatie/laravel-package-tools": "^1.6"
     },
     "require-dev": {
         "phpunit/phpunit" : "^8.0|^9.0",
