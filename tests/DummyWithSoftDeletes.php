@@ -9,7 +9,8 @@ use Spatie\EloquentSortable\SortableTrait;
 
 class DummyWithSoftDeletes extends Model implements Sortable
 {
-    use SoftDeletes, SortableTrait;
+    use SoftDeletes;
+    use SortableTrait;
 
     protected $table = 'dummies';
     protected $guarded = [];
