@@ -43,7 +43,7 @@ In Laravel 5.5 and above the service provider will automatically get registered.
 Optionally you can publish the config file with:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\EloquentSortable\EloquentSortableServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Spatie\EloquentSortable\EloquentSortableServiceProvider" --tag="eloquent-sortable-config"
 ```
 
 This is the content of the file that will be published in `config/eloquent-sortable.php`
