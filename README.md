@@ -76,7 +76,7 @@ To add sortable behaviour to your model you must:
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
-class MyModel extends Eloquent implements Sortable
+class MyModel extends Model implements Sortable
 {
 
     use SortableTrait;
