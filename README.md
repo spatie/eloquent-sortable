@@ -78,7 +78,6 @@ use Spatie\EloquentSortable\SortableTrait;
 
 class MyModel extends Model implements Sortable
 {
-
     use SortableTrait;
 
     public $sortable = [
@@ -86,7 +85,7 @@ class MyModel extends Model implements Sortable
         'sort_when_creating' => true,
     ];
 
-    ...
+    // ...
 }
 ```
 
