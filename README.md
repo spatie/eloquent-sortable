@@ -195,10 +195,12 @@ MyModel::swapOrder($myModel, $anotherModel);
 If your model/table has a grouping field (usually a foreign key): `id, `**`user_id`**`, title, order_column`
 and you'd like the above methods to take it into considerations, you can create a `buildSortQuery` method at your model:
 ```php
-  public function buildSortQuery()
-    {
-        return static::query()->where('user_id', $this->user_id);
-    }
+// MyModel.php
+
+public function buildSortQuery()
+{
+    return static::query()->where('user_id', $this->user_id);
+}
 ```
 This will restrict the calculations to fields value of the model instance.
 
