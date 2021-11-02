@@ -12,6 +12,11 @@ interface Sortable
     public function setHighestOrderNumber(): void;
 
     /**
+     * Repair the order for all models so that it doesn't skip any number.
+     */
+    public function repairOrder(): void;
+
+    /**
      * Let's be nice and provide an ordered scope.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -33,4 +38,9 @@ interface Sortable
      * Determine if the order column should be set when saving a new model instance.
      */
     public function shouldSortWhenCreating(): bool;
+
+    /**
+     * Determine if the order column should be repaired when deleting a model.
+     */
+    public function shouldRepairOrderWhenDeleting(): bool;
 }

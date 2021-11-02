@@ -50,16 +50,25 @@ This is the content of the file that will be published in `config/eloquent-sorta
 
 ```php
 return [
-  /*
-   * The name of the column that will be used to sort models.
-   */
-  'order_column_name' => 'order_column',
-
-  /*
-   * Define if the models should sort when creating. When true, the package
-   * will automatically assign the highest order number to a new model
-   */
-  'sort_when_creating' => true,
+    /*
+     * The name of the column that will be used to sort models.
+     */
+    'order_column_name' => 'order_column',
+    
+    /*
+     * Define if the models should sort when creating. When true, the package
+     * will automatically assign the highest order number to a new model
+     */
+    'sort_when_creating' => true,
+    
+    /*
+     * Define if the models should auto repair the order when a model is deleted.
+     * When true, the package will automatically assign new orders to all models.
+     *
+     * For performance reasons, this is disabled by default. Only use it when you
+     * want the order to never skip a number.
+     */
+    'repair_when_deleting' => false,
 ];
 ```
 
@@ -83,6 +92,7 @@ class MyModel extends Model implements Sortable
     public $sortable = [
         'order_column_name' => 'order_column',
         'sort_when_creating' => true,
+        'repair_when_deleting' => false,
     ];
 
     // ...
@@ -91,7 +101,7 @@ class MyModel extends Model implements Sortable
 
 If you don't set a value `$sortable['order_column_name']` the package will assume that your order column name will be named `order_column`.
 
-If you don't set a value `$sortable['sort_when_creating']` the package will automatically assign the highest order number to a new model;
+If you don't set a value `$sortable['sort_when_creating']` the package will automatically assign the highest order number to a new model.
 
 Assuming that the db-table for `MyModel` is empty:
 

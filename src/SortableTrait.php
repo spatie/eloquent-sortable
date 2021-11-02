@@ -16,6 +16,12 @@ trait SortableTrait
                 $model->setHighestOrderNumber();
             }
         });
+
+        static::deleted(function ($model) {
+            if ($model instanceof Sortable && $model->shouldRepairOrderWhenDeleting()) {
+                $model->repairOrder();
+            }
+        });
     }
 
     public function setHighestOrderNumber(): void
@@ -23,6 +29,16 @@ trait SortableTrait
         $orderColumnName = $this->determineOrderColumnName();
 
         $this->$orderColumnName = $this->getHighestOrderNumber() + 1;
+    }
+
+    /**
+     * Repair the order for all models so that it doesn't skip any number.
+     */
+    public function repairOrder(): void
+    {
+        static::setNewOrder(
+            $this->newQuery()->ordered()->pluck($this->getKeyName())
+        );
     }
 
     public function getHighestOrderNumber(): int
@@ -77,6 +93,11 @@ trait SortableTrait
     public function shouldSortWhenCreating(): bool
     {
         return $this->sortable['sort_when_creating'] ?? config('eloquent-sortable.sort_when_creating', true);
+    }
+
+    public function shouldRepairOrderWhenDeleting(): bool
+    {
+        return $this->sortable['repair_when_deleting'] ?? config('eloquent-sortable.repair_when_deleting', false);
     }
 
     public function moveOrderDown(): static

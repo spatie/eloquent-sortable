@@ -15,6 +15,24 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_repair_the_order_on_delete()
+    {
+        config(['eloquent-sortable.repair_when_deleting' => true]);
+
+        $deleting = Dummy::all()->shuffle()->first();
+        $deleting->delete();
+
+        $remaining = Dummy::ordered()->get();
+
+
+        /** @var Dummy $dummy */
+        foreach($remaining  as $i => $dummy) {
+            $order = $dummy->getAttribute($dummy->determineOrderColumnName());
+            $this->assertEquals($i + 1, $order);
+        }
+    }
+
+    /** @test */
     public function it_can_get_the_highest_order_number()
     {
         $this->assertEquals(Dummy::all()->count(), (new Dummy())->getHighestOrderNumber());
@@ -162,6 +180,24 @@ class SortableTest extends TestCase
         };
 
         $this->assertTrue($model->shouldSortWhenCreating());
+    }
+
+    /** @test */
+    public function it_will_determine_to_not_repair_when_deleting_if_sortable_attribute_does_not_exist()
+    {
+        $model = new Dummy();
+
+        $this->assertFalse($model->shouldRepairOrderWhenDeleting());
+    }
+
+    /** @test */
+    public function it_will_determine_to_not_repair_when_deleting_if_sort_when_creating_setting_does_not_exist()
+    {
+        $model = new class extends Dummy {
+            public $sortable = [];
+        };
+
+        $this->assertFalse($model->shouldRepairOrderWhenDeleting());
     }
 
     /** @test */
@@ -330,9 +366,10 @@ class SortableTest extends TestCase
     public function it_can_use_config_properties()
     {
         config([
-        'eloquent-sortable.order_column_name' => 'order_column',
-        'eloquent-sortable.sort_when_creating' => true,
-      ]);
+            'eloquent-sortable.order_column_name' => 'order_column',
+            'eloquent-sortable.sort_when_creating' => true,
+            'eloquent-sortable.repair_when_deleting' => true,
+        ]);
 
         $model = new class extends Dummy {
             public $sortable = [];
@@ -340,6 +377,7 @@ class SortableTest extends TestCase
 
         $this->assertEquals(config('eloquent-sortable.order_column_name'), $model->determineOrderColumnName());
         $this->assertEquals(config('eloquent-sortable.sort_when_creating'), $model->shouldSortWhenCreating());
+        $this->assertEquals(config('eloquent-sortable.repair_when_deleting'), $model->shouldRepairOrderWhenDeleting());
     }
 
     /** @test */
@@ -347,13 +385,15 @@ class SortableTest extends TestCase
     {
         $model = new class extends Dummy {
             public $sortable = [
-            'order_column_name' => 'my_custom_order_column',
-            'sort_when_creating' => false,
-          ];
+                'order_column_name' => 'my_custom_order_column',
+                'sort_when_creating' => false,
+                'repair_when_deleting' => true,
+            ];
         };
 
         $this->assertEquals($model->determineOrderColumnName(), 'my_custom_order_column');
         $this->assertFalse($model->shouldSortWhenCreating());
+        $this->assertTrue($model->shouldRepairOrderWhenDeleting());
     }
 
     /** @test */
