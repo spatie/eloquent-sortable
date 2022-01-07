@@ -11,7 +11,7 @@ class SortedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(protected Model $instance)
+    public function __construct(public Model $instance)
     {
     }
 }
