@@ -4,6 +4,7 @@ namespace Spatie\EloquentSortable;
 
 use ArrayAccess;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use InvalidArgumentException;
 
@@ -40,6 +41,13 @@ trait SortableTrait
         return $query->orderBy($this->determineOrderColumnName(), $direction);
     }
 
+    public static function dispatchEvent(Collection $instances)
+    {
+        foreach($instances->unique() as $instance) {
+            SortedEvent::dispatch($instance);
+        }
+    }
+
     public static function setNewOrder($ids, int $startOrder = 1, string $primaryKeyColumn = null): void
     {
         if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
@@ -54,11 +62,15 @@ trait SortableTrait
             $primaryKeyColumn = $model->getKeyName();
         }
 
+        $instances = Collection::empty();
         foreach ($ids as $id) {
-            static::withoutGlobalScope(SoftDeletingScope::class)
-                ->where($primaryKeyColumn, $id)
-                ->update([$orderColumnName => $startOrder++]);
+            $q = static::withoutGlobalScope(SoftDeletingScope::class)
+                ->where($primaryKeyColumn, $id);
+            $q->update([$orderColumnName => $startOrder++]);
+
+            $instances = $instances->merge($q->get());
         }
+        self::dispatchEvent($instances);
     }
 
     public static function setNewOrderByCustomColumn(string $primaryKeyColumn, $ids, int $startOrder = 1)
@@ -123,6 +135,8 @@ trait SortableTrait
         $this->$orderColumnName = $oldOrderOfOtherModel;
         $this->save();
 
+        self::dispatchEvent(Collection::make([$this, $otherModel]));
+
         return $this;
     }
 
@@ -146,7 +160,10 @@ trait SortableTrait
         $this->$orderColumnName = $firstModel->$orderColumnName;
         $this->save();
 
-        $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->getKey())->increment($orderColumnName);
+        $q = $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->getKey());
+        $q->increment($orderColumnName);
+
+        self::dispatchEvent($q->get()->add($this));
 
         return $this;
     }
@@ -166,9 +183,11 @@ trait SortableTrait
         $this->$orderColumnName = $maxOrder;
         $this->save();
 
-        $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->getKey())
-            ->where($orderColumnName, '>', $oldOrder)
-            ->decrement($orderColumnName);
+        $q = $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->getKey())
+            ->where($orderColumnName, '>', $oldOrder);
+        $q->decrement($orderColumnName);
+
+        self::dispatchEvent($q->get()->add($this));
 
         return $this;
     }

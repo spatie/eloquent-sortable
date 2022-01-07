@@ -3,6 +3,8 @@
 namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Event;
+use Spatie\EloquentSortable\SortedEvent;
 
 class SortableTest extends TestCase
 {
@@ -370,5 +372,78 @@ class SortableTest extends TestCase
         $model = (new Dummy())->buildSortQuery()->get();
         $this->assertTrue($model[$model->count() - 1]->isLastInOrder());
         $this->assertFalse($model[$model->count() - 2]->isLastInOrder());
+    }
+
+    /** @test */
+    public function it_dispatch_events_when_setting_new_order()
+    {
+        Event::fake();
+
+        $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
+
+        Dummy::setNewOrder($newOrder);
+
+        Event::assertDispatched(SortedEvent::class, sizeof($newOrder));
+    }
+
+    /** @test */
+    public function it_dispatch_events_when_swapping_order()
+    {
+        Event::fake();
+
+        $firstModel = Dummy::find(3);
+        $secondModel = Dummy::find(4);
+
+        Dummy::swapOrder($firstModel, $secondModel);
+
+        Event::assertDispatched(SortedEvent::class, 2);
+    }
+
+    /** @test */
+    public function it_dispatch_events_when_moving_up()
+    {
+        Event::fake();
+
+        $model = Dummy::find(4);
+        $model->moveOrderUp();
+
+        Event::assertDispatched(SortedEvent::class, 2);
+    }
+
+    /** @test */
+    public function it_dispatch_events_when_moving_to_start()
+    {
+        Event::fake();
+
+        $position = 3;
+
+        $model = Dummy::find($position);
+        $model = $model->moveToStart();
+
+        Event::assertDispatched(SortedEvent::class, Dummy::count());
+    }
+
+    /** @test */
+    public function it_dispatch_events_when_moving_down()
+    {
+        Event::fake();
+
+        $model = Dummy::find(4);
+        $model->moveOrderDown();
+
+        Event::assertDispatched(SortedEvent::class, 2);
+    }
+
+    /** @test */
+    public function it_dispatch_events_when_moving_to_end()
+    {
+        Event::fake();
+
+        $position = 3;
+
+        $model = Dummy::find($position);
+        $model = $model->moveToEnd();
+
+        Event::assertDispatched(SortedEvent::class, Dummy::count() - $position);
     }
 }
