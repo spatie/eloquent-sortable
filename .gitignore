@@ -12,3 +12,4 @@ testbench.yaml
 vendor
 composer.phar
 tests/_output/*
+.php-cs-fixer.cache
