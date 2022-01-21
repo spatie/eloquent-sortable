@@ -157,7 +157,7 @@ class SortableTest extends TestCase
     /** @test */
     public function it_will_determine_to_sort_when_creating_if_sort_when_creating_setting_does_not_exist()
     {
-        $model = new class extends Dummy {
+        $model = new class () extends Dummy {
             public $sortable = [];
         };
 
@@ -167,13 +167,13 @@ class SortableTest extends TestCase
     /** @test */
     public function it_will_respect_the_sort_when_creating_setting()
     {
-        $model = new class extends Dummy {
+        $model = new class () extends Dummy {
             public $sortable = ['sort_when_creating' => true];
         };
 
         $this->assertTrue($model->shouldSortWhenCreating());
 
-        $model = new class extends Dummy {
+        $model = new class () extends Dummy {
             public $sortable = ['sort_when_creating' => false];
         };
         $this->assertFalse($model->shouldSortWhenCreating());
@@ -334,7 +334,7 @@ class SortableTest extends TestCase
         'eloquent-sortable.sort_when_creating' => true,
       ]);
 
-        $model = new class extends Dummy {
+        $model = new class () extends Dummy {
             public $sortable = [];
         };
 
@@ -345,7 +345,7 @@ class SortableTest extends TestCase
     /** @test */
     public function it_can_override_config_properties()
     {
-        $model = new class extends Dummy {
+        $model = new class () extends Dummy {
             public $sortable = [
             'order_column_name' => 'my_custom_order_column',
             'sort_when_creating' => false,
