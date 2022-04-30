@@ -188,13 +188,6 @@ $myModel->isFirstInOrder();
 $myModel->isLastInOrder();
 ```
 
-You can also move a model to before or after another models:
-
-```php
-$myModel->moveBefore($anotherModel);
-$myModel->moveAfter($anotherModel);
-```
-
 You can swap the order of two models:
 
 ```php

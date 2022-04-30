@@ -4,7 +4,6 @@ namespace Spatie\EloquentSortable;
 
 use ArrayAccess;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use InvalidArgumentException;
 
@@ -130,60 +129,6 @@ trait SortableTrait
     public static function swapOrder(Sortable $model, Sortable $otherModel): void
     {
         $model->swapOrderWithModel($otherModel);
-    }
-
-    public function moveBefore(Sortable $otherModel): static
-    {
-        if (!$otherModel instanceof Model) {
-            throw new InvalidArgumentException('$otherModel must be an instance of ' . Model::class);
-        }
-
-        if ($otherModel->getTable() !== $this->getTable()) {
-            throw new InvalidArgumentException('Models must be on the same table to be ordered relative to each other.');
-        }
-
-        if ($otherModel->getKey() === $this->getKey()) {
-            return $this;
-        }
-
-        $orderColumnName = $this->determineOrderColumnName();
-
-        $this->$orderColumnName = $otherModel->$orderColumnName;
-        $this->save();
-
-        $this->buildSortQuery()
-            ->where($this->getKeyName(), '!=', $this->getKey())
-            ->where($orderColumnName, '>=', $this->$orderColumnName)
-            ->increment($orderColumnName);
-
-        return $this;
-    }
-
-    public function moveAfter(Sortable $otherModel): static
-    {
-        if (!$otherModel instanceof Model) {
-            throw new InvalidArgumentException('$otherModel must be an instance of ' . Model::class);
-        }
-
-        if ($otherModel->getTable() !== $this->getTable()) {
-            throw new InvalidArgumentException('Models must be on the same table to be ordered relative to each other.');
-        }
-
-        if ($otherModel->getKey() === $this->getKey()) {
-            return $this;
-        }
-
-        $orderColumnName = $this->determineOrderColumnName();
-
-        $this->$orderColumnName = $otherModel->$orderColumnName + 1;
-        $this->save();
-
-        $this->buildSortQuery()
-            ->where($this->getKeyName(), '!=', $this->getKey())
-            ->where($orderColumnName, '>=', $this->$orderColumnName)
-            ->increment($orderColumnName);
-
-        return $this;
     }
 
     public function moveToStart(): static
