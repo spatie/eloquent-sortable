@@ -16,6 +16,12 @@ trait SortableTrait
                 $model->setHighestOrderNumber();
             }
         });
+
+        static::deleting(function ($model) {
+            if ($model instanceof Sortable && $model->shouldSortWhenDeleting()) {
+                $model->movetoEnd();
+            }
+        });
     }
 
     public function setHighestOrderNumber(): void
@@ -77,6 +83,14 @@ trait SortableTrait
     public function shouldSortWhenCreating(): bool
     {
         return $this->sortable['sort_when_creating'] ?? config('eloquent-sortable.sort_when_creating', true);
+    }
+
+    /**
+     * Determine if the order should be updated when deleting a model instance.
+     */
+    public function shouldSortWhenDeleting(): bool
+    {
+        return $this->sortable['sort_when_deleting'] ?? config('eloquent-sortable.sort_when_deleting', true);
     }
 
     public function moveOrderDown(): static
