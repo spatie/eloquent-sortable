@@ -52,8 +52,6 @@ trait SortableTrait
         
         Sorting::dispatch($model);
 
-        ray('lksjdlkdsjlfksdf');
-
         $orderColumnName = $model->determineOrderColumnName();
 
         if (is_null($primaryKeyColumn)) {
