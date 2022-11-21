@@ -16,15 +16,8 @@ class Sorting
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Model $model;
-
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct(Model $model)
+    public function __construct(public Model $model)
     {
-        $this->model = $model;
+        //
     }
 }
