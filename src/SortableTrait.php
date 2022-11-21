@@ -50,7 +50,7 @@ trait SortableTrait
 
         $model = new static();
         
-        Sorting::dispatch($model);
+        event(new Sorting($model));
 
         $orderColumnName = $model->determineOrderColumnName();
 
@@ -63,8 +63,8 @@ trait SortableTrait
                 ->where($primaryKeyColumn, $id)
                 ->update([$orderColumnName => $startOrder++]);
         }
-
-        Sorted::dispatch($model);
+        
+        event(new Sorted($model));
     }
 
     public static function setNewOrderByCustomColumn(string $primaryKeyColumn, $ids, int $startOrder = 1)
