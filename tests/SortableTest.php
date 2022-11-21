@@ -384,7 +384,7 @@ class SortableTest extends TestCase
 
         Dummy::setNewOrder($newOrder);
 
-        // Assert an event was dispatched twice...
+        // Assert the event was dispatched...
         Event::assertDispatched(Sorting::class);
     }
 
@@ -397,7 +397,7 @@ class SortableTest extends TestCase
 
         Dummy::setNewOrder($newOrder);
 
-        // Assert an event was dispatched twice...
+        // Assert the event was dispatched...
         Event::assertDispatched(Sorted::class);
     }
 }
