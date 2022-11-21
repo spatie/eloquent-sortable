@@ -3,6 +3,9 @@
 namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Event;
+use Spatie\EloquentSortable\Events\Sorted;
+use Spatie\EloquentSortable\Events\Sorting;
 
 class SortableTest extends TestCase
 {
@@ -370,5 +373,31 @@ class SortableTest extends TestCase
         $model = (new Dummy())->buildSortQuery()->get();
         $this->assertTrue($model[$model->count() - 1]->isLastInOrder());
         $this->assertFalse($model[$model->count() - 2]->isLastInOrder());
+    }
+
+    /** @test */
+    public function it_dispatches_event_before_sort()
+    {
+        Event::fake();
+
+        $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
+
+        Dummy::setNewOrder($newOrder);
+
+        // Assert an event was dispatched twice...
+        Event::assertDispatched(Sorting::class);
+    }
+
+    /** @test */
+    public function it_dispatches_event_after_sort()
+    {
+        Event::fake();
+
+        $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
+
+        Dummy::setNewOrder($newOrder);
+
+        // Assert an event was dispatched twice...
+        Event::assertDispatched(Sorted::class);
     }
 }
