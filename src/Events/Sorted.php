@@ -18,6 +18,5 @@ class Sorted
 
     public function __construct(public Model $model)
     {
-        //
     }
 }
