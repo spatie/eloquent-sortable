@@ -4,8 +4,8 @@ namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
-use Spatie\EloquentSortable\Events\Sorted;
-use Spatie\EloquentSortable\Events\Sorting;
+use Spatie\EloquentSortable\Events\ModelSorted;
+use Spatie\EloquentSortable\Events\ModelSorting;
 
 class SortableTest extends TestCase
 {
@@ -385,7 +385,7 @@ class SortableTest extends TestCase
         Dummy::setNewOrder($newOrder);
 
         // Assert the event was dispatched...
-        Event::assertDispatched(Sorting::class);
+        Event::assertDispatched(ModelSorting::class);
     }
 
     /** @test */
@@ -398,6 +398,6 @@ class SortableTest extends TestCase
         Dummy::setNewOrder($newOrder);
 
         // Assert the event was dispatched...
-        Event::assertDispatched(Sorted::class);
+        Event::assertDispatched(ModelSorted::class);
     }
 }

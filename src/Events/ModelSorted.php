@@ -12,7 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 
-class Sorted
+class ModelSorted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

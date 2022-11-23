@@ -6,8 +6,8 @@ use ArrayAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use InvalidArgumentException;
-use Spatie\EloquentSortable\Events\Sorted;
-use Spatie\EloquentSortable\Events\Sorting;
+use Spatie\EloquentSortable\Events\ModelSorted;
+use Spatie\EloquentSortable\Events\ModelSorting;
 
 trait SortableTrait
 {
@@ -50,7 +50,7 @@ trait SortableTrait
 
         $model = new static();
         
-        event(new Sorting($model));
+        event(new ModelSorting($model));
 
         $orderColumnName = $model->determineOrderColumnName();
 
@@ -64,7 +64,7 @@ trait SortableTrait
                 ->update([$orderColumnName => $startOrder++]);
         }
         
-        event(new Sorted($model));
+        event(new ModelSorted($model));
     }
 
     public static function setNewOrderByCustomColumn(string $primaryKeyColumn, $ids, int $startOrder = 1)
