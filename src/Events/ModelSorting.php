@@ -17,6 +17,5 @@ class ModelSorting
 
     public function __construct(public Model $model)
     {
-        //
     }
 }
