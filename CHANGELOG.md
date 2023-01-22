@@ -2,6 +2,12 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.1.0 - 2023-01-24
+
+- add support for Laravel 10
+- drop support for Laravel 8
+- drop support for PHP 8.0
+
 ## 4.0.1 - 2022-01-21
 
 - support Laravel 9
