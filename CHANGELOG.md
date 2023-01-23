@@ -2,6 +2,24 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.0.2 - 2023-01-23
+
+### What's Changed
+
+- Update readme about publishing config file by @patrickbrouwers in https://github.com/spatie/eloquent-sortable/pull/120
+- Add Dependabot Automation by @patinthehat in https://github.com/spatie/eloquent-sortable/pull/136
+- Bump actions/checkout from 2 to 3 by @dependabot in https://github.com/spatie/eloquent-sortable/pull/137
+- Add PHP 8.2 Support by @patinthehat in https://github.com/spatie/eloquent-sortable/pull/138
+- Laravel 10 support by @Okipa in https://github.com/spatie/eloquent-sortable/pull/142
+
+### New Contributors
+
+- @patrickbrouwers made their first contribution in https://github.com/spatie/eloquent-sortable/pull/120
+- @dependabot made their first contribution in https://github.com/spatie/eloquent-sortable/pull/137
+- @Okipa made their first contribution in https://github.com/spatie/eloquent-sortable/pull/142
+
+**Full Changelog**: https://github.com/spatie/eloquent-sortable/compare/4.0.1...4.0.2
+
 ## 4.1.0 - 2023-01-24
 
 - add support for Laravel 10
