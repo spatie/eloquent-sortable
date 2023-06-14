@@ -12,8 +12,22 @@ trait SortableTrait
     public static function bootSortableTrait()
     {
         static::creating(function ($model) {
-            if ($model instanceof Sortable && $model->shouldSortWhenCreating()) {
+            if (
+                $model instanceof Sortable &&
+                $model->shouldSortWhenCreating() &&
+                !$model->shouldMoveToStartWhenCreating()
+            ) {
                 $model->setHighestOrderNumber();
+            }
+        });
+
+        static::created(function ($model) {
+            if (
+                $model instanceof Sortable &&
+                $model->shouldSortWhenCreating() &&
+                $model->shouldMoveToStartWhenCreating()
+            ) {
+                $model->moveToStart();
             }
         });
     }
@@ -42,7 +56,7 @@ trait SortableTrait
 
     public static function setNewOrder($ids, int $startOrder = 1, string $primaryKeyColumn = null): void
     {
-        if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
+        if (!is_array($ids) && !$ids instanceof ArrayAccess) {
             throw new InvalidArgumentException('You must pass an array or ArrayAccess object to setNewOrder');
         }
 
@@ -79,6 +93,13 @@ trait SortableTrait
         return $this->sortable['sort_when_creating'] ?? config('eloquent-sortable.sort_when_creating', true);
     }
 
+    public function shouldMoveToStartWhenCreating(): bool
+    {
+        $position = $this->sortable['sort_when_creating_position'] ?? config('eloquent-sortable.sort_when_creating_position', 'end');
+
+        return 'start' === $position;
+    }
+
     public function moveOrderDown(): static
     {
         $orderColumnName = $this->determineOrderColumnName();
@@ -88,7 +109,7 @@ trait SortableTrait
             ->where($orderColumnName, '>', $this->$orderColumnName)
             ->first();
 
-        if (! $swapWithModel) {
+        if (!$swapWithModel) {
             return $this;
         }
 
@@ -104,7 +125,7 @@ trait SortableTrait
             ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
 
-        if (! $swapWithModel) {
+        if (!$swapWithModel) {
             return $this;
         }
 

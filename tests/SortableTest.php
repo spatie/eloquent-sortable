@@ -180,6 +180,39 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_will_determine_sort_when_creating_position_if_sortable_attribute_does_not_exist()
+    {
+        $model = new Dummy();
+
+        $this->assertFalse($model->shouldMoveToStartWhenCreating());
+    }
+
+    /** @test */
+    public function it_will_determine_sort_when_creating_position_if_sort_when_creating_position_setting_does_not_exist()
+    {
+        $model = new class () extends Dummy {
+            public $sortable = [];
+        };
+
+        $this->assertFalse($model->shouldMoveToStartWhenCreating());
+    }
+
+    /** @test */
+    public function it_will_respect_the_sort_when_creating_position_setting()
+    {
+        $model = new class () extends Dummy {
+            public $sortable = ['sort_when_creating_position' => 'start'];
+        };
+
+        $this->assertTrue($model->shouldMoveToStartWhenCreating());
+
+        $model = new class () extends Dummy {
+            public $sortable = ['sort_when_creating_position' => 'end'];
+        };
+        $this->assertFalse($model->shouldMoveToStartWhenCreating());
+    }
+
+    /** @test */
     public function it_provides_an_ordered_trait()
     {
         $i = 1;
@@ -332,6 +365,7 @@ class SortableTest extends TestCase
         config([
         'eloquent-sortable.order_column_name' => 'order_column',
         'eloquent-sortable.sort_when_creating' => true,
+        'eloquent-sortable.sort_when_creating_position' => 'start',
       ]);
 
         $model = new class () extends Dummy {
@@ -340,6 +374,7 @@ class SortableTest extends TestCase
 
         $this->assertEquals(config('eloquent-sortable.order_column_name'), $model->determineOrderColumnName());
         $this->assertEquals(config('eloquent-sortable.sort_when_creating'), $model->shouldSortWhenCreating());
+        $this->assertEquals(config('eloquent-sortable.sort_when_creating_position'), $model->shouldMoveToStartWhenCreating());
     }
 
     /** @test */
@@ -349,11 +384,13 @@ class SortableTest extends TestCase
             public $sortable = [
             'order_column_name' => 'my_custom_order_column',
             'sort_when_creating' => false,
+            'sort_when_creating_position' => 'end',
           ];
         };
 
         $this->assertEquals($model->determineOrderColumnName(), 'my_custom_order_column');
         $this->assertFalse($model->shouldSortWhenCreating());
+        $this->assertFalse($model->shouldMoveToStartWhenCreating());
     }
 
     /** @test */

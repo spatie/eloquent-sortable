@@ -33,4 +33,19 @@ interface Sortable
      * Determine if the order column should be set when saving a new model instance.
      */
     public function shouldSortWhenCreating(): bool;
+
+    /**
+     * Determine the position for `sort_when_creating` is true
+     */
+    public function shouldMoveToStartWhenCreating(): bool;
+
+    /**
+     * Move the model to the start
+     */
+    public function moveToStart(): self;
+
+    /**
+     * Move the model to the end
+     */
+    public function moveToEnd(): self;
 }
