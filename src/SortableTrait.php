@@ -151,6 +151,68 @@ trait SortableTrait
         return $this;
     }
 
+    public function moveDownBy(int $amount): static
+    {
+        if ($amount < 1) {
+            return $this;
+        }
+
+        if ($amount === 1) {
+            return $this->moveOrderDown();
+        }
+
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $newOrder = (int) $this->buildSortQuery()
+            ->where($orderColumnName, '<=', $this->$orderColumnName + $amount)
+            ->max($orderColumnName);
+
+        if ($this->$orderColumnName === $newOrder) {
+            return $this;
+        }
+
+        $oldOrder = $this->$orderColumnName;
+        $this->$orderColumnName = $newOrder;
+        $this->save();
+
+        $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->getKey())
+            ->whereBetween($orderColumnName, [$oldOrder, $newOrder])
+            ->decrement($orderColumnName);
+
+        return $this;
+    }
+
+    public function moveUpBy(int $amount): static
+    {
+        if ($amount < 1) {
+            return $this;
+        }
+
+        if ($amount === 1) {
+            return $this->moveOrderUp();
+        }
+
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $newOrder = (int) $this->buildSortQuery()
+            ->where($orderColumnName, '>=', $this->$orderColumnName - $amount)
+            ->min($orderColumnName);
+
+        if ($this->$orderColumnName === $newOrder) {
+            return $this;
+        }
+
+        $oldOrder = $this->$orderColumnName;
+        $this->$orderColumnName = $newOrder;
+        $this->save();
+
+        $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->getKey())
+            ->whereBetween($orderColumnName, [$newOrder, $oldOrder])
+            ->increment($orderColumnName);
+
+        return $this;
+    }
+
     public function moveToEnd(): static
     {
         $maxOrder = $this->getHighestOrderNumber();

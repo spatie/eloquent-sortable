@@ -371,4 +371,52 @@ class SortableTest extends TestCase
         $this->assertTrue($model[$model->count() - 1]->isLastInOrder());
         $this->assertFalse($model[$model->count() - 2]->isLastInOrder());
     }
+
+    /** @test */
+    public function it_can_move_order_down_by_amount()
+    {
+        $moveBy = 6;
+        $oldOrder = 4;
+
+        $model = Dummy::find($oldOrder);
+        $others = Dummy::whereBetween('order_column', [$oldOrder + 1, $oldOrder + $moveBy])->get();
+
+        $this->assertEquals($model->order_column, $oldOrder);
+        foreach ($others as $index => $other) {
+            $this->assertEquals($other->order_column, $oldOrder + $index + 1);
+        }
+
+        $this->assertNotFalse($model->moveDownBy($moveBy));
+
+        $others = Dummy::whereKey($others)->get();
+
+        $this->assertEquals($model->order_column, $oldOrder + $moveBy);
+        foreach ($others as $index => $other) {
+            $this->assertEquals($other->order_column, $oldOrder + $index);
+        }
+    }
+
+    /** @test */
+    public function it_can_move_order_up_by_amount()
+    {
+        $moveBy = 6;
+        $oldOrder = 14;
+
+        $model = Dummy::find($oldOrder);
+        $others = Dummy::whereBetween('order_column', [$oldOrder - $moveBy, $oldOrder - 1])->ordered('desc')->get();
+
+        $this->assertEquals($model->order_column, $oldOrder);
+        foreach ($others as $index => $other) {
+            $this->assertEquals($other->order_column, $oldOrder - $index - 1);
+        }
+
+        $this->assertNotFalse($model->moveUpBy($moveBy));
+
+        $others = Dummy::whereKey($others)->ordered('desc')->get();
+
+        $this->assertEquals($model->order_column, $oldOrder - $moveBy);
+        foreach ($others as $index => $other) {
+            $this->assertEquals($other->order_column, $oldOrder - $index);
+        }
+    }
 }

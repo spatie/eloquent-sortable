@@ -171,6 +171,13 @@ $myModel->moveOrderDown();
 $myModel->moveOrderUp();
 ```
 
+Or you can move model up or down by specific amount:
+
+```php
+$myModel->moveDownBy(6);
+$myModel->moveUpBy(4);
+```
+
 You can also move a model to the first or last position:
 
 ```php
