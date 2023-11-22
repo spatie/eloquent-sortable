@@ -56,9 +56,7 @@ trait SortableTrait
 
         foreach ($ids as $id) {
             static::withoutGlobalScope(SoftDeletingScope::class)
-                ->when($withoutGlobalScopes, function($query, $withoutGlobalScopes) {
-                    $query->withoutGlobalScopes($withoutGlobalScopes);
-                })
+                ->withoutGlobalScopes($withoutGlobalScopes)
                 ->where($primaryKeyColumn, $id)
                 ->update([$orderColumnName => $startOrder++]);
         }
