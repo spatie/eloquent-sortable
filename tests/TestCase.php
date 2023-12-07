@@ -62,4 +62,11 @@ abstract class TestCase extends Orchestra
             $table->softDeletes();
         });
     }
+
+    protected function setUpIsActiveFieldForGlobalScope()
+    {
+        $this->app['db']->connection()->getSchemaBuilder()->table('dummies', function (Blueprint $table) {
+            $table->boolean('is_active')->default(false);
+        });
+    }
 }
