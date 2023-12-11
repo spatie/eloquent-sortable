@@ -3,7 +3,6 @@
 namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -32,7 +31,7 @@ abstract class TestCase extends Orchestra
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('database.default', 'mysql');
+        $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
             'driver' => 'sqlite',
             'database' => ':memory:',
@@ -42,8 +41,6 @@ abstract class TestCase extends Orchestra
 
     protected function setUpDatabase()
     {
-        Schema::dropIfExists('dummies');
-
         $this->app['db']->connection()->getSchemaBuilder()->create('dummies', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
