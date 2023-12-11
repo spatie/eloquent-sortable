@@ -134,7 +134,7 @@ Optionally you can pass the starting order number as the second argument.
 MyModel::setNewOrder([3,1,2], 10);
 ```
 
-You can set a new order with a closure as the fourth argument.
+You can modify the query that will be executed by passing a closure as the fourth argument.
 
 ```php
 /**
