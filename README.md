@@ -134,7 +134,7 @@ Optionally you can pass the starting order number as the second argument.
 MyModel::setNewOrder([3,1,2], 10);
 ```
 
-You can set a new order without global scopes as the fourth argument.
+You can set a new order with a closure as the fourth argument.
 
 ```php
 /**
@@ -142,8 +142,9 @@ You can set a new order without global scopes as the fourth argument.
  * the record for model id 1 will have order_column value 12
  * the record for model id 2 will have order_column value 13
  */
-$yourGlobalScopes = [new ActiveScope, new DefaultScope];
-MyModel::setNewOrder([3,1,2], 10, null, $yourGlobalScopes);
+MyModel::setNewOrder([3,1,2], 10, null, function($query) {
+    $query->withoutGlobalScope(new ActiveScope);
+});
 ```
 
 
