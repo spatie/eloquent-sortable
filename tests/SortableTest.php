@@ -85,7 +85,7 @@ class SortableTest extends TestCase
 
         $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
 
-        DummyWithGlobalScope::setNewOrder($newOrder, 1, null, function($query) {
+        DummyWithGlobalScope::setNewOrder($newOrder, 1, null, function ($query) {
             $query->withoutGlobalScope('ActiveScope');
         });
 

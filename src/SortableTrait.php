@@ -56,7 +56,7 @@ trait SortableTrait
 
         foreach ($ids as $id) {
             static::withoutGlobalScope(SoftDeletingScope::class)
-                ->when(is_callable($modifyQuery), function($query) use ($modifyQuery) {
+                ->when(is_callable($modifyQuery), function ($query) use ($modifyQuery) {
                     return $modifyQuery($query);
                 })
                 ->where($primaryKeyColumn, $id)

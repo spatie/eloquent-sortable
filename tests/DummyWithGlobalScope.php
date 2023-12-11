@@ -24,7 +24,7 @@ class DummyWithGlobalScope extends Model implements Sortable
     {
         parent::boot();
 
-        parent::addGlobalScope('ActiveScope', function(Builder $builder) {
+        parent::addGlobalScope('ActiveScope', function (Builder $builder) {
             $builder->where('is_active', true);
         });
     }
