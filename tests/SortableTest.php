@@ -85,7 +85,9 @@ class SortableTest extends TestCase
 
         $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
 
-        DummyWithGlobalScope::setNewOrder($newOrder, 1, null, ['ActiveScope']);
+        DummyWithGlobalScope::setNewOrder($newOrder, 1, null, function($query) {
+            $query->withoutGlobalScope('ActiveScope');
+        });
 
         foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
             $this->assertEquals($newOrder[$i], $dummy->id);

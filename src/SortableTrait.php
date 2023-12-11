@@ -40,7 +40,7 @@ trait SortableTrait
         return $query->orderBy($this->determineOrderColumnName(), $direction);
     }
 
-    public static function setNewOrder($ids, int $startOrder = 1, string $primaryKeyColumn = null, array $withoutGlobalScopes = []): void
+    public static function setNewOrder($ids, int $startOrder = 1, string $primaryKeyColumn = null, callable $modifyQuery = null): void
     {
         if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
             throw new InvalidArgumentException('You must pass an array or ArrayAccess object to setNewOrder');
@@ -56,7 +56,9 @@ trait SortableTrait
 
         foreach ($ids as $id) {
             static::withoutGlobalScope(SoftDeletingScope::class)
-                ->withoutGlobalScopes($withoutGlobalScopes)
+                ->when(is_callable($modifyQuery), function($query) use ($modifyQuery) {
+                    return $modifyQuery($query);
+                })
                 ->where($primaryKeyColumn, $id)
                 ->update([$orderColumnName => $startOrder++]);
         }
