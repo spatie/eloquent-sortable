@@ -79,6 +79,22 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_new_order_without_global_scopes_models()
+    {
+        $this->setUpIsActiveFieldForGlobalScope();
+
+        $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
+
+        DummyWithGlobalScope::setNewOrder($newOrder, 1, null, function($query) {
+            $query->withoutGlobalScope('ActiveScope');
+        });
+
+        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
     public function it_can_set_a_new_order_with_trashed_models()
     {
         $this->setUpSoftDeletes();

@@ -134,6 +134,20 @@ Optionally you can pass the starting order number as the second argument.
 MyModel::setNewOrder([3,1,2], 10);
 ```
 
+You can modify the query that will be executed by passing a closure as the fourth argument.
+
+```php
+/**
+ * the record for model id 3 will have order_column value 11
+ * the record for model id 1 will have order_column value 12
+ * the record for model id 2 will have order_column value 13
+ */
+MyModel::setNewOrder([3,1,2], 10, null, function($query) {
+    $query->withoutGlobalScope(new ActiveScope);
+});
+```
+
+
 To sort using a column other than the primary key, use the `setNewOrderByCustomColumn`-method.
 
 ```php
