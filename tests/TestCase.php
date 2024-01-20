@@ -69,4 +69,11 @@ abstract class TestCase extends Orchestra
             $table->boolean('is_active')->default(false);
         });
     }
+
+    protected function setUpTimestamps()
+    {
+        $this->app['db']->connection()->getSchemaBuilder()->table('dummies', function (Blueprint $table) {
+            $table->timestamps();
+        });
+    }
 }
