@@ -61,6 +61,24 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_a_new_order_without_touching_timestamps()
+    {
+        $this->setUpTimestamps();
+        DummyWithTimestamps::query()->update(['updated_at' => now()]);        
+        $originalTimestamps = DummyWithTimestamps::all()->pluck('updated_at');
+        
+        $this->travelTo(now()->addMinute());
+        
+        config()->set('eloquent-sortable.ignore_timestamps', true);
+        $newOrder = Collection::make(DummyWithTimestamps::all()->pluck('id'))->shuffle()->toArray();
+        DummyWithTimestamps::setNewOrder($newOrder);
+
+        foreach (DummyWithTimestamps::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($originalTimestamps[$i], $dummy->updated_at);
+        }
+    }
+
+    /** @test */
     public function it_can_set_a_new_order_by_custom_column()
     {
         $newOrder = Collection::make(Dummy::all()->pluck('custom_column_sort'))->shuffle()->toArray();
