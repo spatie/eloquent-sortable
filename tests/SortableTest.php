@@ -46,11 +46,11 @@ class SortableTest extends TestCase
     public function it_can_touch_timestamps_when_setting_a_new_order()
     {
         $this->setUpTimestamps();
-        DummyWithTimestamps::query()->update(['updated_at' => now()]);        
+        DummyWithTimestamps::query()->update(['updated_at' => now()]);
         $originalTimestamps = DummyWithTimestamps::all()->pluck('updated_at');
-        
+
         $this->travelTo(now()->addMinute());
-        
+
         config()->set('eloquent-sortable.ignore_timestamps', false);
         $newOrder = Collection::make(DummyWithTimestamps::all()->pluck('id'))->shuffle()->toArray();
         DummyWithTimestamps::setNewOrder($newOrder);
@@ -64,11 +64,11 @@ class SortableTest extends TestCase
     public function it_can_set_a_new_order_without_touching_timestamps()
     {
         $this->setUpTimestamps();
-        DummyWithTimestamps::query()->update(['updated_at' => now()]);        
+        DummyWithTimestamps::query()->update(['updated_at' => now()]);
         $originalTimestamps = DummyWithTimestamps::all()->pluck('updated_at');
-        
+
         $this->travelTo(now()->addMinute());
-        
+
         config()->set('eloquent-sortable.ignore_timestamps', true);
         $newOrder = Collection::make(DummyWithTimestamps::all()->pluck('id'))->shuffle()->toArray();
         DummyWithTimestamps::setNewOrder($newOrder);
