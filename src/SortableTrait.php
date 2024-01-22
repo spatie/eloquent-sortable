@@ -54,6 +54,10 @@ trait SortableTrait
             $primaryKeyColumn = $model->getKeyName();
         }
 
+        if (config('eloquent-sortable.ignore_timestamps', false)) {
+            static::$ignoreTimestampsOn = array_values(array_merge(static::$ignoreTimestampsOn, [static::class]));
+        }
+
         foreach ($ids as $id) {
             static::withoutGlobalScope(SoftDeletingScope::class)
                 ->when(is_callable($modifyQuery), function ($query) use ($modifyQuery) {
@@ -61,6 +65,10 @@ trait SortableTrait
                 })
                 ->where($primaryKeyColumn, $id)
                 ->update([$orderColumnName => $startOrder++]);
+        }
+
+        if (config('eloquent-sortable.ignore_timestamps', false)) {
+            static::$ignoreTimestampsOn = array_values(array_diff(static::$ignoreTimestampsOn, [static::class]));
         }
     }
 
