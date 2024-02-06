@@ -2,6 +2,20 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.1.1 - 2024-02-06
+
+### What's Changed
+
+* Fix typo in eloquent-sortable.php by @dissto in https://github.com/spatie/eloquent-sortable/pull/168
+* Add ignore timestamp by @mokhosh in https://github.com/spatie/eloquent-sortable/pull/169
+
+### New Contributors
+
+* @dissto made their first contribution in https://github.com/spatie/eloquent-sortable/pull/168
+* @mokhosh made their first contribution in https://github.com/spatie/eloquent-sortable/pull/169
+
+**Full Changelog**: https://github.com/spatie/eloquent-sortable/compare/4.1.0...4.1.1
+
 ## 4.0.2 - 2023-01-23
 
 ### What's Changed
