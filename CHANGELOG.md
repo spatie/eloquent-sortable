@@ -2,6 +2,16 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.2.0 - 2024-02-26
+
+### What's Changed
+
+* Bump stefanzweifel/git-auto-commit-action from 4 to 5 by @dependabot in https://github.com/spatie/eloquent-sortable/pull/162
+* Support laravel 11 by @mokhosh in https://github.com/spatie/eloquent-sortable/pull/171
+* bump min laravel 9 version to support ignore timestamps by @mokhosh in https://github.com/spatie/eloquent-sortable/pull/173
+
+**Full Changelog**: https://github.com/spatie/eloquent-sortable/compare/4.1.1...4.2.0
+
 ## 4.1.1 - 2024-02-06
 
 ### What's Changed
