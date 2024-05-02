@@ -51,7 +51,7 @@ trait SortableTrait
         $orderColumnName = $model->determineOrderColumnName();
 
         if (is_null($primaryKeyColumn)) {
-            $primaryKeyColumn = $model->getKeyName();
+            $primaryKeyColumn = $model->getQualifiedKeyName();
         }
 
         if (config('eloquent-sortable.ignore_timestamps', false)) {
@@ -157,7 +157,7 @@ trait SortableTrait
         $this->$orderColumnName = $firstModel->$orderColumnName;
         $this->save();
 
-        $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->getKey())->increment($orderColumnName);
+        $this->buildSortQuery()->where($this->getQualifiedKeyName(), '!=', $this->getKey())->increment($orderColumnName);
 
         return $this;
     }
@@ -177,7 +177,7 @@ trait SortableTrait
         $this->$orderColumnName = $maxOrder;
         $this->save();
 
-        $this->buildSortQuery()->where($this->getKeyName(), '!=', $this->getKey())
+        $this->buildSortQuery()->where($this->getQualifiedKeyName(), '!=', $this->getKey())
             ->where($orderColumnName, '>', $oldOrder)
             ->decrement($orderColumnName);
 
