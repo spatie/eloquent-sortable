@@ -2,6 +2,18 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.3.0 - 2024-05-02
+
+### What's Changed
+
+* Use model's qualified key name for update queries by @JeremyDunn in https://github.com/spatie/eloquent-sortable/pull/175
+
+### New Contributors
+
+* @JeremyDunn made their first contribution in https://github.com/spatie/eloquent-sortable/pull/175
+
+**Full Changelog**: https://github.com/spatie/eloquent-sortable/compare/4.2.0...4.3.0
+
 ## 4.2.0 - 2024-02-26
 
 ### What's Changed
