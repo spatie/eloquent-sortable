@@ -47,7 +47,7 @@ class SortableTest extends TestCase
         }
 
         Event::assertDispatched(EloquentModelSortedEvent::class, function (EloquentModelSortedEvent $event) {
-            return $event->model === Dummy::class;
+            return $event->isFor(Dummy::class);
         });
     }
 
