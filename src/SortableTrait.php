@@ -67,6 +67,8 @@ trait SortableTrait
                 ->update([$orderColumnName => $startOrder++]);
         }
 
+        event(new EloquentModelSortedEvent(static::class));
+
         if (config('eloquent-sortable.ignore_timestamps', false)) {
             static::$ignoreTimestampsOn = array_values(array_diff(static::$ignoreTimestampsOn, [static::class]));
         }
