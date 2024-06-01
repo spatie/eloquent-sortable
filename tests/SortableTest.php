@@ -3,6 +3,8 @@
 namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Support\Collection;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 class SortableTest extends TestCase
 {
@@ -422,5 +424,35 @@ class SortableTest extends TestCase
         $model = (new Dummy())->buildSortQuery()->get();
         $this->assertTrue($model[$model->count() - 1]->isLastInOrder());
         $this->assertFalse($model[$model->count() - 2]->isLastInOrder());
+    }
+
+    /** @test */
+    public function it_can_determine_custom_column_and_get_order_number()
+    {
+        $model = Dummy::first();
+
+        $this->assertEquals($model->getOrder(), 1);
+
+        $model = new class () extends Dummy {
+            public $sortable = [
+                'order_column_name' => 'my_custom_order_column',
+            ];
+        };
+
+        $this->assertEquals($model->determineOrderColumnName(), 'my_custom_order_column');
+
+        $model->my_custom_order_column = 2;
+
+        $this->assertEquals($model->getOrder(), 2);
+
+        $model = new class () extends Dummy {
+            public $sortable = [
+                'order_column_name' => 'my_other_custom_order_column',
+            ];
+        };
+
+        $model->my_other_custom_order_column = 3;
+
+        $this->assertEquals($model->getOrder(), 3);
     }
 }

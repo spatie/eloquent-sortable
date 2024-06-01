@@ -35,6 +35,21 @@ trait SortableTrait
         return (int) $this->buildSortQuery()->min($this->determineOrderColumnName());
     }
 
+    /**
+     * Get the order value from a dynamically determined column.
+     *
+     * This method returns the model's order value from the column specified by `determineOrderColumnName`.
+     * It allows for flexibility in specifying the order column in different model configurations.
+     *
+     * @return int The value of the order column.
+     */
+    public function getOrder() : int
+    {
+        $orderColumnName = $this->determineOrderColumnName();
+
+        return $this->$orderColumnName;
+    }
+
     public function scopeOrdered(Builder $query, string $direction = 'asc')
     {
         return $query->orderBy($this->determineOrderColumnName(), $direction);
