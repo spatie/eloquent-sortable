@@ -2,6 +2,18 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.4.0 - 2024-06-04
+
+### What's Changed
+
+* Dispatch event after performing a sort by @chrispage1 in https://github.com/spatie/eloquent-sortable/pull/178
+
+### New Contributors
+
+* @chrispage1 made their first contribution in https://github.com/spatie/eloquent-sortable/pull/178
+
+**Full Changelog**: https://github.com/spatie/eloquent-sortable/compare/4.3.0...4.4.0
+
 ## 4.3.0 - 2024-05-02
 
 ### What's Changed
