@@ -3,6 +3,8 @@
 namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Event;
+use Spatie\EloquentSortable\EloquentModelSortedEvent;
 
 class SortableTest extends TestCase
 {
@@ -33,6 +35,9 @@ class SortableTest extends TestCase
     /** @test */
     public function it_can_set_a_new_order()
     {
+
+        Event::fake(EloquentModelSortedEvent::class);
+
         $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
 
         Dummy::setNewOrder($newOrder);
@@ -40,6 +45,10 @@ class SortableTest extends TestCase
         foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
             $this->assertEquals($newOrder[$i], $dummy->id);
         }
+
+        Event::assertDispatched(EloquentModelSortedEvent::class, function (EloquentModelSortedEvent $event) {
+            return $event->isFor(Dummy::class);
+        });
     }
 
     /** @test */

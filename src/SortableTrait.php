@@ -5,6 +5,7 @@ namespace Spatie\EloquentSortable;
 use ArrayAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Event;
 use InvalidArgumentException;
 
 trait SortableTrait
@@ -27,12 +28,12 @@ trait SortableTrait
 
     public function getHighestOrderNumber(): int
     {
-        return (int) $this->buildSortQuery()->max($this->determineOrderColumnName());
+        return (int)$this->buildSortQuery()->max($this->determineOrderColumnName());
     }
 
     public function getLowestOrderNumber(): int
     {
-        return (int) $this->buildSortQuery()->min($this->determineOrderColumnName());
+        return (int)$this->buildSortQuery()->min($this->determineOrderColumnName());
     }
 
     public function scopeOrdered(Builder $query, string $direction = 'asc')
@@ -40,9 +41,13 @@ trait SortableTrait
         return $query->orderBy($this->determineOrderColumnName(), $direction);
     }
 
-    public static function setNewOrder($ids, int $startOrder = 1, string $primaryKeyColumn = null, callable $modifyQuery = null): void
-    {
-        if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
+    public static function setNewOrder(
+        $ids,
+        int $startOrder = 1,
+        string $primaryKeyColumn = null,
+        callable $modifyQuery = null
+    ): void {
+        if (!is_array($ids) && !$ids instanceof ArrayAccess) {
             throw new InvalidArgumentException('You must pass an array or ArrayAccess object to setNewOrder');
         }
 
@@ -66,6 +71,8 @@ trait SortableTrait
                 ->where($primaryKeyColumn, $id)
                 ->update([$orderColumnName => $startOrder++]);
         }
+
+        Event::dispatch(new EloquentModelSortedEvent(static::class));
 
         if (config('eloquent-sortable.ignore_timestamps', false)) {
             static::$ignoreTimestampsOn = array_values(array_diff(static::$ignoreTimestampsOn, [static::class]));
@@ -99,7 +106,7 @@ trait SortableTrait
             ->where($orderColumnName, '>', $this->$orderColumnName)
             ->first();
 
-        if (! $swapWithModel) {
+        if (!$swapWithModel) {
             return $this;
         }
 
@@ -115,7 +122,7 @@ trait SortableTrait
             ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
 
-        if (! $swapWithModel) {
+        if (!$swapWithModel) {
             return $this;
         }
 
@@ -157,7 +164,9 @@ trait SortableTrait
         $this->$orderColumnName = $firstModel->$orderColumnName;
         $this->save();
 
-        $this->buildSortQuery()->where($this->getQualifiedKeyName(), '!=', $this->getKey())->increment($orderColumnName);
+        $this->buildSortQuery()->where($this->getQualifiedKeyName(), '!=', $this->getKey())->increment(
+            $orderColumnName
+        );
 
         return $this;
     }
