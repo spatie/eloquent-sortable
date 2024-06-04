@@ -225,6 +225,29 @@ public function buildSortQuery()
 ```
 This will restrict the calculations to fields value of the model instance.
 
+### Dispatched events
+
+Once a sort has been completed, an event (`Spatie\EloquentSortable\EloquentModelSortedEvent`) is dispatched that you
+can listen for. This can be useful for running post-sorting logic such as clearing caches or other actions that
+need to be taken after a sort.
+
+The event has an `isFor` helper which allows you to conveniently check the Eloquent class that has been sorted.
+
+Below is an example of how you can listen for this event:
+
+```php
+use Spatie\EloquentSortable\EloquentModelSortedEvent as SortEvent;
+
+class SortingListener
+{
+    public function handle(SortEvent $event): void {
+        if ($event->isFor(MyClass::class)) {
+            // ToDo: flush our cache
+        }
+    }
+}
+```
+
 ## Tests
 
 The package contains some integration/smoke tests, set up with Orchestra. The tests can be run via phpunit.
