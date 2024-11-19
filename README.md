@@ -48,32 +48,46 @@ Optionally you can publish the config file with:
 php artisan vendor:publish --tag=eloquent-sortable-config
 ```
 
-This is the content of the file that will be published in `config/eloquent-sortable.php`
+This is the content of the file that will be published in `config/eloquent-sortable.php`:
 
 ```php
 return [
-  /*
-   * The name of the column that will be used to sort models.
-   */
-  'order_column_name' => 'order_column',
+    /*
+     * The name of the column that will be used to sort models.
+     */
+    'order_column_name' => 'order_column',
 
-  /*
-   * Define if the models should sort when creating. When true, the package
-   * will automatically assign the highest order number to a new model
-   */
-  'sort_when_creating' => true,
+    /*
+     * Define if the models should sort when creating.
+     * When true, the package will automatically assign the highest order number to a new model.
+     */
+    'sort_when_creating' => true,
 
-  /*
-   * Define if the timestamps should be ignored when sorting.
-   * When true, updated_at will not be updated when using setNewOrder
-   */
-  'ignore_timestamps' => false,
+    /*
+     * Define if the models should sort when updating.
+     * When true, the package will automatically update the order of models when one is updated.
+     */
+    'sort_when_updating' => true,
+
+    /*
+     * Define if the models should sort when deleting.
+     * When true, the package will automatically update the order of models when one is deleted.
+     */
+    'sort_when_deleting' => true,
+
+    /*
+     * Define if the timestamps should be ignored when sorting.
+     * When true, `updated_at` will not be updated when using `setNewOrder`, `setMassNewOrder`,
+     * or when models are reordered automatically during creation, updating, or deleting.
+     */
+    'ignore_timestamps' => false,
 ];
 ```
 
 ## Usage
 
 To add sortable behaviour to your model you must:
+
 1. Implement the `Spatie\EloquentSortable\Sortable` interface.
 2. Use the trait `Spatie\EloquentSortable\SortableTrait`.
 3. Optionally specify which column will be used as the order column. The default is `order_column`.
@@ -91,6 +105,8 @@ class MyModel extends Model implements Sortable
     public $sortable = [
         'order_column_name' => 'order_column',
         'sort_when_creating' => true,
+        'sort_when_updating' => true,
+        'sort_when_deleting' => true,
     ];
 
     // ...
@@ -113,12 +129,24 @@ $myModel->save(); // order_column for this record will be set to 2
 $myModel = new MyModel();
 $myModel->save(); // order_column for this record will be set to 3
 
-
-//the trait also provides the ordered query scope
+// The trait also provides the ordered query scope
 $orderedRecords = MyModel::ordered()->get();
 ```
 
-You can set a new order for all the records using the `setNewOrder`-method
+### New Sorting Methods
+
+#### Mass Update Ordering
+
+You can set a new order for all the records using the `setMassNewOrder`-method:
+
+```php
+$newOrder = [5, 3, 1, 4, 2];
+MyModel::setMassNewOrder($newOrder);
+```
+
+This will reorder the records in the order specified by `$newOrder`.
+
+#### Setting a New Order for All Records
 
 ```php
 /**
@@ -126,10 +154,10 @@ You can set a new order for all the records using the `setNewOrder`-method
  * the record for model id 1 will have order_column value 2
  * the record for model id 2 will have order_column value 3
  */
-MyModel::setNewOrder([3,1,2]);
+MyModel::setNewOrder([3, 1, 2]);
 ```
 
-Optionally you can pass the starting order number as the second argument.
+Optionally, you can pass the starting order number as the second argument.
 
 ```php
 /**
@@ -137,7 +165,7 @@ Optionally you can pass the starting order number as the second argument.
  * the record for model id 1 will have order_column value 12
  * the record for model id 2 will have order_column value 13
  */
-MyModel::setNewOrder([3,1,2], 10);
+MyModel::setNewOrder([3, 1, 2], 10);
 ```
 
 You can modify the query that will be executed by passing a closure as the fourth argument.
@@ -148,11 +176,12 @@ You can modify the query that will be executed by passing a closure as the fourt
  * the record for model id 1 will have order_column value 12
  * the record for model id 2 will have order_column value 13
  */
-MyModel::setNewOrder([3,1,2], 10, null, function($query) {
+MyModel::setNewOrder([3, 1, 2], 10, null, function ($query) {
     $query->withoutGlobalScope(new ActiveScope);
 });
 ```
 
+#### Setting New Order by Custom Column
 
 To sort using a column other than the primary key, use the `setNewOrderByCustomColumn`-method.
 
@@ -184,6 +213,8 @@ MyModel::setNewOrderByCustomColumn('uuid', [
 ], 10);
 ```
 
+### Additional Methods for Sorting
+
 You can also move a model up or down with these methods:
 
 ```php
@@ -210,6 +241,36 @@ You can swap the order of two models:
 ```php
 MyModel::swapOrder($myModel, $anotherModel);
 ```
+
+### Handling Model Updates and Deletions
+
+If you want your model to automatically reorder upon updating or deleting a record, ensure the relevant configuration values (`sort_when_updating`, `sort_when_deleting`) are set to `true` in the configuration file. This will allow your models to maintain the correct order without needing to manually update the ordering each time a change is made.
+
+For example, if `sort_when_updating` is set to `true`, any changes to a model's attributes will automatically adjust the order, ensuring consistency.
+
+In addition to automatic reordering, you can also manually trigger sorting for specific scenarios. Here is an example of how you can manually trigger sorting:
+
+```php
+$model = $this->model::query()->find(1);
+$model->forceFill(['updated_at' => now()]);
+$model->sortables = [1, 2, 3]; // The `sortables` array contains the IDs of the records that need to be reordered.
+$model->save();
+```
+
+In this scenario, the model is being updated with a new order, and the `sortables` property is set before saving. This ensures the correct order is applied manually when necessary.
+
+#### Sorting When Deleting
+
+If `sort_when_deleting` is enabled, the order of the remaining models will be automatically adjusted when a model is deleted. For example:
+
+```php
+$model = MyModel::find(1);
+$model->delete(); // The remaining records will be reordered automatically.
+```
+
+This helps maintain the correct sequence without any manual intervention.
+
+In this scenario, the model is being updated with a new order, and the `sortables` property is set before saving. This ensures the correct order is applied manually when necessary.
 
 ### Grouping
 

@@ -29,13 +29,15 @@ class SortableTest extends TestCase
 
         DummyWithSoftDeletes::first()->delete();
 
-        $this->assertEquals(DummyWithSoftDeletes::withTrashed()->count(), (new DummyWithSoftDeletes())->getHighestOrderNumber());
+        $this->assertEquals(
+            DummyWithSoftDeletes::withTrashed()->count(),
+            (new DummyWithSoftDeletes())->getHighestOrderNumber()
+        );
     }
 
     /** @test */
     public function it_can_set_a_new_order()
     {
-
         Event::fake(EloquentModelSortedEvent::class);
 
         $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
@@ -391,9 +393,9 @@ class SortableTest extends TestCase
     public function it_can_use_config_properties()
     {
         config([
-        'eloquent-sortable.order_column_name' => 'order_column',
-        'eloquent-sortable.sort_when_creating' => true,
-      ]);
+            'eloquent-sortable.order_column_name' => 'order_column',
+            'eloquent-sortable.sort_when_creating' => true,
+        ]);
 
         $model = new class () extends Dummy {
             public $sortable = [];
@@ -408,9 +410,9 @@ class SortableTest extends TestCase
     {
         $model = new class () extends Dummy {
             public $sortable = [
-            'order_column_name' => 'my_custom_order_column',
-            'sort_when_creating' => false,
-          ];
+                'order_column_name' => 'my_custom_order_column',
+                'sort_when_creating' => false,
+            ];
         };
 
         $this->assertEquals($model->determineOrderColumnName(), 'my_custom_order_column');
@@ -431,5 +433,151 @@ class SortableTest extends TestCase
         $model = (new Dummy())->buildSortQuery()->get();
         $this->assertTrue($model[$model->count() - 1]->isLastInOrder());
         $this->assertFalse($model[$model->count() - 2]->isLastInOrder());
+    }
+
+    /** @test */
+    public function it_sets_mass_new_order_correctly()
+    {
+        $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
+
+        Dummy::setMassNewOrder($newOrder);
+
+        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
+    public function it_updates_order_when_sortables_property_is_set()
+    {
+        $model = Dummy::first();
+        $originalOrder = Dummy::pluck('order_column', 'id');
+
+        // Shuffle order and set it on the model as sortables
+        $newOrder = $originalOrder->keys()->shuffle()->toArray();
+        $model->sortables = $newOrder;
+
+        $model->save();
+
+        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
+    public function it_does_not_update_order_when_sortables_is_not_set_on_update()
+    {
+        $model = Dummy::first();
+        $originalOrder = Dummy::pluck('order_column', 'id');
+
+        // Do not provide sortables to the model
+        $model->name = 'Updated Name';
+        $model->save();
+
+        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($originalOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
+    public function it_updates_order_when_sortables_property_is_set_on_delete()
+    {
+        $modelToDelete = Dummy::first();
+        $remainingModels = Dummy::where('id', '!=', $modelToDelete->id)->pluck('id');
+
+        $newOrder = $remainingModels->shuffle()->toArray();
+        $modelToDelete->sortables = $newOrder;
+
+        $modelToDelete->delete();
+
+        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($newOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
+    public function it_does_not_update_order_when_sortables_is_not_set_on_delete()
+    {
+        $modelToDelete = Dummy::first();
+        $remainingModels = Dummy::where('id', '!=', $modelToDelete->id)->pluck('id');
+
+        $originalOrder = $remainingModels->values()->toArray();
+
+        // Do not provide sortables to the model before deleting
+        $modelToDelete->delete();
+
+        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($originalOrder[$i], $dummy->id);
+        }
+    }
+
+    /** @test */
+    public function it_dispatches_sorted_event_on_mass_update_for_sortables()
+    {
+        Event::fake(EloquentModelSortedEvent::class);
+
+        $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle()->toArray();
+        Dummy::setMassNewOrder($newOrder);
+
+        Event::assertDispatched(EloquentModelSortedEvent::class, function (EloquentModelSortedEvent $event) {
+            return $event->isFor(Dummy::class);
+        });
+    }
+
+    /** @test */
+    public function it_respects_ignore_timestamps_on_mass_update_for_sortables()
+    {
+        $this->setUpTimestamps();
+        DummyWithTimestamps::query()->update(['updated_at' => now()]);
+        $originalTimestamps = DummyWithTimestamps::all()->pluck('updated_at');
+
+        // Update with timestamps enabled
+        config()->set('eloquent-sortable.ignore_timestamps', false);
+        $newOrder = Collection::make(DummyWithTimestamps::all()->pluck('id'))->shuffle()->toArray();
+        DummyWithTimestamps::setMassNewOrder($newOrder);
+
+        foreach (DummyWithTimestamps::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertNotEquals($originalTimestamps[$i], $dummy->updated_at);
+        }
+
+        // Update with timestamps disabled
+        config()->set('eloquent-sortable.ignore_timestamps', true);
+        DummyWithTimestamps::setMassNewOrder($newOrder);
+
+        foreach (DummyWithTimestamps::orderBy('order_column')->get() as $i => $dummy) {
+            $this->assertEquals($originalTimestamps[$i], $dummy->updated_at);
+        }
+    }
+
+    /** @test */
+    public function it_respects_sort_when_updating_setting()
+    {
+        $model = new class () extends Dummy {
+            public $sortable = ['sort_when_updating' => true];
+        };
+
+        $this->assertTrue($model->shouldSortWhenUpdating());
+
+        $model = new class () extends Dummy {
+            public $sortable = ['sort_when_updating' => false];
+        };
+
+        $this->assertFalse($model->shouldSortWhenUpdating());
+    }
+
+    /** @test */
+    public function it_respects_sort_when_deleting_setting()
+    {
+        $model = new class () extends Dummy {
+            public $sortable = ['sort_when_deleting' => true];
+        };
+
+        $this->assertTrue($model->shouldSortWhenDeleting());
+
+        $model = new class () extends Dummy {
+            public $sortable = ['sort_when_deleting' => false];
+        };
+
+        $this->assertFalse($model->shouldSortWhenDeleting());
     }
 }

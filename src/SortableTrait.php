@@ -1,20 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\EloquentSortable;
 
 use ArrayAccess;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use InvalidArgumentException;
 
 trait SortableTrait
 {
-    public static function bootSortableTrait()
+    public array|null $sortables;
+
+    public static function bootSortableTrait(): void
     {
-        static::creating(function ($model) {
+        static::creating(function (Model $model) {
             if ($model instanceof Sortable && $model->shouldSortWhenCreating()) {
                 $model->setHighestOrderNumber();
+            }
+        });
+
+        static::updating(function (Model $model): void {
+            if ($model instanceof Sortable && $model->shouldSortWhenUpdating() && !empty($model->sortables)) {
+                self::setMassNewOrder($model->sortables);
+            }
+        });
+
+        static::deleting(function (Model $model): void {
+            if ($model instanceof Sortable && $model->shouldSortWhenDeleting() && !empty($model->sortables)) {
+                self::setMassNewOrder($model->sortables);
             }
         });
     }
@@ -36,7 +54,7 @@ trait SortableTrait
         return (int)$this->buildSortQuery()->min($this->determineOrderColumnName());
     }
 
-    public function scopeOrdered(Builder $query, string $direction = 'asc')
+    public function scopeOrdered(Builder $query, string $direction = 'asc'): Builder
     {
         return $query->orderBy($this->determineOrderColumnName(), $direction);
     }
@@ -47,7 +65,7 @@ trait SortableTrait
         string $primaryKeyColumn = null,
         callable $modifyQuery = null
     ): void {
-        if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
+        if (!is_array($ids) && !$ids instanceof ArrayAccess) {
             throw new InvalidArgumentException('You must pass an array or ArrayAccess object to setNewOrder');
         }
 
@@ -79,6 +97,62 @@ trait SortableTrait
         }
     }
 
+    public static function setMassNewOrder(
+        array $getSortables,
+        int $incrementOrder = 1,
+        ?string $primaryKeyColumn = null
+    ): void {
+        $model = new static();
+        $orderColumnName = $model->determineOrderColumnName();
+        $ignoreTimestamps = config('eloquent-sortable.ignore_timestamps', false);
+
+        if (is_null($primaryKeyColumn)) {
+            $primaryKeyColumn = $model->getQualifiedKeyName();
+        }
+
+        if ($ignoreTimestamps) {
+            static::$ignoreTimestampsOn = array_values(array_merge(static::$ignoreTimestampsOn, [static::class]));
+        }
+
+        $caseStatement = collect($getSortables)->reduce(function (string $carry, int $id) use (&$incrementOrder) {
+            $incrementOrder++;
+            $carry .= "WHEN {$id} THEN {$incrementOrder} ";
+            return $carry;
+        }, '');
+
+        $getSortablesId = implode(', ', $getSortables);
+
+        DB::transaction(
+            function () use (
+                $model,
+                $primaryKeyColumn,
+                $orderColumnName,
+                $caseStatement,
+                $getSortablesId,
+                $ignoreTimestamps
+            ) {
+                $timestampUpdate = $ignoreTimestamps ? '' : ", `updated_at` = NOW()";
+
+                DB::update(
+                    "
+                    UPDATE {$model->getTable()}
+                    SET `{$orderColumnName}` = CASE {$primaryKeyColumn}
+                        {$caseStatement}
+                    END
+                    {$timestampUpdate}
+                    WHERE {$primaryKeyColumn} IN ({$getSortablesId})
+                    "
+                );
+            }
+        );
+
+        Event::dispatch(new EloquentModelSortedEvent(static::class));
+
+        if ($ignoreTimestamps) {
+            static::$ignoreTimestampsOn = array_values(array_diff(static::$ignoreTimestampsOn, [static::class]));
+        }
+    }
+
     public static function setNewOrderByCustomColumn(string $primaryKeyColumn, $ids, int $startOrder = 1)
     {
         self::setNewOrder($ids, $startOrder, $primaryKeyColumn);
@@ -97,6 +171,16 @@ trait SortableTrait
         return $this->sortable['sort_when_creating'] ?? config('eloquent-sortable.sort_when_creating', true);
     }
 
+    public function shouldSortWhenUpdating(): bool
+    {
+        return $this->sortable['sort_when_updating'] ?? config('eloquent-sortable.sort_when_updating', true);
+    }
+
+    public function shouldSortWhenDeleting(): bool
+    {
+        return $this->sortable['sort_when_deleting'] ?? config('eloquent-sortable.sort_when_deleting', true);
+    }
+
     public function moveOrderDown(): static
     {
         $orderColumnName = $this->determineOrderColumnName();
@@ -106,7 +190,7 @@ trait SortableTrait
             ->where($orderColumnName, '>', $this->$orderColumnName)
             ->first();
 
-        if (! $swapWithModel) {
+        if (!$swapWithModel) {
             return $this;
         }
 
@@ -122,7 +206,7 @@ trait SortableTrait
             ->where($orderColumnName, '<', $this->$orderColumnName)
             ->first();
 
-        if (! $swapWithModel) {
+        if (!$swapWithModel) {
             return $this;
         }
 
