@@ -14,24 +14,24 @@ use InvalidArgumentException;
 
 trait SortableTrait
 {
-    public array|null $sortables;
+    public array $sortables = [];
 
     public static function bootSortableTrait(): void
     {
         static::creating(function (Model $model) {
-            if ($model instanceof Sortable && $model->shouldSortWhenCreating()) {
+            if (($model instanceof Sortable || $model instanceof Model) && $model->shouldSortWhenCreating()) {
                 $model->setHighestOrderNumber();
             }
         });
 
         static::updating(function (Model $model): void {
-            if ($model instanceof Sortable && $model->shouldSortWhenUpdating() && !empty($model->sortables)) {
+            if (($model instanceof Sortable || $model instanceof Model) && $model->shouldSortWhenUpdating()) {
                 self::setMassNewOrder($model->sortables);
             }
         });
 
         static::deleting(function (Model $model): void {
-            if ($model instanceof Sortable && $model->shouldSortWhenDeleting() && !empty($model->sortables)) {
+            if (($model instanceof Sortable || $model instanceof Model) && $model->shouldSortWhenDeleting()) {
                 self::setMassNewOrder($model->sortables);
             }
         });
