@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Schema;
 use InvalidArgumentException;
 
 trait SortableTrait
@@ -102,16 +103,16 @@ trait SortableTrait
         int $incrementOrder = 1,
         ?string $primaryKeyColumn = null
     ): void {
+        if (count($getSortables) === 0) {
+            return;
+        }
+
         $model = new static();
         $orderColumnName = $model->determineOrderColumnName();
         $ignoreTimestamps = config('eloquent-sortable.ignore_timestamps', false);
 
         if (is_null($primaryKeyColumn)) {
             $primaryKeyColumn = $model->getQualifiedKeyName();
-        }
-
-        if ($ignoreTimestamps) {
-            static::$ignoreTimestampsOn = array_values(array_merge(static::$ignoreTimestampsOn, [static::class]));
         }
 
         $caseStatement = collect($getSortables)->reduce(function (string $carry, int $id) use (&$incrementOrder) {
@@ -122,6 +123,10 @@ trait SortableTrait
 
         $getSortablesId = implode(', ', $getSortables);
 
+        if ($ignoreTimestamps) {
+            $model->timestamps = false;
+        }
+
         DB::transaction(
             function () use (
                 $model,
@@ -131,29 +136,32 @@ trait SortableTrait
                 $getSortablesId,
                 $ignoreTimestamps
             ) {
-                $timestampUpdate = $ignoreTimestamps ? '' : ", `updated_at` = NOW()";
+                $updateQuery = "
+            UPDATE {$model->getTable()}
+            SET `{$orderColumnName}` = CASE {$primaryKeyColumn}
+                {$caseStatement}
+            END";
 
-                DB::update(
-                    "
-                    UPDATE {$model->getTable()}
-                    SET `{$orderColumnName}` = CASE {$primaryKeyColumn}
-                        {$caseStatement}
-                    END
-                    {$timestampUpdate}
-                    WHERE {$primaryKeyColumn} IN ({$getSortablesId})
-                    "
-                );
+                if ($model->timestamps && Schema::hasColumn($model->getTable(), 'updated_at')) {
+                    $consistentTimestamp = now();
+                    $connection = DB::connection()->getDriverName();
+                    $timestampUpdate = $connection === 'sqlite'
+                        ? ", updated_at = '{$consistentTimestamp->format('Y-m-d H:i:s')}'"
+                        : ", updated_at = '{$consistentTimestamp->toDateTimeString()}'";
+
+                    $updateQuery .= $timestampUpdate;
+                }
+
+                $updateQuery .= " WHERE {$primaryKeyColumn} IN ({$getSortablesId})";
+
+                DB::update($updateQuery);
             }
         );
 
         Event::dispatch(new EloquentModelSortedEvent(static::class));
-
-        if ($ignoreTimestamps) {
-            static::$ignoreTimestampsOn = array_values(array_diff(static::$ignoreTimestampsOn, [static::class]));
-        }
     }
 
-    public static function setNewOrderByCustomColumn(string $primaryKeyColumn, $ids, int $startOrder = 1)
+    public static function setNewOrderByCustomColumn(string $primaryKeyColumn, $ids, int $startOrder = 1): void
     {
         self::setNewOrder($ids, $startOrder, $primaryKeyColumn);
     }

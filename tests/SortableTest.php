@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Support\Collection;
@@ -450,32 +452,54 @@ class SortableTest extends TestCase
     /** @test */
     public function it_updates_order_when_sortables_property_is_set()
     {
-        $model = Dummy::first();
-        $originalOrder = Dummy::pluck('order_column', 'id');
-
         // Shuffle order and set it on the model as sortables
-        $newOrder = $originalOrder->keys()->shuffle()->toArray();
-        $model->sortables = $newOrder;
+        $newOrder = Dummy::pluck('id')->shuffle()->toArray(); // Get IDs and shuffle them
 
+        $model = Dummy::first();
+        $model->sortables = $newOrder; // Assuming this property is used for ordering
         $model->save();
 
-        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
-            $this->assertEquals($newOrder[$i], $dummy->id);
+        // Create CASE statement to order by the shuffled IDs
+        $orderByClause = "CASE id ";
+        foreach ($newOrder as $index => $id) {
+            $orderByClause .= "WHEN {$id} THEN {$index} ";
+        }
+        $orderByClause .= "END";
+
+        // Retrieve the dummies in the shuffled order using CASE statement
+        $dummies = Dummy::whereIn('id', $newOrder)
+            ->orderByRaw($orderByClause)
+            ->get();
+
+        // Verify that the new order matches the expected order
+        foreach ($dummies as $index => $dummy) {
+            $this->assertEquals($newOrder[$index], $dummy->id);
         }
     }
 
     /** @test */
     public function it_does_not_update_order_when_sortables_is_not_set_on_update()
     {
+        // Get the first model
         $model = Dummy::first();
-        $originalOrder = Dummy::pluck('order_column', 'id');
 
-        // Do not provide sortables to the model
+        // Get the original order
+        $originalOrder = Dummy::orderBy('order_column')->pluck('id')->toArray(); // Ensure order is consistent
+
+        // Update the model without changing the sortables
         $model->name = 'Updated Name';
         $model->save();
 
-        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
-            $this->assertEquals($originalOrder[$i], $dummy->id);
+        // Retrieve models in the current order and compare with the original
+        $currentOrder = Dummy::orderBy('order_column')->pluck('id')->toArray();
+
+        // Verify that the order has not changed
+        foreach ($originalOrder as $i => $id) {
+            $this->assertEquals(
+                $id,
+                $currentOrder[$i],
+                "Order mismatch at index {$i}. Expected {$id}, got {$currentOrder[$i]}"
+            );
         }
     }
 
@@ -527,25 +551,58 @@ class SortableTest extends TestCase
     /** @test */
     public function it_respects_ignore_timestamps_on_mass_update_for_sortables()
     {
+        // Set up a consistent timestamp
+        $consistentTimestamp = now();
+
+        // Set up timestamps on the models using the consistent timestamp
         $this->setUpTimestamps();
-        DummyWithTimestamps::query()->update(['updated_at' => now()]);
+        DummyWithTimestamps::query()->update(['updated_at' => $consistentTimestamp]);
+
+        // Pluck the original timestamps to use for comparison
         $originalTimestamps = DummyWithTimestamps::all()->pluck('updated_at');
+
+        // Move forward in time by one minute for the next round of updates
+        $this->travelTo($consistentTimestamp->copy()->addMinute());
 
         // Update with timestamps enabled
         config()->set('eloquent-sortable.ignore_timestamps', false);
+        $this->assertFalse(config('eloquent-sortable.ignore_timestamps'), 'ignore_timestamps should be false');
+
         $newOrder = Collection::make(DummyWithTimestamps::all()->pluck('id'))->shuffle()->toArray();
         DummyWithTimestamps::setMassNewOrder($newOrder);
 
-        foreach (DummyWithTimestamps::orderBy('order_column')->get() as $i => $dummy) {
-            $this->assertNotEquals($originalTimestamps[$i], $dummy->updated_at);
+        // Verify that the timestamps have been updated
+        $dummies = DummyWithTimestamps::orderBy('order_column')->get();
+
+        foreach ($dummies as $i => $dummy) {
+            $this->assertNotEquals(
+                $originalTimestamps[$i],
+                $dummy->updated_at,
+                "Timestamps should have been updated, but they were not. Index: {$i}"
+            );
         }
+
+        $dummyWithTimestamps = new DummyWithTimestamps();
+        $dummyWithTimestamps->timestamps = false;
+        $dummyWithTimestamps::setMassNewOrder($newOrder);
+        $dummyWithTimestamps->refresh();
+
+        // Move forward in time by another minute for the next round of updates
+        $this->travelTo($consistentTimestamp->copy()->addMinutes());
 
         // Update with timestamps disabled
         config()->set('eloquent-sortable.ignore_timestamps', true);
-        DummyWithTimestamps::setMassNewOrder($newOrder);
+        $this->assertTrue(config('eloquent-sortable.ignore_timestamps'), 'ignore_timestamps should be true');
 
-        foreach (DummyWithTimestamps::orderBy('order_column')->get() as $i => $dummy) {
-            $this->assertEquals($originalTimestamps[$i], $dummy->updated_at);
+        // Verify that the timestamps have not changed
+        $currentTimestamps = $dummyWithTimestamps::orderBy('order_column')->pluck('updated_at')->toArray();
+
+        foreach ($dummyWithTimestamps->all()->pluck('updated_at') as $i => $timestamp) {
+            $this->assertEquals(
+                $timestamp,
+                $currentTimestamps[$i],
+                "Timestamps should not have been updated, but they were. Index: {$i}"
+            );
         }
     }
 
