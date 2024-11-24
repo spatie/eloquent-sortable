@@ -33,7 +33,9 @@ trait SortableTrait
 
         static::deleting(function (Model $model): void {
             if (($model instanceof Sortable || $model instanceof Model) && $model->shouldSortWhenDeleting()) {
-                self::setMassNewOrder($model->sortables);
+                self::setMassNewOrder(
+                    $model::query()->ordered()->where('id', '!=', $model->id)->pluck('id')->toArray()
+                );
             }
         });
     }
