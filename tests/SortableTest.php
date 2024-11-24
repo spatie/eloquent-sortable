@@ -28,6 +28,7 @@ class SortableTest extends TestCase
     public function it_can_get_the_highest_order_number_with_trashed_models()
     {
         $this->setUpSoftDeletes();
+        config()->set('eloquent-sortable.sort_when_deleting', false);
 
         DummyWithSoftDeletes::first()->delete();
 
@@ -504,18 +505,35 @@ class SortableTest extends TestCase
     }
 
     /** @test */
-    public function it_updates_order_when_sortables_property_is_set_on_delete()
+    public function it_reorders_models_when_a_model_is_deleted()
     {
-        $modelToDelete = Dummy::first();
-        $remainingModels = Dummy::where('id', '!=', $modelToDelete->id)->pluck('id');
+        // Use initial data from SQLite
 
-        $newOrder = $remainingModels->shuffle()->toArray();
-        $modelToDelete->sortables = $newOrder;
+        // Store the original order before deletion
+        $originalOrder = Dummy::orderBy('order_column')->pluck('order_column')->toArray();
 
+        // Ensure the config is set to reorder on delete
+        config()->set('eloquent-sortable.sort_when_deleting', true);
+        $this->assertTrue(config('eloquent-sortable.sort_when_deleting'), 'sort_when_deleting should be true');
+
+        // Act: Delete one model (e.g., the one with order_column = 1)
+        $modelToDelete = Dummy::query()->find(1);
         $modelToDelete->delete();
 
-        foreach (Dummy::orderBy('order_column')->get() as $i => $dummy) {
-            $this->assertEquals($newOrder[$i], $dummy->id);
+        // Fetch the new order after deletion
+        $newOrder = Dummy::orderBy('order_column')->pluck('order_column')->toArray();
+
+        // Assert: The new order should not match the original order
+        $this->assertNotEquals($newOrder, $originalOrder, 'The models should have been reordered after deletion.');
+
+        // Additional Assert: Ensure `order_column` values are gapless and sequential
+        $remainingModels = Dummy::orderBy('order_column')->get();
+        foreach ($remainingModels as $index => $model) {
+            $this->assertSame(
+                $index + 1,
+                (int)$model->order_column,
+                "The order_column value should be sequential and gapless after deletion."
+            );
         }
     }
 

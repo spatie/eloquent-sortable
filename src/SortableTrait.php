@@ -118,8 +118,8 @@ trait SortableTrait
         }
 
         $caseStatement = collect($getSortables)->reduce(function (string $carry, int $id) use (&$incrementOrder) {
-            $incrementOrder++;
             $carry .= "WHEN {$id} THEN {$incrementOrder} ";
+            $incrementOrder++;
             return $carry;
         }, '');
 

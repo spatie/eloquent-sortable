@@ -18,13 +18,13 @@ return [
      * Define if the models should sort when updating.
      * When true, the package will automatically update the order of models when one is updated.
      */
-    'sort_when_updating' => true,
+    'sort_when_updating' => false,
 
     /*
      * Define if the models should sort when deleting.
      * When true, the package will automatically update the order of models when one is deleted.
      */
-    'sort_when_deleting' => true,
+    'sort_when_deleting' => false,
 
     /*
      * Define if the timestamps should be ignored when sorting.
