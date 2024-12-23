@@ -2,6 +2,20 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.4.1 - 2024-12-23
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.1.0 by @dependabot in https://github.com/spatie/eloquent-sortable/pull/176
+* Bump dependabot/fetch-metadata from 2.1.0 to 2.2.0 by @dependabot in https://github.com/spatie/eloquent-sortable/pull/181
+* Fix PHP 8.4 deprecation notice by @clarkewing in https://github.com/spatie/eloquent-sortable/pull/184
+
+### New Contributors
+
+* @clarkewing made their first contribution in https://github.com/spatie/eloquent-sortable/pull/184
+
+**Full Changelog**: https://github.com/spatie/eloquent-sortable/compare/4.4.0...4.4.1
+
 ## 4.4.0 - 2024-06-04
 
 ### What's Changed
