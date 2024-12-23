@@ -44,8 +44,8 @@ trait SortableTrait
     public static function setNewOrder(
         $ids,
         int $startOrder = 1,
-        string $primaryKeyColumn = null,
-        callable $modifyQuery = null
+        ?string $primaryKeyColumn = null,
+        ?callable $modifyQuery = null
     ): void {
         if (! is_array($ids) && ! $ids instanceof ArrayAccess) {
             throw new InvalidArgumentException('You must pass an array or ArrayAccess object to setNewOrder');
