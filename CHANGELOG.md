@@ -2,6 +2,19 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.4.2 - 2025-02-19
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/spatie/eloquent-sortable/pull/185
+* Laravel 12.x Compatibility by @laravel-shift in https://github.com/spatie/eloquent-sortable/pull/186
+
+### New Contributors
+
+* @laravel-shift made their first contribution in https://github.com/spatie/eloquent-sortable/pull/186
+
+**Full Changelog**: https://github.com/spatie/eloquent-sortable/compare/4.4.1...4.4.2
+
 ## 4.4.1 - 2024-12-23
 
 ### What's Changed
