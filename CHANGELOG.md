@@ -2,6 +2,19 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.5.0 - 2025-06-03
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot in https://github.com/spatie/eloquent-sortable/pull/187
+* Add `moveAfter` and `moveBefore` methods for precise positioning by @SebastiaanKloos in https://github.com/spatie/eloquent-sortable/pull/189
+
+### New Contributors
+
+* @SebastiaanKloos made their first contribution in https://github.com/spatie/eloquent-sortable/pull/189
+
+**Full Changelog**: https://github.com/spatie/eloquent-sortable/compare/4.4.2...4.5.0
+
 ## 4.4.2 - 2025-02-19
 
 ### What's Changed
