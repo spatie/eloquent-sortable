@@ -251,6 +251,37 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_move_after()
+    {
+        $firstModel = Dummy::find(3);
+        $secondModel = Dummy::find(4);
+        $newModel = Dummy::create(['name' => 'New dummy', 'custom_column_sort' => rand()]);
+
+        $newModel->moveAfter($firstModel);
+
+        $newModel->refresh();
+        $secondModel->refresh();
+
+        $this->assertEquals($newModel->order_column, 4);
+        $this->assertEquals($secondModel->order_column, 5);
+    }
+
+    /** @test */
+    public function it_can_move_before()
+    {
+        $firstModel = Dummy::find(4);
+        $newModel = Dummy::create(['name' => 'New dummy', 'custom_column_sort' => rand()]);
+
+        $newModel->moveBefore($firstModel);
+
+        $firstModel->refresh();
+        $newModel->refresh();
+
+        $this->assertEquals($newModel->order_column, 4);
+        $this->assertEquals($firstModel->order_column, 5);
+    }
+
+    /** @test */
     public function it_can_move_the_order_down()
     {
         $firstModel = Dummy::find(3);
