@@ -2,6 +2,20 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.5.1 - 2025-08-25
+
+### What's Changed
+
+* Check for parent::buildSortQuery() by @JeroenHauser in https://github.com/spatie/eloquent-sortable/pull/188
+* Bump actions/checkout from 4 to 5 by @dependabot[bot] in https://github.com/spatie/eloquent-sortable/pull/191
+* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot[bot] in https://github.com/spatie/eloquent-sortable/pull/190
+
+### New Contributors
+
+* @JeroenHauser made their first contribution in https://github.com/spatie/eloquent-sortable/pull/188
+
+**Full Changelog**: https://github.com/spatie/eloquent-sortable/compare/4.5.0...4.5.1
+
 ## 4.5.0 - 2025-06-03
 
 ### What's Changed
