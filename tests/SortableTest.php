@@ -463,18 +463,4 @@ class SortableTest extends TestCase
         $this->assertTrue($model[$model->count() - 1]->isLastInOrder());
         $this->assertFalse($model[$model->count() - 2]->isLastInOrder());
     }
-
-    /** @test */
-    public function it_calls_parent_buildSortQuery_if_exists()
-    {
-        // Dummy uses the default trait `buildSortQuery()`
-        $expectedIdWithoutParent = 1;
-        $modelWithoutParent = (new Dummy())->buildSortQuery()->orderBy('id')->first();
-        $this->assertEquals($modelWithoutParent->id, $expectedIdWithoutParent);
-
-        // DummyWithParent inherits parent `buildSortQuery()` that adds `->where('id', '>=', 5)`
-        $expectedIdWithParent = 5;
-        $modelWithParent = (new DummyWithParent())->buildSortQuery()->orderBy('id')->first();
-        $this->assertEquals($modelWithParent->id, $expectedIdWithParent);
-    }
 }

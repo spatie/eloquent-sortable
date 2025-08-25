@@ -237,10 +237,6 @@ trait SortableTrait
 
     public function buildSortQuery(): Builder
     {
-        if (method_exists(get_parent_class($this), 'buildSortQuery')) {
-            return parent::buildSortQuery();
-        }
-
         return static::query();
     }
 }
