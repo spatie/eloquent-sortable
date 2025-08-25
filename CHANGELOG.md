@@ -2,6 +2,18 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
+## 4.5.2 - 2025-08-25
+
+### What's Changed
+
+* Revert "Check for parent::buildSortQuery() (#188)" by @phh in https://github.com/spatie/eloquent-sortable/pull/193
+
+### New Contributors
+
+* @phh made their first contribution in https://github.com/spatie/eloquent-sortable/pull/193
+
+**Full Changelog**: https://github.com/spatie/eloquent-sortable/compare/4.5.1...4.5.2
+
 ## 4.5.1 - 2025-08-25
 
 ### What's Changed
