@@ -157,6 +157,34 @@ trait SortableTrait
         return $this->swapOrderWithModel($swapWithModel);
     }
 
+    public function moveTo(int $position): static
+    {
+        $orderColumnName = $this->determineOrderColumnName();
+
+        $currentOrder = $this->$orderColumnName;
+
+        if ($currentOrder === $position) {
+            return $this;
+        }
+
+        if ($position > $currentOrder) {
+            $this->buildSortQuery()
+                ->where($orderColumnName, '>', $currentOrder)
+                ->where($orderColumnName, '<=', $position)
+                ->decrement($orderColumnName);
+        } else {
+            $this->buildSortQuery()
+                ->where($orderColumnName, '>=', $position)
+                ->where($orderColumnName, '<', $currentOrder)
+                ->increment($orderColumnName);
+        }
+
+        $this->$orderColumnName = $position;
+        $this->save();
+
+        return $this;
+    }
+
     public function swapOrderWithModel(Sortable $otherModel): static
     {
         $orderColumnName = $this->determineOrderColumnName();

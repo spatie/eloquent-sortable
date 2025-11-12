@@ -208,17 +208,23 @@ $myModel->moveToStart();
 $myModel->moveToEnd();
 ```
 
+You can swap the order of two models:
+
+```php
+MyModel::swapOrder($myModel, $anotherModel);
+```
+
+You can move a model to a specific position:
+
+```php
+$myModel->moveTo(position: 5);
+```
+
 You can determine whether an element is first or last in order:
 
 ```php
 $myModel->isFirstInOrder();
 $myModel->isLastInOrder();
-```
-
-You can swap the order of two models:
-
-```php
-MyModel::swapOrder($myModel, $anotherModel);
 ```
 
 ### Grouping

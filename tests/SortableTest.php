@@ -463,4 +463,93 @@ class SortableTest extends TestCase
         $this->assertTrue($model[$model->count() - 1]->isLastInOrder());
         $this->assertFalse($model[$model->count() - 2]->isLastInOrder());
     }
+
+    /** @test */
+    public function it_can_move_to_a_specific_position_moving_down()
+    {
+        $model = Dummy::find(3);
+        $this->assertEquals(3, $model->order_column);
+
+        // Move from position 3 to position 7
+        $model->moveTo(7);
+
+        $model->refresh();
+        $this->assertEquals(7, $model->order_column);
+
+        // Check that models between old and new position moved up
+        $this->assertEquals(3, Dummy::find(4)->order_column);
+        $this->assertEquals(4, Dummy::find(5)->order_column);
+        $this->assertEquals(5, Dummy::find(6)->order_column);
+        $this->assertEquals(6, Dummy::find(7)->order_column);
+    }
+
+    /** @test */
+    public function it_can_move_to_a_specific_position_moving_up()
+    {
+        $model = Dummy::find(10);
+        $this->assertEquals(10, $model->order_column);
+
+        // Move from position 10 to position 5
+        $model->moveTo(5);
+
+        $model->refresh();
+        $this->assertEquals(5, $model->order_column);
+
+        // Check that models between new and old position moved down
+        $this->assertEquals(6, Dummy::find(5)->order_column);
+        $this->assertEquals(7, Dummy::find(6)->order_column);
+        $this->assertEquals(8, Dummy::find(7)->order_column);
+    }
+
+    /** @test */
+    public function it_does_not_change_order_when_moving_to_current_position()
+    {
+        $model = Dummy::find(5);
+        $currentOrder = $model->order_column;
+        $this->assertEquals(5, $currentOrder);
+
+        // Get the order of all other models before
+        $ordersBefore = Dummy::whereNot('id', 5)->get()->pluck('order_column', 'id')->toArray();
+
+        // Move to the same position
+        $model->moveTo($currentOrder);
+
+        $model->refresh();
+        $this->assertEquals($currentOrder, $model->order_column);
+
+        // Verify no other model changed position
+        $ordersAfter = Dummy::whereNot('id', 5)->get()->pluck('order_column', 'id')->toArray();
+        $this->assertEquals($ordersBefore, $ordersAfter);
+    }
+
+    /** @test */
+    public function it_can_move_to_first_position_using_move_to()
+    {
+        $model = Dummy::find(8);
+        $this->assertEquals(8, $model->order_column);
+
+        $model->moveTo(1);
+
+        $model->refresh();
+        $this->assertEquals(1, $model->order_column);
+
+        // Check that the first model moved down
+        $this->assertEquals(2, Dummy::find(1)->order_column);
+    }
+
+    /** @test */
+    public function it_can_move_to_last_position_using_move_to()
+    {
+        $model = Dummy::find(5);
+        $this->assertEquals(5, $model->order_column);
+
+        $lastPosition = Dummy::max('order_column');
+        $model->moveTo($lastPosition);
+
+        $model->refresh();
+        $this->assertEquals($lastPosition, $model->order_column);
+
+        // Check that models moved up
+        $this->assertEquals(5, Dummy::find(6)->order_column);
+    }
 }
