@@ -267,6 +267,25 @@ class SortableTest extends TestCase
     }
 
     /** @test */
+    public function it_fires_model_events_when_moving_after()
+    {
+        $fired = false;
+
+        Dummy::saving(function () use (&$fired) {
+            $fired = true;
+        });
+
+        $firstModel = Dummy::find(3);
+        $newModel = Dummy::create(['name' => 'New dummy', 'custom_column_sort' => rand()]);
+
+        $fired = false;
+
+        $newModel->moveAfter($firstModel);
+
+        $this->assertTrue($fired, 'The saving event should be fired when calling moveAfter.');
+    }
+
+    /** @test */
     public function it_can_move_before()
     {
         $firstModel = Dummy::find(4);
@@ -279,6 +298,25 @@ class SortableTest extends TestCase
 
         $this->assertEquals($newModel->order_column, 4);
         $this->assertEquals($firstModel->order_column, 5);
+    }
+
+    /** @test */
+    public function it_fires_model_events_when_moving_before()
+    {
+        $fired = false;
+
+        Dummy::saving(function () use (&$fired) {
+            $fired = true;
+        });
+
+        $firstModel = Dummy::find(4);
+        $newModel = Dummy::create(['name' => 'New dummy', 'custom_column_sort' => rand()]);
+
+        $fired = false;
+
+        $newModel->moveBefore($firstModel);
+
+        $this->assertTrue($fired, 'The saving event should be fired when calling moveBefore.');
     }
 
     /** @test */

@@ -108,7 +108,7 @@ trait SortableTrait
 
         $this->$orderColumnName = $model->$orderColumnName + 1;
 
-        $this->saveQuietly();
+        $this->save();
     }
 
     public function moveBefore(Sortable $model): void
@@ -122,7 +122,7 @@ trait SortableTrait
 
         $this->$orderColumnName = $model->$orderColumnName;
 
-        $this->saveQuietly();
+        $this->save();
     }
 
     public function moveOrderDown(): static
