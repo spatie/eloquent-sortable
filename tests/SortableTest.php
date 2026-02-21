@@ -4,8 +4,8 @@ namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
-use Spatie\EloquentSortable\EloquentModelSortedEvent;
 use PHPUnit\Framework\Attributes\Test;
+use Spatie\EloquentSortable\EloquentModelSortedEvent;
 
 class SortableTest extends TestCase
 {
@@ -388,7 +388,8 @@ class SortableTest extends TestCase
             $this->assertEquals($oldModel + 1, $newModels[$key]);
         }
     }
-          #[Test]
+
+    #[Test]
     public function it_can_move_a_model_to_the_last_place()
     {
         $position = 3;
