@@ -4,11 +4,12 @@ namespace Spatie\EloquentSortable\Test;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
+use PHPUnit\Framework\Attributes\Test;
 use Spatie\EloquentSortable\EloquentModelSortedEvent;
 
 class SortableTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_sets_the_order_column_on_creation()
     {
         foreach (Dummy::all() as $dummy) {
@@ -16,13 +17,13 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_the_highest_order_number()
     {
         $this->assertEquals(Dummy::all()->count(), (new Dummy())->getHighestOrderNumber());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_the_highest_order_number_with_trashed_models()
     {
         $this->setUpSoftDeletes();
@@ -32,7 +33,7 @@ class SortableTest extends TestCase
         $this->assertEquals(DummyWithSoftDeletes::withTrashed()->count(), (new DummyWithSoftDeletes())->getHighestOrderNumber());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_a_new_order()
     {
 
@@ -51,7 +52,7 @@ class SortableTest extends TestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function it_can_touch_timestamps_when_setting_a_new_order()
     {
         $this->setUpTimestamps();
@@ -69,7 +70,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_a_new_order_without_touching_timestamps()
     {
         $this->setUpTimestamps();
@@ -87,7 +88,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_a_new_order_by_custom_column()
     {
         $newOrder = Collection::make(Dummy::all()->pluck('custom_column_sort'))->shuffle()->toArray();
@@ -99,7 +100,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_a_new_order_from_collection()
     {
         $newOrder = Collection::make(Dummy::all()->pluck('id'))->shuffle();
@@ -111,7 +112,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_a_new_order_by_custom_column_from_collection()
     {
         $newOrder = Collection::make(Dummy::all()->pluck('custom_column_sort'))->shuffle();
@@ -123,7 +124,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_new_order_without_global_scopes_models()
     {
         $this->setUpIsActiveFieldForGlobalScope();
@@ -139,7 +140,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_a_new_order_with_trashed_models()
     {
         $this->setUpSoftDeletes();
@@ -157,7 +158,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_a_new_order_by_custom_column_with_trashed_models()
     {
         $this->setUpSoftDeletes();
@@ -175,7 +176,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_a_new_order_without_trashed_models()
     {
         $this->setUpSoftDeletes();
@@ -191,7 +192,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_a_new_order_by_custom_column_without_trashed_models()
     {
         $this->setUpSoftDeletes();
@@ -207,7 +208,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_will_determine_to_sort_when_creating_if_sortable_attribute_does_not_exist()
     {
         $model = new Dummy();
@@ -215,7 +216,7 @@ class SortableTest extends TestCase
         $this->assertTrue($model->shouldSortWhenCreating());
     }
 
-    /** @test */
+    #[Test]
     public function it_will_determine_to_sort_when_creating_if_sort_when_creating_setting_does_not_exist()
     {
         $model = new class () extends Dummy {
@@ -225,7 +226,7 @@ class SortableTest extends TestCase
         $this->assertTrue($model->shouldSortWhenCreating());
     }
 
-    /** @test */
+    #[Test]
     public function it_will_respect_the_sort_when_creating_setting()
     {
         $model = new class () extends Dummy {
@@ -240,7 +241,7 @@ class SortableTest extends TestCase
         $this->assertFalse($model->shouldSortWhenCreating());
     }
 
-    /** @test */
+    #[Test]
     public function it_provides_an_ordered_trait()
     {
         $i = 1;
@@ -250,7 +251,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_move_after()
     {
         $firstModel = Dummy::find(3);
@@ -266,7 +267,7 @@ class SortableTest extends TestCase
         $this->assertEquals($secondModel->order_column, 5);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_move_before()
     {
         $firstModel = Dummy::find(4);
@@ -281,7 +282,7 @@ class SortableTest extends TestCase
         $this->assertEquals($firstModel->order_column, 5);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_move_the_order_down()
     {
         $firstModel = Dummy::find(3);
@@ -299,7 +300,7 @@ class SortableTest extends TestCase
         $this->assertEquals($secondModel->order_column, 3);
     }
 
-    /** @test */
+    #[Test]
     public function it_will_not_fail_when_it_cant_move_the_order_down()
     {
         $lastModel = Dummy::all()->last();
@@ -308,7 +309,7 @@ class SortableTest extends TestCase
         $this->assertEquals($lastModel, $lastModel->moveOrderDown());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_move_the_order_up()
     {
         $firstModel = Dummy::find(3);
@@ -326,7 +327,7 @@ class SortableTest extends TestCase
         $this->assertEquals($secondModel->order_column, 3);
     }
 
-    /** @test */
+    #[Test]
     public function it_will_not_break_when_it_cant_move_the_order_up()
     {
         $lastModel = Dummy::first();
@@ -335,7 +336,7 @@ class SortableTest extends TestCase
         $this->assertEquals($lastModel, $lastModel->moveOrderUp());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_swap_the_position_of_two_given_models()
     {
         $firstModel = Dummy::find(3);
@@ -350,7 +351,7 @@ class SortableTest extends TestCase
         $this->assertEquals($secondModel->order_column, 3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_swap_itself_with_another_model()
     {
         $firstModel = Dummy::find(3);
@@ -365,7 +366,7 @@ class SortableTest extends TestCase
         $this->assertEquals($secondModel->order_column, 3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_move_a_model_to_the_first_place()
     {
         $position = 3;
@@ -388,9 +389,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_move_a_model_to_the_last_place()
     {
         $position = 3;
@@ -418,7 +417,7 @@ class SortableTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_use_config_properties()
     {
         config([
@@ -434,7 +433,7 @@ class SortableTest extends TestCase
         $this->assertEquals(config('eloquent-sortable.sort_when_creating'), $model->shouldSortWhenCreating());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_override_config_properties()
     {
         $model = new class () extends Dummy {
@@ -448,7 +447,7 @@ class SortableTest extends TestCase
         $this->assertFalse($model->shouldSortWhenCreating());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_tell_if_element_is_first_in_order()
     {
         $model = (new Dummy())->buildSortQuery()->get();
@@ -456,7 +455,7 @@ class SortableTest extends TestCase
         $this->assertFalse($model[1]->isFirstInOrder());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_tell_if_element_is_last_in_order()
     {
         $model = (new Dummy())->buildSortQuery()->get();
